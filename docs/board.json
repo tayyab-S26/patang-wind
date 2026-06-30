@@ -1,5 +1,5 @@
 {
-"generated": "Tue 30 Jun 2026, 12:27",
+"generated": "Tue 30 Jun 2026, 14:11",
 "criteria": {
 "mean_min": 12,
 "mean_max": 18,
@@ -13,7 +13,7 @@
 },
 "sites": [
 {
-"name": "Minster / Sheppey",
+"name": "Sheerness",
 "sea": 22,
 "sea_c": "NNE",
 "days": [
@@ -21,14 +21,14 @@
 "date": "2026-06-30",
 "wd": "Tue",
 "dd": "30 Jun",
-"prob": 9,
+"prob": 7,
 "models": {
-"gfs025": 10,
+"gfs025": 6,
 "ecmwf_ifs025": 8
 },
 "peak": {
 "hour": 20,
-"mph": 14,
+"mph": 13,
 "gust": 20,
 "from": "SW"
 },
@@ -50,15 +50,15 @@
 "date": "2026-07-02",
 "wd": "Thu",
 "dd": "2 Jul",
-"prob": 4,
+"prob": 9,
 "models": {
-"gfs025": 0,
+"gfs025": 13,
 "ecmwf_ifs025": 6
 },
 "peak": {
 "hour": 8,
-"mph": 16,
-"gust": 25,
+"mph": 13,
+"gust": 23,
 "from": "WSW"
 },
 "lead": 2
@@ -67,15 +67,15 @@
 "date": "2026-07-03",
 "wd": "Fri",
 "dd": "3 Jul",
-"prob": 11,
+"prob": 9,
 "models": {
-"gfs025": 19,
+"gfs025": 13,
 "ecmwf_ifs025": 6
 },
 "peak": {
-"hour": 20,
-"mph": 14,
-"gust": 20,
+"hour": 19,
+"mph": 15,
+"gust": 22,
 "from": "SW"
 },
 "lead": 3
@@ -84,9 +84,9 @@
 "date": "2026-07-04",
 "wd": "Sat",
 "dd": "4 Jul",
-"prob": 13,
+"prob": 15,
 "models": {
-"gfs025": 3,
+"gfs025": 6,
 "ecmwf_ifs025": 20
 },
 "peak": {
@@ -101,14 +101,14 @@
 "date": "2026-07-05",
 "wd": "Sun",
 "dd": "5 Jul",
-"prob": 5,
+"prob": 10,
 "models": {
-"gfs025": 0,
+"gfs025": 13,
 "ecmwf_ifs025": 8
 },
 "peak": {
 "hour": 16,
-"mph": 13,
+"mph": 15,
 "gust": 24,
 "from": "WSW"
 },
@@ -127,7 +127,7 @@
 "hour": 18,
 "mph": 12,
 "gust": 25,
-"from": "SW"
+"from": "WSW"
 },
 "lead": 6
 },
@@ -135,16 +135,16 @@
 "date": "2026-07-07",
 "wd": "Tue",
 "dd": "7 Jul",
-"prob": 2,
+"prob": 6,
 "models": {
-"gfs025": 0,
+"gfs025": 10,
 "ecmwf_ifs025": 4
 },
 "peak": {
-"hour": 20,
-"mph": 17,
-"gust": 26,
-"from": "SW"
+"hour": 18,
+"mph": 15,
+"gust": 22,
+"from": "WSW"
 },
 "lead": 7
 },
@@ -152,16 +152,16 @@
 "date": "2026-07-08",
 "wd": "Wed",
 "dd": "8 Jul",
-"prob": 4,
+"prob": 9,
 "models": {
-"gfs025": 0,
+"gfs025": 13,
 "ecmwf_ifs025": 6
 },
 "peak": {
-"hour": 12,
-"mph": 14,
+"hour": 19,
+"mph": 16,
 "gust": 25,
-"from": "WSW"
+"from": "SW"
 },
 "lead": 8
 },
@@ -169,15 +169,15 @@
 "date": "2026-07-09",
 "wd": "Thu",
 "dd": "9 Jul",
-"prob": 11,
+"prob": 10,
 "models": {
-"gfs025": 16,
+"gfs025": 13,
 "ecmwf_ifs025": 8
 },
 "peak": {
-"hour": 18,
+"hour": 17,
 "mph": 14,
-"gust": 23,
+"gust": 22,
 "from": "SW"
 },
 "lead": 9
@@ -253,7 +253,7 @@
 ]
 },
 {
-"name": "Seasalter / Whitstable",
+"name": "Whitstable",
 "sea": 23,
 "sea_c": "NNE",
 "days": [
@@ -261,14 +261,14 @@
 "date": "2026-06-30",
 "wd": "Tue",
 "dd": "30 Jun",
-"prob": 6,
+"prob": 5,
 "models": {
-"gfs025": 6,
+"gfs025": 3,
 "ecmwf_ifs025": 6
 },
 "peak": {
 "hour": 20,
-"mph": 14,
+"mph": 13,
 "gust": 20,
 "from": "SW"
 },
@@ -297,7 +297,7 @@
 },
 "peak": {
 "hour": 8,
-"mph": 16,
+"mph": 14,
 "gust": 25,
 "from": "WSW"
 },
@@ -307,15 +307,15 @@
 "date": "2026-07-03",
 "wd": "Fri",
 "dd": "3 Jul",
-"prob": 16,
+"prob": 9,
 "models": {
-"gfs025": 26,
+"gfs025": 6,
 "ecmwf_ifs025": 10
 },
 "peak": {
 "hour": 20,
 "mph": 14,
-"gust": 21,
+"gust": 22,
 "from": "SW"
 },
 "lead": 3
@@ -324,9 +324,9 @@
 "date": "2026-07-04",
 "wd": "Sat",
 "dd": "4 Jul",
-"prob": 17,
+"prob": 22,
 "models": {
-"gfs025": 3,
+"gfs025": 16,
 "ecmwf_ifs025": 25
 },
 "peak": {
@@ -341,14 +341,14 @@
 "date": "2026-07-05",
 "wd": "Sun",
 "dd": "5 Jul",
-"prob": 5,
+"prob": 11,
 "models": {
-"gfs025": 0,
+"gfs025": 16,
 "ecmwf_ifs025": 8
 },
 "peak": {
 "hour": 20,
-"mph": 12,
+"mph": 15,
 "gust": 22,
 "from": "SW"
 },
@@ -375,16 +375,16 @@
 "date": "2026-07-07",
 "wd": "Tue",
 "dd": "7 Jul",
-"prob": 2,
+"prob": 6,
 "models": {
-"gfs025": 3,
+"gfs025": 13,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 12,
-"mph": 14,
-"gust": 22,
-"from": "SSW"
+"hour": 19,
+"mph": 17,
+"gust": 24,
+"from": "WSW"
 },
 "lead": 7
 },
@@ -392,15 +392,15 @@
 "date": "2026-07-08",
 "wd": "Wed",
 "dd": "8 Jul",
-"prob": 4,
+"prob": 9,
 "models": {
-"gfs025": 6,
+"gfs025": 19,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 13,
-"mph": 13,
-"gust": 25,
+"hour": 14,
+"mph": 15,
+"gust": 23,
 "from": "WSW"
 },
 "lead": 8
@@ -409,15 +409,15 @@
 "date": "2026-07-09",
 "wd": "Thu",
 "dd": "9 Jul",
-"prob": 13,
+"prob": 11,
 "models": {
-"gfs025": 19,
+"gfs025": 13,
 "ecmwf_ifs025": 10
 },
 "peak": {
-"hour": 18,
-"mph": 14,
-"gust": 23,
+"hour": 19,
+"mph": 15,
+"gust": 24,
 "from": "SW"
 },
 "lead": 9
@@ -493,7 +493,7 @@
 ]
 },
 {
-"name": "Walmer / Deal",
+"name": "Deal",
 "sea": 101,
 "sea_c": "ESE",
 "days": [
@@ -501,15 +501,15 @@
 "date": "2026-06-30",
 "wd": "Tue",
 "dd": "30 Jun",
-"prob": 5,
+"prob": 2,
 "models": {
-"gfs025": 10,
+"gfs025": 3,
 "ecmwf_ifs025": 2
 },
 "peak": {
 "hour": 20,
-"mph": 15,
-"gust": 20,
+"mph": 14,
+"gust": 19,
 "from": "SW"
 },
 "lead": 0
@@ -530,15 +530,15 @@
 "date": "2026-07-02",
 "wd": "Thu",
 "dd": "2 Jul",
-"prob": 46,
+"prob": 48,
 "models": {
-"gfs025": 87,
+"gfs025": 90,
 "ecmwf_ifs025": 22
 },
 "peak": {
 "hour": 10,
 "mph": 14,
-"gust": 23,
+"gust": 24,
 "from": "W"
 },
 "lead": 2
@@ -547,15 +547,15 @@
 "date": "2026-07-03",
 "wd": "Fri",
 "dd": "3 Jul",
-"prob": 7,
+"prob": 1,
 "models": {
-"gfs025": 16,
+"gfs025": 0,
 "ecmwf_ifs025": 2
 },
 "peak": {
 "hour": 20,
-"mph": 15,
-"gust": 22,
+"mph": 14,
+"gust": 25,
 "from": "SW"
 },
 "lead": 3
@@ -564,14 +564,14 @@
 "date": "2026-07-04",
 "wd": "Sat",
 "dd": "4 Jul",
-"prob": 27,
+"prob": 30,
 "models": {
-"gfs025": 23,
+"gfs025": 32,
 "ecmwf_ifs025": 29
 },
 "peak": {
-"hour": 18,
-"mph": 13,
+"hour": 17,
+"mph": 14,
 "gust": 22,
 "from": "W"
 },
@@ -581,16 +581,16 @@
 "date": "2026-07-05",
 "wd": "Sun",
 "dd": "5 Jul",
-"prob": 10,
+"prob": 12,
 "models": {
-"gfs025": 10,
+"gfs025": 16,
 "ecmwf_ifs025": 10
 },
 "peak": {
-"hour": 8,
+"hour": 20,
 "mph": 14,
-"gust": 20,
-"from": "NW"
+"gust": 23,
+"from": "W"
 },
 "lead": 5
 },
@@ -598,15 +598,15 @@
 "date": "2026-07-06",
 "wd": "Mon",
 "dd": "6 Jul",
-"prob": 10,
+"prob": 11,
 "models": {
-"gfs025": 16,
+"gfs025": 19,
 "ecmwf_ifs025": 6
 },
 "peak": {
 "hour": 18,
-"mph": 13,
-"gust": 23,
+"mph": 12,
+"gust": 21,
 "from": "W"
 },
 "lead": 6
@@ -615,16 +615,16 @@
 "date": "2026-07-07",
 "wd": "Tue",
 "dd": "7 Jul",
-"prob": 10,
+"prob": 12,
 "models": {
-"gfs025": 23,
+"gfs025": 29,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 8,
-"mph": 15,
-"gust": 21,
-"from": "NW"
+"hour": 12,
+"mph": 14,
+"gust": 20,
+"from": "W"
 },
 "lead": 7
 },
@@ -632,16 +632,16 @@
 "date": "2026-07-08",
 "wd": "Wed",
 "dd": "8 Jul",
-"prob": 6,
+"prob": 7,
 "models": {
-"gfs025": 13,
+"gfs025": 16,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 8,
-"mph": 14,
+"hour": 12,
+"mph": 12,
 "gust": 22,
-"from": "WNW"
+"from": "WSW"
 },
 "lead": 8
 },
@@ -649,16 +649,16 @@
 "date": "2026-07-09",
 "wd": "Thu",
 "dd": "9 Jul",
-"prob": 9,
+"prob": 7,
 "models": {
-"gfs025": 13,
+"gfs025": 10,
 "ecmwf_ifs025": 6
 },
 "peak": {
-"hour": 10,
-"mph": 15,
-"gust": 20,
-"from": "W"
+"hour": 18,
+"mph": 14,
+"gust": 24,
+"from": "WSW"
 },
 "lead": 9
 },
@@ -666,16 +666,16 @@
 "date": "2026-07-10",
 "wd": "Fri",
 "dd": "10 Jul",
-"prob": 1,
+"prob": 4,
 "models": {
-"gfs025": 0,
+"gfs025": 6,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 13,
-"mph": 12,
+"hour": 8,
+"mph": 17,
 "gust": 25,
-"from": "SW"
+"from": "WNW"
 },
 "lead": 10
 },
@@ -733,7 +733,7 @@
 ]
 },
 {
-"name": "Bexhill",
+"name": "Cooden",
 "sea": 158,
 "sea_c": "SSE",
 "days": [
@@ -770,15 +770,15 @@
 "date": "2026-07-02",
 "wd": "Thu",
 "dd": "2 Jul",
-"prob": 46,
+"prob": 50,
 "models": {
-"gfs025": 48,
+"gfs025": 58,
 "ecmwf_ifs025": 45
 },
 "peak": {
-"hour": 12,
+"hour": 13,
 "mph": 14,
-"gust": 22,
+"gust": 24,
 "from": "WNW"
 },
 "lead": 2
@@ -799,16 +799,16 @@
 "date": "2026-07-04",
 "wd": "Sat",
 "dd": "4 Jul",
-"prob": 10,
+"prob": 12,
 "models": {
-"gfs025": 6,
+"gfs025": 13,
 "ecmwf_ifs025": 12
 },
 "peak": {
-"hour": 20,
+"hour": 19,
 "mph": 16,
-"gust": 24,
-"from": "W"
+"gust": 23,
+"from": "WNW"
 },
 "lead": 4
 },
@@ -816,16 +816,16 @@
 "date": "2026-07-05",
 "wd": "Sun",
 "dd": "5 Jul",
-"prob": 6,
+"prob": 4,
 "models": {
-"gfs025": 6,
+"gfs025": 0,
 "ecmwf_ifs025": 6
 },
 "peak": {
-"hour": 13,
+"hour": 17,
 "mph": 13,
-"gust": 19,
-"from": "WNW"
+"gust": 24,
+"from": "NW"
 },
 "lead": 5
 },
@@ -833,16 +833,16 @@
 "date": "2026-07-06",
 "wd": "Mon",
 "dd": "6 Jul",
-"prob": 6,
+"prob": 4,
 "models": {
-"gfs025": 13,
+"gfs025": 6,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 13,
-"mph": 13,
-"gust": 24,
-"from": "NW"
+"hour": 15,
+"mph": 15,
+"gust": 23,
+"from": "WNW"
 },
 "lead": 6
 },
@@ -850,9 +850,9 @@
 "date": "2026-07-07",
 "wd": "Tue",
 "dd": "7 Jul",
-"prob": 11,
+"prob": 12,
 "models": {
-"gfs025": 10,
+"gfs025": 13,
 "ecmwf_ifs025": 12
 },
 "peak": {
@@ -873,9 +873,9 @@
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 20,
+"hour": 18,
 "mph": 14,
-"gust": 20,
+"gust": 21,
 "from": "NNW"
 },
 "lead": 8
@@ -890,9 +890,9 @@
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 11,
+"hour": 10,
 "mph": 13,
-"gust": 19,
+"gust": 21,
 "from": "NW"
 },
 "lead": 9
@@ -901,16 +901,16 @@
 "date": "2026-07-10",
 "wd": "Fri",
 "dd": "10 Jul",
-"prob": 2,
+"prob": 5,
 "models": {
-"gfs025": 0,
+"gfs025": 6,
 "ecmwf_ifs025": 4
 },
 "peak": {
-"hour": 10,
+"hour": 8,
 "mph": 14,
-"gust": 26,
-"from": "WNW"
+"gust": 22,
+"from": "N"
 },
 "lead": 10
 },
@@ -1006,9 +1006,9 @@
 "ecmwf_ifs025": 18
 },
 "peak": {
-"hour": 16,
-"mph": 12,
-"gust": 23,
+"hour": 18,
+"mph": 13,
+"gust": 22,
 "from": "NNW"
 },
 "lead": 2
@@ -1041,16 +1041,16 @@
 "date": "2026-07-05",
 "wd": "Sun",
 "dd": "5 Jul",
-"prob": 1,
+"prob": 0,
 "models": {
-"gfs025": 3,
+"gfs025": 0,
 "ecmwf_ifs025": 0
 },
 "peak": {
-"hour": 18,
-"mph": 15,
-"gust": 18,
-"from": "ENE"
+"hour": 8,
+"mph": 16,
+"gust": 21,
+"from": "NNW"
 },
 "lead": 5
 },
@@ -1058,17 +1058,12 @@
 "date": "2026-07-06",
 "wd": "Mon",
 "dd": "6 Jul",
-"prob": 2,
+"prob": 0,
 "models": {
-"gfs025": 6,
+"gfs025": 0,
 "ecmwf_ifs025": 0
 },
-"peak": {
-"hour": 18,
-"mph": 16,
-"gust": 19,
-"from": "ENE"
-},
+"peak": null,
 "lead": 6
 },
 {
@@ -1081,10 +1076,10 @@
 "ecmwf_ifs025": 6
 },
 "peak": {
-"hour": 19,
-"mph": 14,
+"hour": 18,
+"mph": 16,
 "gust": 24,
-"from": "NW"
+"from": "NNE"
 },
 "lead": 7
 },
@@ -1092,14 +1087,14 @@
 "date": "2026-07-08",
 "wd": "Wed",
 "dd": "8 Jul",
-"prob": 1,
+"prob": 5,
 "models": {
-"gfs025": 0,
+"gfs025": 10,
 "ecmwf_ifs025": 2
 },
 "peak": {
 "hour": 19,
-"mph": 13,
+"mph": 14,
 "gust": 24,
 "from": "NE"
 },
@@ -1109,15 +1104,15 @@
 "date": "2026-07-09",
 "wd": "Thu",
 "dd": "9 Jul",
-"prob": 4,
+"prob": 7,
 "models": {
-"gfs025": 10,
+"gfs025": 19,
 "ecmwf_ifs025": 0
 },
 "peak": {
-"hour": 20,
-"mph": 16,
-"gust": 18,
+"hour": 17,
+"mph": 18,
+"gust": 22,
 "from": "ENE"
 },
 "lead": 9
@@ -1126,16 +1121,16 @@
 "date": "2026-07-10",
 "wd": "Fri",
 "dd": "10 Jul",
-"prob": 2,
+"prob": 6,
 "models": {
-"gfs025": 0,
+"gfs025": 10,
 "ecmwf_ifs025": 4
 },
 "peak": {
-"hour": 16,
-"mph": 13,
-"gust": 24,
-"from": "ENE"
+"hour": 8,
+"mph": 16,
+"gust": 23,
+"from": "NNE"
 },
 "lead": 10
 },
@@ -1193,7 +1188,7 @@
 ]
 },
 {
-"name": "Portland / Chesil",
+"name": "Portland",
 "sea": 214,
 "sea_c": "SW",
 "days": [
@@ -1225,15 +1220,15 @@
 "date": "2026-07-02",
 "wd": "Thu",
 "dd": "2 Jul",
-"prob": 2,
+"prob": 1,
 "models": {
-"gfs025": 3,
+"gfs025": 0,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 10,
-"mph": 15,
-"gust": 21,
+"hour": 11,
+"mph": 17,
+"gust": 22,
 "from": "NNW"
 },
 "lead": 2
@@ -1259,7 +1254,12 @@
 "gfs025": 0,
 "ecmwf_ifs025": 0
 },
-"peak": null,
+"peak": {
+"hour": 19,
+"mph": 15,
+"gust": 19,
+"from": "NNW"
+},
 "lead": 4
 },
 {
@@ -1278,16 +1278,16 @@
 "date": "2026-07-06",
 "wd": "Mon",
 "dd": "6 Jul",
-"prob": 1,
+"prob": 0,
 "models": {
-"gfs025": 3,
+"gfs025": 0,
 "ecmwf_ifs025": 0
 },
 "peak": {
-"hour": 9,
+"hour": 19,
 "mph": 16,
-"gust": 23,
-"from": "NNE"
+"gust": 19,
+"from": "NNW"
 },
 "lead": 6
 },
@@ -1313,9 +1313,9 @@
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 10,
+"hour": 20,
 "mph": 14,
-"gust": 18,
+"gust": 24,
 "from": "NNW"
 },
 "lead": 8
@@ -1324,27 +1324,32 @@
 "date": "2026-07-09",
 "wd": "Thu",
 "dd": "9 Jul",
-"prob": 0,
+"prob": 1,
 "models": {
-"gfs025": 0,
+"gfs025": 3,
 "ecmwf_ifs025": 0
 },
-"peak": null,
+"peak": {
+"hour": 20,
+"mph": 16,
+"gust": 19,
+"from": "NNW"
+},
 "lead": 9
 },
 {
 "date": "2026-07-10",
 "wd": "Fri",
 "dd": "10 Jul",
-"prob": 1,
+"prob": 4,
 "models": {
-"gfs025": 0,
+"gfs025": 6,
 "ecmwf_ifs025": 2
 },
 "peak": {
-"hour": 19,
-"mph": 14,
-"gust": 26,
+"hour": 8,
+"mph": 13,
+"gust": 22,
 "from": "NNW"
 },
 "lead": 10
@@ -1403,8 +1408,8 @@
 ]
 },
 {
-"name": "Thorpeness",
-"sea": 104,
+"name": "Aldeburgh",
+"sea": 112,
 "sea_c": "ESE",
 "days": [
 {
@@ -1440,14 +1445,14 @@
 "date": "2026-07-02",
 "wd": "Thu",
 "dd": "2 Jul",
-"prob": 60,
+"prob": 57,
 "models": {
-"gfs025": 87,
+"gfs025": 81,
 "ecmwf_ifs025": 43
 },
 "peak": {
 "hour": 9,
-"mph": 15,
+"mph": 14,
 "gust": 24,
 "from": "W"
 },
@@ -1457,9 +1462,9 @@
 "date": "2026-07-03",
 "wd": "Fri",
 "dd": "3 Jul",
-"prob": 5,
+"prob": 4,
 "models": {
-"gfs025": 3,
+"gfs025": 0,
 "ecmwf_ifs025": 6
 },
 "peak": {
@@ -1474,15 +1479,15 @@
 "date": "2026-07-04",
 "wd": "Sat",
 "dd": "4 Jul",
-"prob": 57,
+"prob": 56,
 "models": {
-"gfs025": 42,
+"gfs025": 39,
 "ecmwf_ifs025": 67
 },
 "peak": {
-"hour": 14,
+"hour": 12,
 "mph": 14,
-"gust": 22,
+"gust": 21,
 "from": "W"
 },
 "lead": 4
@@ -1491,9 +1496,9 @@
 "date": "2026-07-05",
 "wd": "Sun",
 "dd": "5 Jul",
-"prob": 26,
+"prob": 22,
 "models": {
-"gfs025": 29,
+"gfs025": 19,
 "ecmwf_ifs025": 24
 },
 "peak": {
@@ -1508,15 +1513,15 @@
 "date": "2026-07-06",
 "wd": "Mon",
 "dd": "6 Jul",
-"prob": 21,
+"prob": 24,
 "models": {
-"gfs025": 29,
+"gfs025": 39,
 "ecmwf_ifs025": 16
 },
 "peak": {
-"hour": 12,
+"hour": 8,
 "mph": 13,
-"gust": 23,
+"gust": 22,
 "from": "WNW"
 },
 "lead": 6
@@ -1532,8 +1537,8 @@
 },
 "peak": {
 "hour": 10,
-"mph": 15,
-"gust": 23,
+"mph": 14,
+"gust": 22,
 "from": "WNW"
 },
 "lead": 7
@@ -1542,15 +1547,15 @@
 "date": "2026-07-08",
 "wd": "Wed",
 "dd": "8 Jul",
-"prob": 17,
+"prob": 13,
 "models": {
-"gfs025": 26,
+"gfs025": 16,
 "ecmwf_ifs025": 12
 },
 "peak": {
 "hour": 11,
 "mph": 12,
-"gust": 21,
+"gust": 23,
 "from": "WNW"
 },
 "lead": 8
@@ -1565,10 +1570,10 @@
 "ecmwf_ifs025": 6
 },
 "peak": {
-"hour": 8,
+"hour": 9,
 "mph": 15,
 "gust": 24,
-"from": "WNW"
+"from": "W"
 },
 "lead": 9
 },
@@ -1576,16 +1581,16 @@
 "date": "2026-07-10",
 "wd": "Fri",
 "dd": "10 Jul",
-"prob": 2,
+"prob": 7,
 "models": {
-"gfs025": 0,
+"gfs025": 13,
 "ecmwf_ifs025": 4
 },
 "peak": {
-"hour": 12,
-"mph": 12,
-"gust": 26,
-"from": "WNW"
+"hour": 8,
+"mph": 14,
+"gust": 20,
+"from": "W"
 },
 "lead": 10
 },
@@ -1610,10 +1615,10 @@
 "date": "2026-07-12",
 "wd": "Sun",
 "dd": "12 Jul",
-"prob": 4,
+"prob": 2,
 "models": {
 "gfs025": 0,
-"ecmwf_ifs025": 6
+"ecmwf_ifs025": 4
 },
 "peak": {
 "hour": 11,
@@ -1643,7 +1648,7 @@
 ]
 },
 {
-"name": "Bawdsey / Felixstowe",
+"name": "Shingle Street",
 "sea": 135,
 "sea_c": "SE",
 "days": [
@@ -1663,31 +1668,26 @@
 "date": "2026-07-01",
 "wd": "Wed",
 "dd": "1 Jul",
-"prob": 1,
+"prob": 0,
 "models": {
-"gfs025": 3,
+"gfs025": 0,
 "ecmwf_ifs025": 0
 },
-"peak": {
-"hour": 16,
-"mph": 14,
-"gust": 18,
-"from": "NW"
-},
+"peak": null,
 "lead": 1
 },
 {
 "date": "2026-07-02",
 "wd": "Thu",
 "dd": "2 Jul",
-"prob": 50,
+"prob": 45,
 "models": {
-"gfs025": 94,
+"gfs025": 81,
 "ecmwf_ifs025": 24
 },
 "peak": {
-"hour": 14,
-"mph": 15,
+"hour": 13,
+"mph": 14,
 "gust": 22,
 "from": "NW"
 },
@@ -1697,16 +1697,16 @@
 "date": "2026-07-03",
 "wd": "Fri",
 "dd": "3 Jul",
-"prob": 1,
+"prob": 0,
 "models": {
-"gfs025": 3,
+"gfs025": 0,
 "ecmwf_ifs025": 0
 },
 "peak": {
-"hour": 20,
+"hour": 8,
 "mph": 13,
-"gust": 25,
-"from": "W"
+"gust": 19,
+"from": "NW"
 },
 "lead": 3
 },
@@ -1714,15 +1714,15 @@
 "date": "2026-07-04",
 "wd": "Sat",
 "dd": "4 Jul",
-"prob": 40,
+"prob": 44,
 "models": {
-"gfs025": 32,
+"gfs025": 42,
 "ecmwf_ifs025": 45
 },
 "peak": {
 "hour": 16,
 "mph": 14,
-"gust": 21,
+"gust": 20,
 "from": "W"
 },
 "lead": 4
@@ -1731,16 +1731,16 @@
 "date": "2026-07-05",
 "wd": "Sun",
 "dd": "5 Jul",
-"prob": 17,
+"prob": 12,
 "models": {
-"gfs025": 29,
+"gfs025": 16,
 "ecmwf_ifs025": 10
 },
 "peak": {
-"hour": 12,
-"mph": 15,
-"gust": 23,
-"from": "WNW"
+"hour": 8,
+"mph": 14,
+"gust": 20,
+"from": "NW"
 },
 "lead": 5
 },
@@ -1748,15 +1748,15 @@
 "date": "2026-07-06",
 "wd": "Mon",
 "dd": "6 Jul",
-"prob": 11,
+"prob": 16,
 "models": {
-"gfs025": 23,
+"gfs025": 35,
 "ecmwf_ifs025": 4
 },
 "peak": {
 "hour": 8,
-"mph": 15,
-"gust": 22,
+"mph": 14,
+"gust": 21,
 "from": "WNW"
 },
 "lead": 6
@@ -1765,15 +1765,15 @@
 "date": "2026-07-07",
 "wd": "Tue",
 "dd": "7 Jul",
-"prob": 17,
+"prob": 16,
 "models": {
-"gfs025": 29,
+"gfs025": 26,
 "ecmwf_ifs025": 10
 },
 "peak": {
 "hour": 8,
-"mph": 14,
-"gust": 23,
+"mph": 15,
+"gust": 25,
 "from": "WNW"
 },
 "lead": 7
@@ -1789,9 +1789,9 @@
 },
 "peak": {
 "hour": 8,
-"mph": 14,
-"gust": 20,
-"from": "WNW"
+"mph": 16,
+"gust": 26,
+"from": "W"
 },
 "lead": 8
 },
@@ -1799,16 +1799,16 @@
 "date": "2026-07-09",
 "wd": "Thu",
 "dd": "9 Jul",
-"prob": 4,
+"prob": 9,
 "models": {
-"gfs025": 6,
+"gfs025": 19,
 "ecmwf_ifs025": 2
 },
 "peak": {
 "hour": 8,
-"mph": 14,
-"gust": 24,
-"from": "NW"
+"mph": 15,
+"gust": 21,
+"from": "NNW"
 },
 "lead": 9
 },
@@ -1816,12 +1816,17 @@
 "date": "2026-07-10",
 "wd": "Fri",
 "dd": "10 Jul",
-"prob": 0,
+"prob": 5,
 "models": {
-"gfs025": 0,
+"gfs025": 13,
 "ecmwf_ifs025": 0
 },
-"peak": null,
+"peak": {
+"hour": 8,
+"mph": 15,
+"gust": 21,
+"from": "WNW"
+},
 "lead": 10
 },
 {
@@ -1869,13 +1874,13 @@
 }
 ],
 "best_pick": {
-"site": "Thorpeness",
+"site": "Aldeburgh",
 "wd": "Thu",
 "dd": "2 Jul",
-"prob": 60,
+"prob": 57,
 "peak": {
 "hour": 9,
-"mph": 15,
+"mph": 14,
 "gust": 24,
 "from": "W"
 }
@@ -1884,20 +1889,20 @@
 {
 "wd": "Wed",
 "dd": "8 Jul",
-"site": "Thorpeness",
-"prob": 17
+"site": "Aldeburgh",
+"prob": 13
 },
 {
 "wd": "Thu",
 "dd": "9 Jul",
-"site": "Seasalter / Whitstable",
-"prob": 13
+"site": "Whitstable",
+"prob": 11
 },
 {
 "wd": "Fri",
 "dd": "10 Jul",
-"site": "Bexhill",
-"prob": 2
+"site": "Aldeburgh",
+"prob": 7
 },
 {
 "wd": "Sat",
