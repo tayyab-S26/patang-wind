@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patang Wind — beach game planner</title>
+<style>
+:root{--bg:#fbf8f1;--card:#fff;--ink:#26211a;--mut:#8a8170;--line:#e7ded0;
+--hi-bg:#e7f3e3;--hi:#2f7d3f;--mid-bg:#fbeed4;--mid:#9a6b12;--lo-bg:#f4efe6;--accent:#c9a227;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding:22px 16px 60px}
+h1{font-size:22px;font-weight:600;margin:0}
+.sub1{color:var(--mut);font-size:13px;margin:2px 0 0}
+.crit{color:var(--mut);font-size:12.5px;margin:8px 0 18px}
+.hero{display:flex;align-items:center;gap:18px;background:var(--card);border:2px solid var(--accent);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.hero.none{border-color:var(--line);color:var(--mut);font-size:14px;display:block}
+.lbl{font-size:12px;color:var(--mut);margin-bottom:3px}
+.hsite{font-size:18px;font-weight:600}
+.hmeta{font-size:13.5px;color:#5c5446;margin-top:2px}
+.hnum{margin-left:auto;text-align:right;line-height:1}
+.hnum span{font-size:42px;font-weight:600;color:var(--hi)}
+.hnum small{display:block;font-size:11px;color:var(--mut);margin-top:2px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:7px 4px;text-align:center}
+thead th{font-size:11px;color:var(--mut);font-weight:500;border-bottom:1px solid var(--line)}
+thead th span{display:block;font-size:10px;opacity:.8}
+th.site{text-align:left;font-weight:600;font-size:13px;white-space:nowrap;position:sticky;left:0;background:var(--card);padding-left:12px;border-right:1px solid var(--line)}
+th.site .sea{display:block;font-weight:400;font-size:11px;color:var(--mut)}
+tbody tr+tr td,tbody tr+tr th{border-top:1px solid var(--line)}
+.cell{min-width:70px}
+.pct{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.sub{display:block;font-size:11px;font-weight:400}
+.cell.hi{background:var(--hi-bg)}.cell.hi .pct{color:var(--hi)}.cell.hi .sub{color:var(--hi)}
+.cell.mid{background:var(--mid-bg)}.cell.mid .pct{color:var(--mid)}.cell.mid .sub{color:var(--mid)}
+.cell.lo{background:var(--lo-bg)}.cell.lo .pct{color:var(--mut)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--mut);margin:12px 2px 0}
+.dot{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.olbl{font-size:12.5px;color:#5c5446;margin:22px 0 8px}
+.outlook{display:flex;flex-wrap:wrap;gap:8px}
+.ochip{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:12.5px;color:var(--mut)}
+.ochip span{color:#5c5446}
+.foot{color:var(--mut);font-size:12px;margin-top:26px;line-height:1.7}
+.foot a{color:#5c5446}
+</style></head><body>
+<div class="wrap">
+<h1>Patang Wind</h1>
+<p class="sub1">UK beach game planner &middot; updated Tue 30 Jun 2026, 12:27</p>
+<p class="crit">good day = 12–18 mph &middot; gust 18–26 &middot; 08:00–20:00 &middot; offshore only</p>
+<div class="hero"><div><div class="lbl">best window this week</div><div class="hsite">Thorpeness</div><div class="hmeta">Thu 2 Jul &middot; 9am &middot; 15 mph, gust 24 &middot; wind W (offshore)</div></div><div class="hnum"><span>60%</span><small>likely</small></div></div>
+<div class="scroll"><table>
+<thead><tr><th class="site">beach</th><th>Wed<span>1 Jul</span></th><th>Thu<span>2 Jul</span></th><th>Fri<span>3 Jul</span></th><th>Sat<span>4 Jul</span></th><th>Sun<span>5 Jul</span></th><th>Mon<span>6 Jul</span></th><th>Tue<span>7 Jul</span></th></tr></thead>
+<tbody><tr><th class="site">Minster / Sheppey<span class="sea">sea NNE</span></th><td class="cell lo" title="Wed 1 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Thu 2 Jul · 4% · 8am · 16 mph, gust 25, from WSW · gfs025 0%, ecmwf 6%"><span class="pct">4%</span></td><td class="cell lo" title="Fri 3 Jul · 11% · 8pm · 14 mph, gust 20, from SW · gfs025 19%, ecmwf 6%"><span class="pct">11%</span></td><td class="cell lo" title="Sat 4 Jul · 13% · 2pm · 13 mph, gust 21, from WSW · gfs025 3%, ecmwf 20%"><span class="pct">13%</span></td><td class="cell lo" title="Sun 5 Jul · 5% · 4pm · 13 mph, gust 24, from WSW · gfs025 0%, ecmwf 8%"><span class="pct">5%</span></td><td class="cell lo" title="Mon 6 Jul · 5% · 6pm · 12 mph, gust 25, from SW · gfs025 3%, ecmwf 6%"><span class="pct">5%</span></td><td class="cell lo" title="Tue 7 Jul · 2% · 8pm · 17 mph, gust 26, from SW · gfs025 0%, ecmwf 4%"><span class="pct">2%</span></td></tr><tr><th class="site">Seasalter / Whitstable<span class="sea">sea NNE</span></th><td class="cell lo" title="Wed 1 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Thu 2 Jul · 9% · 8am · 16 mph, gust 25, from WSW · gfs025 13%, ecmwf 6%"><span class="pct">9%</span></td><td class="cell lo" title="Fri 3 Jul · 16% · 8pm · 14 mph, gust 21, from SW · gfs025 26%, ecmwf 10%"><span class="pct">16%</span></td><td class="cell lo" title="Sat 4 Jul · 17% · 2pm · 13 mph, gust 21, from WSW · gfs025 3%, ecmwf 25%"><span class="pct">17%</span></td><td class="cell lo" title="Sun 5 Jul · 5% · 8pm · 12 mph, gust 22, from SW · gfs025 0%, ecmwf 8%"><span class="pct">5%</span></td><td class="cell lo" title="Mon 6 Jul · 5% · 6pm · 12 mph, gust 24, from SW · gfs025 3%, ecmwf 6%"><span class="pct">5%</span></td><td class="cell lo" title="Tue 7 Jul · 2% · 12pm · 14 mph, gust 22, from SSW · gfs025 3%, ecmwf 2%"><span class="pct">2%</span></td></tr><tr><th class="site">Walmer / Deal<span class="sea">sea ESE</span></th><td class="cell lo" title="Wed 1 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell mid" title="Thu 2 Jul · 46% · 10am · 14 mph, gust 23, from W · gfs025 87%, ecmwf 22%"><span class="pct">46%</span><span class="sub">10am W</span></td><td class="cell lo" title="Fri 3 Jul · 7% · 8pm · 15 mph, gust 22, from SW · gfs025 16%, ecmwf 2%"><span class="pct">7%</span></td><td class="cell lo" title="Sat 4 Jul · 27% · 6pm · 13 mph, gust 22, from W · gfs025 23%, ecmwf 29%"><span class="pct">27%</span></td><td class="cell lo" title="Sun 5 Jul · 10% · 8am · 14 mph, gust 20, from NW · gfs025 10%, ecmwf 10%"><span class="pct">10%</span></td><td class="cell lo" title="Mon 6 Jul · 10% · 6pm · 13 mph, gust 23, from W · gfs025 16%, ecmwf 6%"><span class="pct">10%</span></td><td class="cell lo" title="Tue 7 Jul · 10% · 8am · 15 mph, gust 21, from NW · gfs025 23%, ecmwf 2%"><span class="pct">10%</span></td></tr><tr><th class="site">Bexhill<span class="sea">sea SSE</span></th><td class="cell lo" title="Wed 1 Jul · 2% · 6pm · 12 mph, gust 20, from NW · gfs025 0%, ecmwf 4%"><span class="pct">2%</span></td><td class="cell mid" title="Thu 2 Jul · 46% · 12pm · 14 mph, gust 22, from WNW · gfs025 48%, ecmwf 45%"><span class="pct">46%</span><span class="sub">12pm WNW</span></td><td class="cell lo" title="Fri 3 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Sat 4 Jul · 10% · 8pm · 16 mph, gust 24, from W · gfs025 6%, ecmwf 12%"><span class="pct">10%</span></td><td class="cell lo" title="Sun 5 Jul · 6% · 1pm · 13 mph, gust 19, from WNW · gfs025 6%, ecmwf 6%"><span class="pct">6%</span></td><td class="cell lo" title="Mon 6 Jul · 6% · 1pm · 13 mph, gust 24, from NW · gfs025 13%, ecmwf 2%"><span class="pct">6%</span></td><td class="cell lo" title="Tue 7 Jul · 11% · 5pm · 13 mph, gust 23, from NW · gfs025 10%, ecmwf 12%"><span class="pct">11%</span></td></tr><tr><th class="site">Seaford<span class="sea">sea SSW</span></th><td class="cell lo" title="Wed 1 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Thu 2 Jul · 13% · 4pm · 12 mph, gust 23, from NNW · gfs025 6%, ecmwf 18%"><span class="pct">13%</span></td><td class="cell lo" title="Fri 3 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Sat 4 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Sun 5 Jul · 1% · 6pm · 15 mph, gust 18, from ENE · gfs025 3%, ecmwf 0%"><span class="pct">1%</span></td><td class="cell lo" title="Mon 6 Jul · 2% · 6pm · 16 mph, gust 19, from ENE · gfs025 6%, ecmwf 0%"><span class="pct">2%</span></td><td class="cell lo" title="Tue 7 Jul · 4% · 7pm · 14 mph, gust 24, from NW · gfs025 0%, ecmwf 6%"><span class="pct">4%</span></td></tr><tr><th class="site">Portland / Chesil<span class="sea">sea SW</span></th><td class="cell lo" title="Wed 1 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Thu 2 Jul · 2% · 10am · 15 mph, gust 21, from NNW · gfs025 3%, ecmwf 2%"><span class="pct">2%</span></td><td class="cell lo" title="Fri 3 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Sat 4 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Sun 5 Jul · 0%"><span class="pct">&ndash;</span></td><td class="cell lo" title="Mon 6 Jul · 1% · 9am · 16 mph, gust 23, from NNE · gfs025 3%, ecmwf 0%"><span class="pct">1%</span></td><td class="cell lo" title="Tue 7 Jul · 0%"><span class="pct">&ndash;</span></td></tr><tr><th class="site">Thorpeness<span class="sea">sea ESE</span></th><td class="cell lo" title="Wed 1 Jul · 1% · 4pm · 12 mph, gust 21, from WNW · gfs025 0%, ecmwf 2%"><span class="pct">1%</span></td><td class="cell hi" title="Thu 2 Jul · 60% · 9am · 15 mph, gust 24, from W · gfs025 87%, ecmwf 43%"><span class="pct">60%</span><span class="sub">9am W</span></td><td class="cell lo" title="Fri 3 Jul · 5% · 12pm · 12 mph, gust 22, from WNW · gfs025 3%, ecmwf 6%"><span class="pct">5%</span></td><td class="cell mid" title="Sat 4 Jul · 57% · 2pm · 14 mph, gust 22, from W · gfs025 42%, ecmwf 67%"><span class="pct">57%</span><span class="sub">2pm W</span></td><td class="cell lo" title="Sun 5 Jul · 26% · 12pm · 14 mph, gust 23, from WNW · gfs025 29%, ecmwf 24%"><span class="pct">26%</span></td><td class="cell lo" title="Mon 6 Jul · 21% · 12pm · 13 mph, gust 23, from WNW · gfs025 29%, ecmwf 16%"><span class="pct">21%</span></td><td class="cell lo" title="Tue 7 Jul · 20% · 10am · 15 mph, gust 23, from WNW · gfs025 29%, ecmwf 14%"><span class="pct">20%</span></td></tr><tr><th class="site">Bawdsey / Felixstowe<span class="sea">sea SE</span></th><td class="cell lo" title="Wed 1 Jul · 1% · 4pm · 14 mph, gust 18, from NW · gfs025 3%, ecmwf 0%"><span class="pct">1%</span></td><td class="cell mid" title="Thu 2 Jul · 50% · 2pm · 15 mph, gust 22, from NW · gfs025 94%, ecmwf 24%"><span class="pct">50%</span><span class="sub">2pm NW</span></td><td class="cell lo" title="Fri 3 Jul · 1% · 8pm · 13 mph, gust 25, from W · gfs025 3%, ecmwf 0%"><span class="pct">1%</span></td><td class="cell mid" title="Sat 4 Jul · 40% · 4pm · 14 mph, gust 21, from W · gfs025 32%, ecmwf 45%"><span class="pct">40%</span><span class="sub">4pm W</span></td><td class="cell lo" title="Sun 5 Jul · 17% · 12pm · 15 mph, gust 23, from WNW · gfs025 29%, ecmwf 10%"><span class="pct">17%</span></td><td class="cell lo" title="Mon 6 Jul · 11% · 8am · 15 mph, gust 22, from WNW · gfs025 23%, ecmwf 4%"><span class="pct">11%</span></td><td class="cell lo" title="Tue 7 Jul · 17% · 8am · 14 mph, gust 23, from WNW · gfs025 29%, ecmwf 10%"><span class="pct">17%</span></td></tr></tbody>
+</table></div>
+<div class="legend">
+<span><span class="dot" style="background:var(--hi-bg);border:1px solid var(--hi)"></span>likely &ge;60%</span>
+<span><span class="dot" style="background:var(--mid-bg);border:1px solid var(--mid)"></span>possible 35–59%</span>
+<span><span class="dot" style="background:var(--lo-bg);border:1px solid var(--line)"></span>low &lt;35%</span>
+<span>tap a cell for the detail</span>
+</div>
+<p class="olbl">10–14 day outlook &middot; rough, low confidence</p>
+<div class="outlook"><div class="ochip"><span>Wed 8 Jul</span> Thorpeness 17%</div><div class="ochip"><span>Thu 9 Jul</span> Seasalter / Whitstable 13%</div><div class="ochip"><span>Fri 10 Jul</span> Bexhill 2%</div><div class="ochip"><span>Sat 11 Jul</span> Seaford 6%</div><div class="ochip"><span>Sun 12 Jul</span> Seaford 10%</div><div class="ochip"><span>Mon 13 Jul</span> Seaford 12%</div></div>
+<p class="foot">Probability = share of the ensemble forecast runs (GFS + ECMWF, via
+<a href="https://open-meteo.com">Open-Meteo</a>) with a steady offshore window that day.
+Gust forecasts are the least certain part — treat the number as a ranking, not a promise.
+Summer winds are light; the board greens up Oct–Apr. Auto-updates ~4&times;/day.</p>
+</div></body></html>

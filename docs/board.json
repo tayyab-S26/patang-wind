@@ -1,0 +1,1921 @@
+{
+"generated": "Tue 30 Jun 2026, 12:27",
+"criteria": {
+"mean_min": 12,
+"mean_max": 18,
+"gust_min": 18,
+"gust_max": 26,
+"hour_start": 8,
+"hour_end": 20,
+"offshore_arc": 60,
+"firm_days": 7,
+"outlook_days": 14
+},
+"sites": [
+{
+"name": "Minster / Sheppey",
+"sea": 22,
+"sea_c": "NNE",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 9,
+"models": {
+"gfs025": 10,
+"ecmwf_ifs025": 8
+},
+"peak": {
+"hour": 20,
+"mph": 14,
+"gust": 20,
+"from": "SW"
+},
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 8,
+"mph": 16,
+"gust": 25,
+"from": "WSW"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 11,
+"models": {
+"gfs025": 19,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 20,
+"mph": 14,
+"gust": 20,
+"from": "SW"
+},
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 13,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 20
+},
+"peak": {
+"hour": 14,
+"mph": 13,
+"gust": 21,
+"from": "WSW"
+},
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 5,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 8
+},
+"peak": {
+"hour": 16,
+"mph": 13,
+"gust": 24,
+"from": "WSW"
+},
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 5,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 18,
+"mph": 12,
+"gust": 25,
+"from": "SW"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 2,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 4
+},
+"peak": {
+"hour": 20,
+"mph": 17,
+"gust": 26,
+"from": "SW"
+},
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 12,
+"mph": 14,
+"gust": 25,
+"from": "WSW"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 11,
+"models": {
+"gfs025": 16,
+"ecmwf_ifs025": 8
+},
+"peak": {
+"hour": 18,
+"mph": 14,
+"gust": 23,
+"from": "SW"
+},
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 14,
+"mph": 12,
+"gust": 26,
+"from": "SW"
+},
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 9,
+"mph": 12,
+"gust": 24,
+"from": "SSW"
+},
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 11,
+"mph": 12,
+"gust": 26,
+"from": "SW"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 10,
+"mph": 13,
+"gust": 24,
+"from": "SW"
+},
+"lead": 13
+}
+]
+},
+{
+"name": "Seasalter / Whitstable",
+"sea": 23,
+"sea_c": "NNE",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 6,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 20,
+"mph": 14,
+"gust": 20,
+"from": "SW"
+},
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 9,
+"models": {
+"gfs025": 13,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 8,
+"mph": 16,
+"gust": 25,
+"from": "WSW"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 16,
+"models": {
+"gfs025": 26,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 20,
+"mph": 14,
+"gust": 21,
+"from": "SW"
+},
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 17,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 25
+},
+"peak": {
+"hour": 14,
+"mph": 13,
+"gust": 21,
+"from": "WSW"
+},
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 5,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 8
+},
+"peak": {
+"hour": 20,
+"mph": 12,
+"gust": 22,
+"from": "SW"
+},
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 5,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 18,
+"mph": 12,
+"gust": 24,
+"from": "SW"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 2,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 12,
+"mph": 14,
+"gust": 22,
+"from": "SSW"
+},
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 4,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 13,
+"mph": 13,
+"gust": 25,
+"from": "WSW"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 13,
+"models": {
+"gfs025": 19,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 18,
+"mph": 14,
+"gust": 23,
+"from": "SW"
+},
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 15,
+"mph": 12,
+"gust": 26,
+"from": "SW"
+},
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 9,
+"mph": 12,
+"gust": 24,
+"from": "SSW"
+},
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 10,
+"mph": 12,
+"gust": 22,
+"from": "SW"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 10,
+"mph": 12,
+"gust": 24,
+"from": "SW"
+},
+"lead": 13
+}
+]
+},
+{
+"name": "Walmer / Deal",
+"sea": 101,
+"sea_c": "ESE",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 5,
+"models": {
+"gfs025": 10,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 20,
+"mph": 15,
+"gust": 20,
+"from": "SW"
+},
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 46,
+"models": {
+"gfs025": 87,
+"ecmwf_ifs025": 22
+},
+"peak": {
+"hour": 10,
+"mph": 14,
+"gust": 23,
+"from": "W"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 7,
+"models": {
+"gfs025": 16,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 20,
+"mph": 15,
+"gust": 22,
+"from": "SW"
+},
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 27,
+"models": {
+"gfs025": 23,
+"ecmwf_ifs025": 29
+},
+"peak": {
+"hour": 18,
+"mph": 13,
+"gust": 22,
+"from": "W"
+},
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 10,
+"models": {
+"gfs025": 10,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 8,
+"mph": 14,
+"gust": 20,
+"from": "NW"
+},
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 10,
+"models": {
+"gfs025": 16,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 18,
+"mph": 13,
+"gust": 23,
+"from": "W"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 10,
+"models": {
+"gfs025": 23,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 8,
+"mph": 15,
+"gust": 21,
+"from": "NW"
+},
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 6,
+"models": {
+"gfs025": 13,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 8,
+"mph": 14,
+"gust": 22,
+"from": "WNW"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 9,
+"models": {
+"gfs025": 13,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 10,
+"mph": 15,
+"gust": 20,
+"from": "W"
+},
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 13,
+"mph": 12,
+"gust": 25,
+"from": "SW"
+},
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 18,
+"mph": 12,
+"gust": 25,
+"from": "SW"
+},
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 14,
+"mph": 12,
+"gust": 25,
+"from": "W"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 14,
+"mph": 12,
+"gust": 26,
+"from": "SW"
+},
+"lead": 13
+}
+]
+},
+{
+"name": "Bexhill",
+"sea": 158,
+"sea_c": "SSE",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 2,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 4
+},
+"peak": {
+"hour": 18,
+"mph": 12,
+"gust": 20,
+"from": "NW"
+},
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 46,
+"models": {
+"gfs025": 48,
+"ecmwf_ifs025": 45
+},
+"peak": {
+"hour": 12,
+"mph": 14,
+"gust": 22,
+"from": "WNW"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 10,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 12
+},
+"peak": {
+"hour": 20,
+"mph": 16,
+"gust": 24,
+"from": "W"
+},
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 6,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 13,
+"mph": 13,
+"gust": 19,
+"from": "WNW"
+},
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 6,
+"models": {
+"gfs025": 13,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 13,
+"mph": 13,
+"gust": 24,
+"from": "NW"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 11,
+"models": {
+"gfs025": 10,
+"ecmwf_ifs025": 12
+},
+"peak": {
+"hour": 17,
+"mph": 13,
+"gust": 23,
+"from": "NW"
+},
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 4,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 20,
+"mph": 14,
+"gust": 20,
+"from": "NNW"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 4,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 11,
+"mph": 13,
+"gust": 19,
+"from": "NW"
+},
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 2,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 4
+},
+"peak": {
+"hour": 10,
+"mph": 14,
+"gust": 26,
+"from": "WNW"
+},
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 5,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 8
+},
+"peak": {
+"hour": 17,
+"mph": 13,
+"gust": 25,
+"from": "N"
+},
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 6,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 9,
+"mph": 13,
+"gust": 24,
+"from": "NNE"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 9,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 14
+},
+"peak": {
+"hour": 11,
+"mph": 14,
+"gust": 24,
+"from": "NNE"
+},
+"lead": 13
+}
+]
+},
+{
+"name": "Seaford",
+"sea": 202,
+"sea_c": "SSW",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 13,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 18
+},
+"peak": {
+"hour": 16,
+"mph": 12,
+"gust": 23,
+"from": "NNW"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 1,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 18,
+"mph": 15,
+"gust": 18,
+"from": "ENE"
+},
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 2,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 18,
+"mph": 16,
+"gust": 19,
+"from": "ENE"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 19,
+"mph": 14,
+"gust": 24,
+"from": "NW"
+},
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 19,
+"mph": 13,
+"gust": 24,
+"from": "NE"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 4,
+"models": {
+"gfs025": 10,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 20,
+"mph": 16,
+"gust": 18,
+"from": "ENE"
+},
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 2,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 4
+},
+"peak": {
+"hour": 16,
+"mph": 13,
+"gust": 24,
+"from": "ENE"
+},
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 6,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 19,
+"mph": 12,
+"gust": 24,
+"from": "NE"
+},
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 10,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 16
+},
+"peak": {
+"hour": 8,
+"mph": 14,
+"gust": 23,
+"from": "NE"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 12,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 20
+},
+"peak": {
+"hour": 17,
+"mph": 13,
+"gust": 25,
+"from": "NE"
+},
+"lead": 13
+}
+]
+},
+{
+"name": "Portland / Chesil",
+"sea": 214,
+"sea_c": "SW",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 2,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 10,
+"mph": 15,
+"gust": 21,
+"from": "NNW"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 1,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 9,
+"mph": 16,
+"gust": 23,
+"from": "NNE"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 10,
+"mph": 14,
+"gust": 18,
+"from": "NNW"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 19,
+"mph": 14,
+"gust": 26,
+"from": "NNW"
+},
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 10,
+"mph": 12,
+"gust": 24,
+"from": "NE"
+},
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 5,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 8
+},
+"peak": {
+"hour": 8,
+"mph": 12,
+"gust": 24,
+"from": "NE"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 6,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 19,
+"mph": 13,
+"gust": 24,
+"from": "NNW"
+},
+"lead": 13
+}
+]
+},
+{
+"name": "Thorpeness",
+"sea": 104,
+"sea_c": "ESE",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 16,
+"mph": 12,
+"gust": 21,
+"from": "WNW"
+},
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 60,
+"models": {
+"gfs025": 87,
+"ecmwf_ifs025": 43
+},
+"peak": {
+"hour": 9,
+"mph": 15,
+"gust": 24,
+"from": "W"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 5,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 12,
+"mph": 12,
+"gust": 22,
+"from": "WNW"
+},
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 57,
+"models": {
+"gfs025": 42,
+"ecmwf_ifs025": 67
+},
+"peak": {
+"hour": 14,
+"mph": 14,
+"gust": 22,
+"from": "W"
+},
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 26,
+"models": {
+"gfs025": 29,
+"ecmwf_ifs025": 24
+},
+"peak": {
+"hour": 12,
+"mph": 14,
+"gust": 23,
+"from": "WNW"
+},
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 21,
+"models": {
+"gfs025": 29,
+"ecmwf_ifs025": 16
+},
+"peak": {
+"hour": 12,
+"mph": 13,
+"gust": 23,
+"from": "WNW"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 20,
+"models": {
+"gfs025": 29,
+"ecmwf_ifs025": 14
+},
+"peak": {
+"hour": 10,
+"mph": 15,
+"gust": 23,
+"from": "WNW"
+},
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 17,
+"models": {
+"gfs025": 26,
+"ecmwf_ifs025": 12
+},
+"peak": {
+"hour": 11,
+"mph": 12,
+"gust": 21,
+"from": "WNW"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 6,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 8,
+"mph": 15,
+"gust": 24,
+"from": "WNW"
+},
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 2,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 4
+},
+"peak": {
+"hour": 12,
+"mph": 12,
+"gust": 26,
+"from": "WNW"
+},
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 12,
+"mph": 13,
+"gust": 24,
+"from": "WNW"
+},
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 11,
+"mph": 13,
+"gust": 24,
+"from": "WSW"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 4,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 6
+},
+"peak": {
+"hour": 12,
+"mph": 13,
+"gust": 23,
+"from": "WNW"
+},
+"lead": 13
+}
+]
+},
+{
+"name": "Bawdsey / Felixstowe",
+"sea": 135,
+"sea_c": "SE",
+"days": [
+{
+"date": "2026-06-30",
+"wd": "Tue",
+"dd": "30 Jun",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 0
+},
+{
+"date": "2026-07-01",
+"wd": "Wed",
+"dd": "1 Jul",
+"prob": 1,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 16,
+"mph": 14,
+"gust": 18,
+"from": "NW"
+},
+"lead": 1
+},
+{
+"date": "2026-07-02",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 50,
+"models": {
+"gfs025": 94,
+"ecmwf_ifs025": 24
+},
+"peak": {
+"hour": 14,
+"mph": 15,
+"gust": 22,
+"from": "NW"
+},
+"lead": 2
+},
+{
+"date": "2026-07-03",
+"wd": "Fri",
+"dd": "3 Jul",
+"prob": 1,
+"models": {
+"gfs025": 3,
+"ecmwf_ifs025": 0
+},
+"peak": {
+"hour": 20,
+"mph": 13,
+"gust": 25,
+"from": "W"
+},
+"lead": 3
+},
+{
+"date": "2026-07-04",
+"wd": "Sat",
+"dd": "4 Jul",
+"prob": 40,
+"models": {
+"gfs025": 32,
+"ecmwf_ifs025": 45
+},
+"peak": {
+"hour": 16,
+"mph": 14,
+"gust": 21,
+"from": "W"
+},
+"lead": 4
+},
+{
+"date": "2026-07-05",
+"wd": "Sun",
+"dd": "5 Jul",
+"prob": 17,
+"models": {
+"gfs025": 29,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 12,
+"mph": 15,
+"gust": 23,
+"from": "WNW"
+},
+"lead": 5
+},
+{
+"date": "2026-07-06",
+"wd": "Mon",
+"dd": "6 Jul",
+"prob": 11,
+"models": {
+"gfs025": 23,
+"ecmwf_ifs025": 4
+},
+"peak": {
+"hour": 8,
+"mph": 15,
+"gust": 22,
+"from": "WNW"
+},
+"lead": 6
+},
+{
+"date": "2026-07-07",
+"wd": "Tue",
+"dd": "7 Jul",
+"prob": 17,
+"models": {
+"gfs025": 29,
+"ecmwf_ifs025": 10
+},
+"peak": {
+"hour": 8,
+"mph": 14,
+"gust": 23,
+"from": "WNW"
+},
+"lead": 7
+},
+{
+"date": "2026-07-08",
+"wd": "Wed",
+"dd": "8 Jul",
+"prob": 6,
+"models": {
+"gfs025": 13,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 8,
+"mph": 14,
+"gust": 20,
+"from": "WNW"
+},
+"lead": 8
+},
+{
+"date": "2026-07-09",
+"wd": "Thu",
+"dd": "9 Jul",
+"prob": 4,
+"models": {
+"gfs025": 6,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 8,
+"mph": 14,
+"gust": 24,
+"from": "NW"
+},
+"lead": 9
+},
+{
+"date": "2026-07-10",
+"wd": "Fri",
+"dd": "10 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 10
+},
+{
+"date": "2026-07-11",
+"wd": "Sat",
+"dd": "11 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 11
+},
+{
+"date": "2026-07-12",
+"wd": "Sun",
+"dd": "12 Jul",
+"prob": 1,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 2
+},
+"peak": {
+"hour": 12,
+"mph": 12,
+"gust": 23,
+"from": "N"
+},
+"lead": 12
+},
+{
+"date": "2026-07-13",
+"wd": "Mon",
+"dd": "13 Jul",
+"prob": 0,
+"models": {
+"gfs025": 0,
+"ecmwf_ifs025": 0
+},
+"peak": null,
+"lead": 13
+}
+]
+}
+],
+"best_pick": {
+"site": "Thorpeness",
+"wd": "Thu",
+"dd": "2 Jul",
+"prob": 60,
+"peak": {
+"hour": 9,
+"mph": 15,
+"gust": 24,
+"from": "W"
+}
+},
+"outlook": [
+{
+"wd": "Wed",
+"dd": "8 Jul",
+"site": "Thorpeness",
+"prob": 17
+},
+{
+"wd": "Thu",
+"dd": "9 Jul",
+"site": "Seasalter / Whitstable",
+"prob": 13
+},
+{
+"wd": "Fri",
+"dd": "10 Jul",
+"site": "Bexhill",
+"prob": 2
+},
+{
+"wd": "Sat",
+"dd": "11 Jul",
+"site": "Seaford",
+"prob": 6
+},
+{
+"wd": "Sun",
+"dd": "12 Jul",
+"site": "Seaford",
+"prob": 10
+},
+{
+"wd": "Mon",
+"dd": "13 Jul",
+"site": "Seaford",
+"prob": 12
+}
+]
+}

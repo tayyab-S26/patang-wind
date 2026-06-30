@@ -1,0 +1,24 @@
+{
+  "thresholds": {
+    "mean_min": 12,
+    "mean_max": 18,
+    "gust_min": 18,
+    "gust_max": 26,
+    "hour_start": 8,
+    "hour_end": 20,
+    "offshore_arc": 60,
+    "firm_days": 7,
+    "outlook_days": 14
+  },
+  "models": ["gfs025", "ecmwf_ifs025"],
+  "sites": [
+    { "name": "Minster / Sheppey",      "lat": 51.43623753868814, "lon": 0.7970619372217482 },
+    { "name": "Seasalter / Whitstable", "lat": 51.34656125546958, "lon": 0.9683430261391845 },
+    { "name": "Walmer / Deal",          "lat": 51.20062312327557, "lon": 1.404978049221318 },
+    { "name": "Bexhill",                "lat": 50.832306734620886, "lon": 0.4275356391435688 },
+    { "name": "Seaford",                "lat": 50.76953433143468, "lon": 0.09793233053175206 },
+    { "name": "Portland / Chesil",      "lat": 50.519059622165535, "lon": -2.4584858446321722 },
+    { "name": "Thorpeness",             "lat": 52.15110722573965, "lon": 1.6026403226076729 },
+    { "name": "Bawdsey / Felixstowe",   "lat": 52.03549469207844, "lon": 1.4549989887897794 }
+  ]
+}
