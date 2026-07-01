@@ -133,7 +133,9 @@ def good(m, g, dd, sc):
 
 
 def day_prob(members, date, sc):
-    """Fraction of members with a real (>=2 consecutive hour) good window that day."""
+    """Fraction of members flyable for a FULL day — a contiguous run of good
+    hours >= full_day_hours (offshore + in band), because it's only worth
+    taking the day off if it's flyable across 8am-8pm, not just a few hours."""
     tot = len(members)
     if not tot:
         return 0, None
@@ -145,8 +147,7 @@ def day_prob(members, date, sc):
             if good(m, g, dd, sc):
                 good_hours.append(hr)
                 hourhits[hr].append((m, g, dd))
-        gs = set(good_hours)
-        if any((h in gs and h + 1 in gs) for h in good_hours):
+        if len(good_hours) >= TH["full_day_hours"]:
             fly += 1
     prob = round(100 * fly / tot)
     peak = None
@@ -229,7 +230,7 @@ def render(out):
                 f'<div class="hsite">{html.escape(bp["site"])}</div>'
                 f'<div class="hmeta">{bp["wd"]} {bp["dd"]} &middot; {fmt_hour(pk["hour"])} &middot; '
                 f'{pk["mph"]} mph, gust {pk["gust"]} &middot; wind {pk["from"]} (offshore)</div></div>'
-                f'<div class="hnum"><span>{bp["prob"]}%</span><small>likely</small></div></div>')
+                f'<div class="hnum"><span>{bp["prob"]}%</span><small>{"likely" if bp["prob"] >= 60 else "possible" if bp["prob"] >= 35 else "long shot"}</small></div></div>')
     else:
         hero = '<div class="hero none">No flying window in the band this week. Try the outlook below.</div>'
     outlook = "".join(
@@ -329,7 +330,7 @@ tbody tr+tr td,tbody tr+tr th{{border-top:1px solid var(--line)}}
 <p class="olbl">10–14 day outlook &middot; rough, low confidence</p>
 <div class="outlook">{outlook}</div>
 <p class="foot">Probability = share of {n} ensemble forecast runs (GFS + ECMWF, via
-<a href="https://open-meteo.com">Open-Meteo</a>) with a steady offshore window that day.
+<a href="https://open-meteo.com">Open-Meteo</a>) flyable offshore for most of 8am–8pm — a full day.
 Gust forecasts are the least certain part — treat the number as a ranking, not a promise.
 Summer winds are light; the board greens up Oct–Apr. Auto-updates ~4&times;/day.</p>
 </div></body></html>""".replace("{n}", "the")
