@@ -206,7 +206,7 @@ def build():
 
 
 def bucket(p):
-    return "hi" if p >= 60 else ("mid" if p >= 35 else "lo")
+    return "hi" if p >= 40 else ("mid" if p >= 20 else "lo")
 
 
 def render(out):
@@ -230,14 +230,14 @@ def render(out):
                 f'<div class="hsite">{html.escape(bp["site"])}</div>'
                 f'<div class="hmeta">{bp["wd"]} {bp["dd"]} &middot; {fmt_hour(pk["hour"])} &middot; '
                 f'{pk["mph"]} mph, gust {pk["gust"]} &middot; wind {pk["from"]} (offshore)</div></div>'
-                f'<div class="hnum"><span>{bp["prob"]}%</span><small>{"likely" if bp["prob"] >= 60 else "possible" if bp["prob"] >= 35 else "long shot"}</small></div></div>')
+                f'<div class="hnum"><span>{bp["prob"]}%</span><small>{"likely" if bp["prob"] >= 50 else "worth watching" if bp["prob"] >= 25 else "unlikely"}</small></div></div>')
     else:
         hero = '<div class="hero none">No flying window in the band this week. Try the outlook below.</div>'
     outlook = "".join(
         f'<div class="ochip"><span>{o["wd"]} {o["dd"]}</span> {html.escape(o["site"])} {o["prob"]}%</div>'
         for o in out["outlook"])
-    crit = (f'{th["mean_min"]}–{th["mean_max"]} mph &middot; gust {th["gust_min"]}–{th["gust_max"]} '
-            f'&middot; {th["hour_start"]:02d}:00–{th["hour_end"]:02d}:00 &middot; offshore only')
+    crit = (f'{th["mean_min"]}–{th["mean_max"]} mph &middot; gust &le;{th["gust_max"]} '
+            f'&middot; offshore &middot; {th["full_day_hours"]}+ hrs of {th["hour_start"]:02d}:00–{th["hour_end"]:02d}:00')
     return PAGE.format(generated=out["generated"], crit=crit, hero=hero, head=head,
                        rows="".join(rows), outlook=outlook)
 
@@ -322,9 +322,9 @@ tbody tr+tr td,tbody tr+tr th{{border-top:1px solid var(--line)}}
 <tbody>{rows}</tbody>
 </table></div>
 <div class="legend">
-<span><span class="dot" style="background:var(--hi-bg);border:1px solid var(--hi)"></span>likely &ge;60%</span>
-<span><span class="dot" style="background:var(--mid-bg);border:1px solid var(--mid)"></span>possible 35–59%</span>
-<span><span class="dot" style="background:var(--lo-bg);border:1px solid var(--line)"></span>low &lt;35%</span>
+<span><span class="dot" style="background:var(--hi-bg);border:1px solid var(--hi)"></span>strong &ge;40%</span>
+<span><span class="dot" style="background:var(--mid-bg);border:1px solid var(--mid)"></span>worth watching 20–39%</span>
+<span><span class="dot" style="background:var(--lo-bg);border:1px solid var(--line)"></span>low &lt;20%</span>
 <span>tap a cell for the detail</span>
 </div>
 <p class="olbl">10–14 day outlook &middot; rough, low confidence</p>
