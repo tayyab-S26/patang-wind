@@ -83,7 +83,7 @@ def main():
     out = {"g": gen.strftime("%a %-d %b, %H:%M"), "th": B.TH, "sites": [], "best": None, "outlook": []}
     allbest = []
     for s in B.SITES:
-        sea = B.seaward(s["lat"], s["lon"])
+        sea = B.sea_for(s)
         sm = B.sea_mean(sea)
         per = B.pull(s["lat"], s["lon"])
         detmap = det_pull(s["lat"], s["lon"])

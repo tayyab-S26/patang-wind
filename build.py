@@ -9,7 +9,7 @@ OFFSHORE / out to sea). A day is GREEN only when BOTH decision models agree it's
 full offshore day; AMBER when they split (a coin-flip); grey when neither bites.
 Writes a static page to docs/ that GitHub Pages serves. Runs from a GitHub Action.
 """
-import urllib.request, json, datetime, re, math, os, html
+import urllib.request, json, datetime, re, math, os, html, time
 from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -28,9 +28,19 @@ COMP = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
         "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
 
 
-def get(url, timeout=120):
-    with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
-        return json.load(r)
+def get(url, timeout=120, tries=4):
+    """Fetch JSON with retries — the build fires ~24 Open-Meteo calls in a burst
+    per run, so a single transient timeout / throttle shouldn't fail the whole
+    build."""
+    last = None
+    for i in range(tries):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
+                return json.load(r)
+        except Exception as e:
+            last = e
+            time.sleep(1.5 * (i + 1))
+    raise last
 
 
 def comp(d):
@@ -77,7 +87,7 @@ def seaward(lat, lon):
     try:
         el = get(url).get("elevation", [])
     except Exception:
-        return None
+        return []
     sea = []
     for b in bearings:
         ok = True
@@ -89,6 +99,16 @@ def seaward(lat, lon):
         if ok:
             sea.append(b)
     return sea
+
+
+def sea_for(s):
+    """Sea-bearing set for a site. Beach geography is static, so prefer the
+    cached 'sea_deg' in config.json and only hit the elevation API when it's
+    missing — that keeps the scheduled build off a flaky per-run dependency."""
+    cached = s.get("sea_deg")
+    if cached:
+        return list(cached)
+    return seaward(s["lat"], s["lon"])
 
 
 def sea_mean(sea):
@@ -218,7 +238,7 @@ def build():
            "sites": [], "best_pick": None, "outlook": []}
     allbest = []
     for s in SITES:
-        sea = seaward(s["lat"], s["lon"])
+        sea = sea_for(s)
         sm = sea_mean(sea)
         per = pull(s["lat"], s["lon"])
         dates = sorted({d for m in DECIDE if m in per for d in per[m]})
@@ -270,7 +290,8 @@ def short(m):
 def render(out):
     th = out["criteria"]
     firm_days = th["firm_days"]
-    cols = [d for d in out["sites"][0]["days"] if 0 <= d["lead"] <= firm_days] if out["sites"] else []
+    base = max(out["sites"], key=lambda s: len(s["days"]), default=None) if out["sites"] else None
+    cols = [d for d in base["days"] if 0 <= d["lead"] <= firm_days] if base else []
     head = "".join(f'<th>{"Today" if c["lead"] == 0 else c["wd"]}<span>{c["dd"]}</span></th>' for c in cols)
     rows = []
     for s in out["sites"]:
