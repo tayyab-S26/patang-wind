@@ -11,7 +11,8 @@
     "firm_days": 7,
     "outlook_days": 14
   },
-  "models": ["gfs025", "ecmwf_ifs025"],
+  "decide_models": ["gfs_seamless", "ukmo_seamless"],
+  "watch_models": ["ecmwf_ifs025"],
   "sites": [
     { "name": "Sheerness",      "lat": 51.43623753868814, "lon": 0.7970619372217482 },
     { "name": "Whitstable",     "lat": 51.34656125546958, "lon": 0.9683430261391845 },

@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Patang Wind — UK beach game planner.
 
-Pulls ensemble wind forecasts from Open-Meteo (free, no key) for each beach,
-scores each day against a fighter-kite flying window (steady wind + gust band,
-inside flying hours, blowing OFFSHORE / out to sea), and writes a static page
-to docs/ that GitHub Pages serves. Runs unattended from a GitHub Action.
+Pulls deterministic wind forecasts from Open-Meteo (free, no key) for each beach
+from the two models Tayyab checks on the day — XCWeather's GFS and the Met Office
+(UKMO) — plus ECMWF as a silent second opinion. Scores each day against a
+fighter-kite flying window (steady wind + gust band, inside flying hours, blowing
+OFFSHORE / out to sea). A day is GREEN only when BOTH decision models agree it's a
+full offshore day; AMBER when they split (a coin-flip); grey when neither bites.
+Writes a static page to docs/ that GitHub Pages serves. Runs from a GitHub Action.
 """
 import urllib.request, json, datetime, re, math, os, html
 from collections import defaultdict
@@ -12,7 +15,13 @@ from collections import defaultdict
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CFG = json.load(open(os.path.join(ROOT, "config.json")))
 TH = CFG["thresholds"]
-MODELS = CFG.get("models", ["gfs025", "ecmwf_ifs025"])
+# The two models you actually check on the day drive the verdict; ECMWF rides
+# along silently so we can later score whether its dissents come true.
+DECIDE = CFG.get("decide_models", ["gfs_seamless", "ukmo_seamless"])
+WATCH = CFG.get("watch_models", ["ecmwf_ifs025"])
+ALLMODELS = DECIDE + WATCH
+MODEL_LABEL = {"gfs_seamless": "XC (GFS)", "ukmo_seamless": "Met Office",
+               "ecmwf_ifs025": "ECMWF", "icon_seamless": "ICON", "gem_global": "GEM"}
 SITES = CFG["sites"]
 UA = {"User-Agent": "patang-wind-planner/1.0 (hobby; github pages)"}
 COMP = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
@@ -105,41 +114,34 @@ def offshore(dd, sea):
 
 
 def pull(lat, lon):
-    """Pull every ensemble member's hourly wind for the flying hours, per model."""
+    """Deterministic hourly wind for every model, one API call.
+
+    Open-Meteo suffixes each series with the model id when several models are
+    requested (wind_speed_10m_gfs_seamless, ...). Returns
+    {model: {date: [(hr, mean, gust, dir), ...]}} for the flying hours only."""
+    url = ("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s"
+           "&hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m"
+           "&wind_speed_unit=mph&timezone=Europe/London&forecast_days=%d&models=%s"
+           % (lat, lon, TH["outlook_days"], ",".join(ALLMODELS)))
+    try:
+        d = get(url)
+    except Exception:
+        return {}
+    H = d.get("hourly", {})
+    times = H.get("time", [])
     per = {}
-    for model in MODELS:
-        url = ("https://ensemble-api.open-meteo.com/v1/ensemble?latitude=%s&longitude=%s"
-               "&hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m"
-               "&wind_speed_unit=mph&timezone=Europe/London&forecast_days=%d&models=%s"
-               % (lat, lon, TH["outlook_days"], model))
-        try:
-            d = get(url)
-        except Exception:
+    for m in ALLMODELS:
+        ws = H.get("wind_speed_10m_" + m)
+        wg = H.get("wind_gusts_10m_" + m)
+        wd = H.get("wind_direction_10m_" + m)
+        if not ws:
             continue
-        if isinstance(d, dict) and d.get("error"):
-            continue
-        H = d.get("hourly", {})
-        times = H.get("time", [])
-        mv = defaultdict(dict)
-        for k, arr in H.items():
-            if k == "time":
-                continue
-            mm = re.match(r"(wind_speed_10m|wind_gusts_10m|wind_direction_10m)(?:_member(\d+))?$", k)
-            if not mm:
-                continue
-            mv[mm.group(2) or "00"][mm.group(1)] = arr
-        members = {}
-        for memid, vd in mv.items():
-            ws, wg, wd = vd.get("wind_speed_10m"), vd.get("wind_gusts_10m"), vd.get("wind_direction_10m")
-            if not ws:
-                continue
-            byday = defaultdict(list)
-            for i, t in enumerate(times):
-                hr = int(t[11:13])
-                if TH["hour_start"] <= hr <= TH["hour_end"]:
-                    byday[t[:10]].append((hr, ws[i], wg[i] if wg else None, wd[i] if wd else None))
-            members[memid] = byday
-        per[model] = members
+        byday = defaultdict(list)
+        for i, t in enumerate(times):
+            hr = int(t[11:13])
+            if TH["hour_start"] <= hr <= TH["hour_end"]:
+                byday[t[:10]].append((hr, ws[i], wg[i] if wg else None, wd[i] if wd else None))
+        per[m] = byday
     return per
 
 
@@ -153,34 +155,60 @@ def good(m, g, dd, sea):
     return offshore(dd, sea)
 
 
-def day_prob(members, date, sea):
-    """Fraction of members flyable for a FULL day — a contiguous run of good
-    hours >= full_day_hours (offshore + in band), because it's only worth
-    taking the day off if it's flyable across 8am-8pm, not just a few hours."""
-    tot = len(members)
-    if not tot:
-        return 0, None
-    fly = 0
-    hourhits = defaultdict(list)
-    for memid, byday in members.items():
-        good_hours = []
-        for hr, m, g, dd in sorted(byday.get(date, [])):
-            if good(m, g, dd, sea):
-                good_hours.append(hr)
-                hourhits[hr].append((m, g, dd))
-        if len(good_hours) >= TH["full_day_hours"]:
-            fly += 1
-    prob = round(100 * fly / tot)
+def day_read(byday, date, sea):
+    """One model's deterministic read for a day: how many offshore + in-band
+    hours it gives inside the flying window, whether that clears full_day_hours,
+    the good-hours span, and a representative peak (median wind/gust/dir)."""
+    good_hours, rows = [], []
+    for hr, m, g, dd in sorted(byday.get(date, [])):
+        if good(m, g, dd, sea):
+            good_hours.append(hr)
+            rows.append((m, g, dd))
+    n = len(good_hours)
     peak = None
-    if hourhits:
-        ph = max(hourhits.items(), key=lambda x: len(x[1]))
-        ms = sorted(v[0] for v in ph[1])
-        gss = sorted(v[1] for v in ph[1])
-        xs = sum(math.cos(math.radians(v[2])) for v in ph[1])
-        ys = sum(math.sin(math.radians(v[2])) for v in ph[1])
-        peak = {"hour": ph[0], "mph": round(ms[len(ms) // 2]),
-                "gust": round(gss[len(gss) // 2]), "from": comp(math.degrees(math.atan2(ys, xs)) % 360)}
-    return prob, peak
+    if rows:
+        ms = sorted(r[0] for r in rows)
+        gs = sorted(r[1] for r in rows)
+        xs = sum(math.cos(math.radians(r[2])) for r in rows)
+        ys = sum(math.sin(math.radians(r[2])) for r in rows)
+        peak = {"hour": good_hours[len(good_hours) // 2], "mph": round(ms[len(ms) // 2]),
+                "gust": round(gs[len(gs) // 2]), "from": comp(math.degrees(math.atan2(ys, xs)) % 360)}
+    return {"hours": n, "go": n >= TH["full_day_hours"],
+            "span": [good_hours[0], good_hours[-1]] if good_hours else None, "peak": peak}
+
+
+def verdict_of(reads):
+    """GREEN when both decision models call a full offshore day; AMBER when they
+    split (a genuine coin-flip); grey when neither does."""
+    gos = [reads[m]["go"] for m in DECIDE if m in reads]
+    if gos and all(gos):
+        return "go"
+    if any(gos):
+        return "split"
+    return "no"
+
+
+def day_record(per, dt, sea, today):
+    reads = {m: day_read(per.get(m, {}), dt, sea) for m in ALLMODELS if m in per}
+    v = verdict_of(reads)
+    wd = datetime.date.fromisoformat(dt)
+    # headline peak: the Met Office read on a GO day (highest-res for UK coast),
+    # else whichever decision model likes it, else any read.
+    order = ["ukmo_seamless", "gfs_seamless"] + [m for m in ALLMODELS]
+    peak = None
+    for m in order:
+        r = reads.get(m)
+        if r and r["go"] and r["peak"]:
+            peak = r["peak"]; break
+    if peak is None:
+        for m in order:
+            r = reads.get(m)
+            if r and r["peak"]:
+                peak = r["peak"]; break
+    return {"date": dt, "wd": wd.strftime("%a"), "dd": wd.strftime("%-d %b"),
+            "lead": (wd - today).days, "verdict": v, "peak": peak,
+            "models": {m: {"hours": reads[m]["hours"], "go": reads[m]["go"]} for m in reads},
+            "agree": len({reads[m]["go"] for m in DECIDE if m in reads}) == 1}
 
 
 def build():
@@ -193,102 +221,113 @@ def build():
         sea = seaward(s["lat"], s["lon"])
         sm = sea_mean(sea)
         per = pull(s["lat"], s["lon"])
-        pooled = {}
-        for model, members in per.items():
-            for memid, byday in members.items():
-                pooled[(model, memid)] = byday
-        dates = sorted({d for byday in pooled.values() for d in byday})
-        days = []
-        for dt in dates:
-            prob, peak = day_prob(pooled, dt, sea)
-            models = {m: day_prob(per[m], dt, sea)[0] for m in per}
-            wd = datetime.date.fromisoformat(dt)
-            days.append({"date": dt, "wd": wd.strftime("%a"), "dd": wd.strftime("%-d %b"),
-                         "prob": prob, "models": models, "peak": peak, "lead": (wd - today).days})
+        dates = sorted({d for m in DECIDE if m in per for d in per[m]})
+        days = [day_record(per, dt, sea, today) for dt in dates]
         out["sites"].append({"name": s["name"],
                              "sea": round(sm) if sm is not None else None,
                              "sea_c": comp(sm) if sm is not None else "?",
                              "sea_arc": [comp(b) for b in sea], "days": days})
         for d in days:
-            allbest.append((d["prob"], s["name"], d))
-    firm = sorted([(p, n, d) for p, n, d in allbest if 0 <= d["lead"] <= TH["firm_days"]], key=lambda x: -x[0])
+            allbest.append((s["name"], d))
+    # best pick this week = a day both models AGREE on (verdict go), most hours first
+    def hrs(d):
+        return sum(d["models"].get(m, {}).get("hours", 0) for m in DECIDE)
+    firm = [(n, d) for n, d in allbest if 0 <= d["lead"] <= TH["firm_days"] and d["verdict"] == "go"]
+    firm.sort(key=lambda x: -hrs(x[1]))
     if firm:
-        p, n, d = firm[0]
-        out["best_pick"] = {"site": n, "wd": d["wd"], "dd": d["dd"], "prob": p, "peak": d["peak"]}
+        n, d = firm[0]
+        out["best_pick"] = {"site": n, "wd": d["wd"], "dd": d["dd"], "peak": d["peak"],
+                            "verdict": "go", "models": d["models"]}
+    else:  # nothing agreed — surface the best split day so the week isn't blank
+        split = [(n, d) for n, d in allbest if 0 <= d["lead"] <= TH["firm_days"] and d["verdict"] == "split"]
+        split.sort(key=lambda x: -hrs(x[1]))
+        if split:
+            n, d = split[0]
+            out["best_pick"] = {"site": n, "wd": d["wd"], "dd": d["dd"], "peak": d["peak"],
+                                "verdict": "split", "models": d["models"]}
+    rank = {"go": 2, "split": 1, "no": 0}
     byday = defaultdict(list)
-    for p, n, d in allbest:
+    for n, d in allbest:
         if TH["firm_days"] < d["lead"] <= TH["outlook_days"] - 1:
-            byday[d["date"]].append((p, n, d))
+            byday[d["date"]].append((n, d))
     for dt in sorted(byday):
-        p, n, d = max(byday[dt], key=lambda x: x[0])
-        out["outlook"].append({"wd": d["wd"], "dd": d["dd"], "site": n, "prob": p})
+        n, d = max(byday[dt], key=lambda x: (rank[x[1]["verdict"]], hrs(x[1])))
+        out["outlook"].append({"wd": d["wd"], "dd": d["dd"], "site": n, "verdict": d["verdict"]})
     os.makedirs(os.path.join(ROOT, "docs"), exist_ok=True)
     json.dump(out, open(os.path.join(ROOT, "docs", "board.json"), "w"), indent=0)
     open(os.path.join(ROOT, "docs", "index.html"), "w").write(render(out))
     print("wrote docs/index.html + docs/board.json |", len(out["sites"]), "sites | best:", out["best_pick"])
 
 
-def bucket(p):
-    return "hi" if p >= 40 else ("mid" if p >= 20 else "lo")
+VCLASS = {"go": "hi", "split": "mid", "no": "lo"}
+VWORD = {"go": "GO", "split": "maybe", "no": "—"}
+
+
+def short(m):
+    return MODEL_LABEL.get(m, m).split()[0]
 
 
 def render(out):
     th = out["criteria"]
     firm_days = th["firm_days"]
     cols = [d for d in out["sites"][0]["days"] if 0 <= d["lead"] <= firm_days] if out["sites"] else []
-    head = "".join(f'<th>{"Today" if c["lead"] == 0 else c["wd"]}<span>{c["dd"]}</span></th>' for c in c0(cols))
+    head = "".join(f'<th>{"Today" if c["lead"] == 0 else c["wd"]}<span>{c["dd"]}</span></th>' for c in cols)
     rows = []
     for s in out["sites"]:
-        cells = []
         by_lead = {d["lead"]: d for d in s["days"]}
-        for c in cols:
-            d = by_lead.get(c["lead"])
-            cells.append(cell(d, c))
+        cells = "".join(cell(by_lead.get(c["lead"]), c) for c in cols)
         sea = f'<span class="sea">sea {s["sea_c"]}</span>' if s["sea"] is not None else ""
-        rows.append(f'<tr><th class="site">{html.escape(s["name"])}{sea}</th>{"".join(cells)}</tr>')
+        rows.append(f'<tr><th class="site">{html.escape(s["name"])}{sea}</th>{cells}</tr>')
     bp = out["best_pick"]
     if bp and bp["peak"]:
         pk = bp["peak"]
+        go = bp["verdict"] == "go"
+        badge = "GO" if go else "MAYBE"
+        note = "XC + Met Office both agree" if go else "only one model likes it — a coin-flip"
         hero = (f'<div class="hero"><div><div class="lbl">best window this week</div>'
                 f'<div class="hsite">{html.escape(bp["site"])}</div>'
                 f'<div class="hmeta">{bp["wd"]} {bp["dd"]} &middot; {fmt_hour(pk["hour"])} &middot; '
-                f'{pk["mph"]} mph, gust {pk["gust"]} &middot; wind {pk["from"]} (offshore)</div></div>'
-                f'<div class="hnum"><span>{bp["prob"]}%</span><small>{"likely" if bp["prob"] >= 50 else "worth watching" if bp["prob"] >= 25 else "unlikely"}</small></div></div>')
+                f'{pk["mph"]} mph, gust {pk["gust"]} &middot; wind {pk["from"]} (offshore)</div>'
+                f'<div class="hnote">{note}</div></div>'
+                f'<div class="hnum {VCLASS[bp["verdict"]]}"><span>{badge}</span></div></div>')
     else:
-        hero = '<div class="hero none">No flying window in the band this week. Try the outlook below.</div>'
+        hero = '<div class="hero none">No day this week where both models agree. Try the outlook below.</div>'
     outlook = "".join(
-        f'<div class="ochip"><span>{o["wd"]} {o["dd"]}</span> {html.escape(o["site"])} {o["prob"]}%</div>'
+        f'<div class="ochip {VCLASS[o["verdict"]]}"><span>{o["wd"]} {o["dd"]}</span> '
+        f'{html.escape(o["site"])} {VWORD[o["verdict"]]}</div>'
         for o in out["outlook"])
     crit = (f'{th["mean_min"]}–{th["mean_max"]} mph &middot; gust &le;{th["gust_max"]} '
-            f'&middot; offshore &middot; {th["full_day_hours"]}+ hrs of {th["hour_start"]:02d}:00–{th["hour_end"]:02d}:00')
+            f'&middot; offshore &middot; {th["full_day_hours"]}+ hrs of {th["hour_start"]:02d}:00–{th["hour_end"]:02d}:00 '
+            f'&middot; <b>XC + Met Office must agree</b>')
     return PAGE.format(generated=out["generated"], crit=crit, hero=hero, head=head,
                        rows="".join(rows), outlook=outlook)
-
-
-def c0(cols):
-    return cols
 
 
 def cell(d, c):
     if d is None:
         return '<td class="cell lo"><span class="pct">&ndash;</span></td>'
-    p = d["prob"]
-    b = bucket(p)
+    v = d["verdict"]
+    b = VCLASS[v]
     peak = d["peak"]
     label = c["wd"] + " " + c["dd"]
-    if p == 0 and not peak:
-        title = f"{label} · 0%"
-        return f'<td class="cell lo" title="{html.escape(title)}"><span class="pct">&ndash;</span></td>'
-    sub = ""
-    if b != "lo" and peak:
-        sub = f'<span class="sub">{fmt_hour(peak["hour"])} {peak["from"]}</span>'
-    title = f"{label} · {p}%"
-    if peak:
-        title += f' · {fmt_hour(peak["hour"])} · {peak["mph"]} mph, gust {peak["gust"]}, from {peak["from"]}'
     ms = d.get("models") or {}
+    tip = {"go": "both agree — GO", "split": "split — coin-flip", "no": "no window"}[v]
+    title = f"{label} · {tip}"
+    if peak:
+        title += f' · {fmt_hour(peak["hour"])} {peak["mph"]} mph, gust {peak["gust"]}, {peak["from"]}'
     if ms:
-        title += " · " + ", ".join(f"{k.split('_')[0]} {v}%" for k, v in ms.items())
-    return f'<td class="cell {b}" title="{html.escape(title)}"><span class="pct">{p}%</span>{sub}</td>'
+        title += " · " + ", ".join(
+            f'{MODEL_LABEL.get(m, m)} {ms[m]["hours"]}h {"✓" if ms[m]["go"] else "✗"}'
+            for m in ALLMODELS if m in ms)
+    if v == "no":
+        return f'<td class="cell lo" title="{html.escape(title)}"><span class="pct">&ndash;</span></td>'
+    if v == "go":
+        main, sub = "GO", (f'<span class="sub">{fmt_hour(peak["hour"])} {peak["from"]}</span>' if peak else "")
+    else:
+        yes = [short(m) for m in DECIDE if ms.get(m, {}).get("go")]
+        main = (yes[0] if yes else "?") + "?"
+        sub = f'<span class="sub">{fmt_hour(peak["hour"])} {peak["from"]}</span>' if peak else ""
+    return f'<td class="cell {b}" title="{html.escape(title)}"><span class="pct">{main}</span>{sub}</td>'
 
 
 PAGE = """<!DOCTYPE html>
@@ -310,8 +349,9 @@ h1{{font-size:22px;font-weight:600;margin:0}}
 .hsite{{font-size:18px;font-weight:600}}
 .hmeta{{font-size:13.5px;color:#5c5446;margin-top:2px}}
 .hnum{{margin-left:auto;text-align:right;line-height:1}}
-.hnum span{{font-size:42px;font-weight:600;color:var(--hi)}}
-.hnum small{{display:block;font-size:11px;color:var(--mut);margin-top:2px}}
+.hnum span{{font-size:34px;font-weight:700;letter-spacing:.5px;color:var(--hi)}}
+.hnum.mid span{{color:var(--mid)}}
+.hnote{{font-size:12px;color:var(--mut);margin-top:5px}}
 .scroll{{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px;background:var(--card)}}
 table{{border-collapse:collapse;width:100%;min-width:560px}}
 th,td{{padding:7px 4px;text-align:center}}
@@ -332,6 +372,8 @@ tbody tr+tr td,tbody tr+tr th{{border-top:1px solid var(--line)}}
 .outlook{{display:flex;flex-wrap:wrap;gap:8px}}
 .ochip{{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:12.5px;color:var(--mut)}}
 .ochip span{{color:#5c5446}}
+.ochip.hi{{background:var(--hi-bg);border-color:var(--hi);color:var(--hi)}}
+.ochip.mid{{background:var(--mid-bg);border-color:var(--mid);color:var(--mid)}}
 .foot{{color:var(--mut);font-size:12px;margin-top:26px;line-height:1.7}}
 .foot a{{color:#5c5446}}
 </style></head><body>
@@ -345,16 +387,18 @@ tbody tr+tr td,tbody tr+tr th{{border-top:1px solid var(--line)}}
 <tbody>{rows}</tbody>
 </table></div>
 <div class="legend">
-<span><span class="dot" style="background:var(--hi-bg);border:1px solid var(--hi)"></span>strong &ge;40%</span>
-<span><span class="dot" style="background:var(--mid-bg);border:1px solid var(--mid)"></span>worth watching 20–39%</span>
-<span><span class="dot" style="background:var(--lo-bg);border:1px solid var(--line)"></span>low &lt;20%</span>
-<span>tap a cell for the detail</span>
+<span><span class="dot" style="background:var(--hi-bg);border:1px solid var(--hi)"></span><b>GO</b> — XC &amp; Met Office both agree</span>
+<span><span class="dot" style="background:var(--mid-bg);border:1px solid var(--mid)"></span><b>maybe</b> — they split (coin-flip); cell shows which app</span>
+<span><span class="dot" style="background:var(--lo-bg);border:1px solid var(--line)"></span>no offshore full-day</span>
+<span>tap a cell for both apps' hours</span>
 </div>
 <p class="olbl">10–14 day outlook &middot; rough, low confidence</p>
 <div class="outlook">{outlook}</div>
-<p class="foot">Probability = share of {n} ensemble forecast runs (GFS + ECMWF, via
-<a href="https://open-meteo.com">Open-Meteo</a>) flyable offshore for most of 8am–8pm — a full day.
-Gust forecasts are the least certain part — treat the number as a ranking, not a promise.
+<p class="foot">Each day is judged on the two models you check on the day — <b>XCWeather (GFS)</b> and
+the <b>Met Office (UKMO)</b>, via <a href="https://open-meteo.com">Open-Meteo</a>. GREEN only when
+<b>both</b> agree it's a full offshore day (9+ hrs of 8am–8pm); amber when they split. ECMWF rides
+along silently so we can later check whose call comes true at each beach.
+Gusts are the least certain part — treat as a ranking, not a promise.
 Summer winds are light; the board greens up Oct–Apr. Auto-updates ~4&times;/day.</p>
 </div></body></html>""".replace("{n}", "the")
 
