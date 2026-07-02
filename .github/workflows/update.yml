@@ -1,0 +1,35 @@
+name: refresh forecast
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # every 4 hours (UTC)
+  workflow_dispatch:          # a manual "Run workflow" button
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-forecast
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild board + prototype
+        run: python build_all.py
+      - name: Commit if the forecast changed
+        run: |
+          git config user.name "patang-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "no change"
+          else
+            git commit -m "auto: refresh forecast $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
