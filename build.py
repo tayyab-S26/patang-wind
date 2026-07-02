@@ -45,11 +45,16 @@ def offset(lat, lon, bearing, dist_km):
 
 
 def seaward(lat, lon):
-    """Return the compass bearing toward open sea, or None.
+    """Return the list of compass bearings that point at open sea (or []).
 
     Samples elevation in a 16-point ring at 3 km and 6 km. Open-Meteo's DEM
     returns exactly 0.0 over sea (land is non-zero, even negative for fens),
     so a bearing counts as sea only if both ring samples are exactly 0.0.
+
+    We keep the full SET of sea bearings rather than averaging them to a single
+    heading — headland/estuary beaches (Sheerness, Portland) have sea wrapping
+    round a wide, sometimes split arc, and averaging that to one point wrongly
+    rejects wind blowing at the edges of the arc (e.g. due-east open water).
     """
     bearings = [i * 22.5 for i in range(16)]
     dists = [3, 6]
@@ -74,11 +79,29 @@ def seaward(lat, lon):
                 ok = False; break
         if ok:
             sea.append(b)
+    return sea
+
+
+def sea_mean(sea):
+    """Circular-mean bearing of a sea-bearing set, for display only."""
     if not sea:
         return None
     x = sum(math.cos(math.radians(b)) for b in sea)
     y = sum(math.sin(math.radians(b)) for b in sea)
     return math.degrees(math.atan2(y, x)) % 360
+
+
+def offshore(dd, sea):
+    """True if wind FROM bearing dd blows OUT toward the sea.
+
+    Tests the downwind heading against every detected sea bearing (not a single
+    averaged one), so a wind counts as offshore when it heads into any part of
+    the open-water arc within offshore_arc degrees. Unknown direction / no sea
+    detected -> not filtered (returns True)."""
+    if dd is None or not sea:
+        return True
+    blow = (dd + 180) % 360
+    return any(angdiff(blow, b) <= TH["offshore_arc"] for b in sea)
 
 
 def pull(lat, lon):
@@ -120,19 +143,17 @@ def pull(lat, lon):
     return per
 
 
-def good(m, g, dd, sc):
+def good(m, g, dd, sea):
     if m is None or g is None:
         return False
     if not (TH["mean_min"] <= m <= TH["mean_max"]):
         return False
     if not (TH["gust_min"] <= g <= TH["gust_max"]):
         return False
-    if sc is not None and dd is not None and angdiff((dd + 180) % 360, sc) > TH["offshore_arc"]:
-        return False
-    return True
+    return offshore(dd, sea)
 
 
-def day_prob(members, date, sc):
+def day_prob(members, date, sea):
     """Fraction of members flyable for a FULL day — a contiguous run of good
     hours >= full_day_hours (offshore + in band), because it's only worth
     taking the day off if it's flyable across 8am-8pm, not just a few hours."""
@@ -144,7 +165,7 @@ def day_prob(members, date, sc):
     for memid, byday in members.items():
         good_hours = []
         for hr, m, g, dd in sorted(byday.get(date, [])):
-            if good(m, g, dd, sc):
+            if good(m, g, dd, sea):
                 good_hours.append(hr)
                 hourhits[hr].append((m, g, dd))
         if len(good_hours) >= TH["full_day_hours"]:
@@ -169,7 +190,8 @@ def build():
            "sites": [], "best_pick": None, "outlook": []}
     allbest = []
     for s in SITES:
-        sc = seaward(s["lat"], s["lon"])
+        sea = seaward(s["lat"], s["lon"])
+        sm = sea_mean(sea)
         per = pull(s["lat"], s["lon"])
         pooled = {}
         for model, members in per.items():
@@ -178,17 +200,18 @@ def build():
         dates = sorted({d for byday in pooled.values() for d in byday})
         days = []
         for dt in dates:
-            prob, peak = day_prob(pooled, dt, sc)
-            models = {m: day_prob(per[m], dt, sc)[0] for m in per}
+            prob, peak = day_prob(pooled, dt, sea)
+            models = {m: day_prob(per[m], dt, sea)[0] for m in per}
             wd = datetime.date.fromisoformat(dt)
             days.append({"date": dt, "wd": wd.strftime("%a"), "dd": wd.strftime("%-d %b"),
                          "prob": prob, "models": models, "peak": peak, "lead": (wd - today).days})
         out["sites"].append({"name": s["name"],
-                             "sea": round(sc) if sc is not None else None,
-                             "sea_c": comp(sc) if sc is not None else "?", "days": days})
+                             "sea": round(sm) if sm is not None else None,
+                             "sea_c": comp(sm) if sm is not None else "?",
+                             "sea_arc": [comp(b) for b in sea], "days": days})
         for d in days:
             allbest.append((d["prob"], s["name"], d))
-    firm = sorted([(p, n, d) for p, n, d in allbest if 1 <= d["lead"] <= TH["firm_days"]], key=lambda x: -x[0])
+    firm = sorted([(p, n, d) for p, n, d in allbest if 0 <= d["lead"] <= TH["firm_days"]], key=lambda x: -x[0])
     if firm:
         p, n, d = firm[0]
         out["best_pick"] = {"site": n, "wd": d["wd"], "dd": d["dd"], "prob": p, "peak": d["peak"]}
@@ -212,8 +235,8 @@ def bucket(p):
 def render(out):
     th = out["criteria"]
     firm_days = th["firm_days"]
-    cols = [d for d in out["sites"][0]["days"] if 1 <= d["lead"] <= firm_days] if out["sites"] else []
-    head = "".join(f'<th>{c["wd"]}<span>{c["dd"]}</span></th>' for c in c0(cols))
+    cols = [d for d in out["sites"][0]["days"] if 0 <= d["lead"] <= firm_days] if out["sites"] else []
+    head = "".join(f'<th>{"Today" if c["lead"] == 0 else c["wd"]}<span>{c["dd"]}</span></th>' for c in c0(cols))
     rows = []
     for s in out["sites"]:
         cells = []
