@@ -34,6 +34,12 @@ details p{margin:7px 0;color:#5c5446;line-height:1.6}
 .csea{font-size:11px;color:#8a8170;display:block;font-weight:400}
 .strip7{display:flex;gap:3px;margin-left:auto}
 .dc{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer}
+.dayhead{display:flex;align-items:center;gap:10px;padding:2px 13px 6px}
+.dayhead .cname{min-width:96px}
+.dh{width:32px;display:flex;flex-direction:column;align-items:center;line-height:1.12}
+.dh b{font-size:10px;font-weight:600;color:#8a8170}
+.dh span{font-size:9px;color:#b3a892}
+.dhchev{width:10px;flex:none}
 .chev{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #b3a892;transition:transform .15s;flex:none}
 .card.open .chev{transform:rotate(180deg)}
 .panel{display:none;padding:2px 14px 16px;border-top:1px solid #f0e8d9}
@@ -87,6 +93,17 @@ details p{margin:7px 0;color:#5c5446;line-height:1.6}
 .mk-hi{background:#2f7d3f}.mk-mid{background:#cf9518}.mk-lo{background:#a9a090}
 .lpop b{font-size:14px}.lpop a{color:#2f7d3f;font-weight:600}
 .leaflet-container{font:13px -apple-system,BlinkMacSystemFont,sans-serif}
+@media (max-width:430px){
+  .chead{gap:7px;padding:11px 10px}
+  .dayhead{gap:7px;padding:2px 10px 6px}
+  .cname{min-width:76px;font-size:13px}
+  .csea{font-size:10.5px}
+  .strip7{gap:2px}
+  .dc{width:26px;height:26px;font-size:10px;border-radius:5px}
+  .dh{width:26px}
+  .dh b{font-size:9px}
+  .dh span{font-size:8px}
+}
 """
 
 JS = r'''
@@ -106,6 +123,8 @@ html+='<details><summary>How to read this — tap to open</summary>'
 +'<p><b>GO (green)</b> means the two apps you check on the day — <b>XCWeather</b> and the <b>Met Office</b> — <b>both</b> forecast a full offshore day. <b>maybe (amber)</b> means they split: one says go, one says no — the cell shows which one. Grey means neither.</p>'
 +'<p><b>A good day</b> = wind 11–18 mph, gusts up to 26, blowing <b>offshore</b> (out to sea so kites fly over water), for <b>at least 9 hours</b> between 8am and 8pm — a full day, because it&#39;s only worth leaving work for a full day, not a lucky couple of hours.</p>'
 +'<p><b>Plan early, commit late.</b> A third model (ECMWF) rides along silently — tap any day to see all three. Summer winds are light; this fills with green from October to spring.</p></details>';
+var dhCols=D.sites[0].d.filter(function(d){return d.ld>=0&&d.ld<=7;});
+html+='<div class="dayhead"><div class="cname"></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')+'</div><div class="dhchev"></div></div>';
 D.sites.forEach(function(s,i){
   var firm=s.d.filter(function(d){return d.ld>=0&&d.ld<=7;}),cells="";
   firm.forEach(function(d){var k=vcls(d.v);cells+='<div class="dc" style="'+STY[k]+';font-size:12px;font-weight:700" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+'">'+cellTxt(d)+'</div>';});
