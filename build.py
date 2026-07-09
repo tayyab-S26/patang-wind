@@ -28,7 +28,7 @@ COMP = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
         "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
 
 
-def get(url, timeout=120, tries=4):
+def get(url, timeout=30, tries=4):
     """Fetch JSON with retries — the build fires ~24 Open-Meteo calls in a burst
     per run, so a single transient timeout / throttle shouldn't fail the whole
     build."""
