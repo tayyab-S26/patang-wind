@@ -83,14 +83,13 @@ def main():
     out = {"g": gen.strftime("%a %-d %b, %H:%M"), "th": B.TH, "sites": [], "best": None, "outlook": []}
     allbest = []
     for s in B.SITES:
-        sea = B.sea_for(s)
-        sm = B.sea_mean(sea)
+        face = B.face_for(s)
         per = B.pull(s["lat"], s["lon"])
         detmap = det_pull(s["lat"], s["lon"])
         dates = sorted({d for m in B.DECIDE if m in per for d in per[m]})
         days = []
         for dt in dates:
-            rec = B.day_record(per, dt, sea, today)
+            rec = B.day_record(per, dt, face, today)
             m = rec["models"]
             row = {"dd": rec["dd"], "wd": rec["wd"], "ld": rec["lead"], "v": rec["verdict"],
                    "pk": rec["peak"],
@@ -101,9 +100,10 @@ def main():
                 row["det"] = detmap.get(dt)
             days.append(row)
         out["sites"].append({"n": s["name"], "lat": round(s["lat"], 5), "lon": round(s["lon"], 5),
-                             "sea": round(sm) if sm is not None else None,
-                             "sc": B.comp(sm) if sm is not None else "?",
-                             "seaarc": [round(b) for b in sea], "d": days})
+                             "face": round(face) if face is not None else None,
+                             "fc": B.comp(face) if face is not None else "?",
+                             "off_from": B.comp((face + 180) % 360) if face is not None else "?",
+                             "d": days})
         for d in days:
             allbest.append((s["name"], d))
 

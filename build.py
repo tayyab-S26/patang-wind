@@ -120,17 +120,26 @@ def sea_mean(sea):
     return math.degrees(math.atan2(y, x)) % 360
 
 
-def offshore(dd, sea):
-    """True if wind FROM bearing dd blows OUT toward the sea.
+def face_for(s):
+    """The bearing the beach FACES out to open sea (perpendicular to the coast).
 
-    Tests the downwind heading against every detected sea bearing (not a single
-    averaged one), so a wind counts as offshore when it heads into any part of
-    the open-water arc within offshore_arc degrees. Unknown direction / no sea
-    detected -> not filtered (returns True)."""
-    if dd is None or not sea:
+    This is the reference for the offshore test. We use a verified per-beach
+    'face_deg' in config.json (from real coastline geography) rather than the
+    circular mean of the elevation ring — the ring over-widens for bays and
+    peninsulas (Cooden's Pevensey Bay edge, Portland Bill wrapping) and would let
+    an along-shore wind graze through as 'offshore'. Falls back to the ring mean."""
+    f = s.get("face_deg")
+    return float(f) if f is not None else sea_mean(sea_for(s))
+
+
+def offshore(dd, face):
+    """True if wind FROM bearing dd blows OUT to sea — i.e. its downwind heading
+    is within offshore_arc degrees of the beach's seaward facing. This rejects
+    along-shore winds (a wind blowing ~90 deg off the facing runs down the beach,
+    not out over open water). Unknown direction / facing -> not filtered."""
+    if dd is None or face is None:
         return True
-    blow = (dd + 180) % 360
-    return any(angdiff(blow, b) <= TH["offshore_arc"] for b in sea)
+    return angdiff((dd + 180) % 360, face) <= TH["offshore_arc"]
 
 
 def pull(lat, lon):
@@ -165,23 +174,23 @@ def pull(lat, lon):
     return per
 
 
-def good(m, g, dd, sea):
+def good(m, g, dd, face):
     if m is None or g is None:
         return False
     if not (TH["mean_min"] <= m <= TH["mean_max"]):
         return False
     if not (TH["gust_min"] <= g <= TH["gust_max"]):
         return False
-    return offshore(dd, sea)
+    return offshore(dd, face)
 
 
-def day_read(byday, date, sea):
+def day_read(byday, date, face):
     """One model's deterministic read for a day: how many offshore + in-band
     hours it gives inside the flying window, whether that clears full_day_hours,
     the good-hours span, and a representative peak (median wind/gust/dir)."""
     good_hours, rows = [], []
     for hr, m, g, dd in sorted(byday.get(date, [])):
-        if good(m, g, dd, sea):
+        if good(m, g, dd, face):
             good_hours.append(hr)
             rows.append((m, g, dd))
     n = len(good_hours)
@@ -208,8 +217,8 @@ def verdict_of(reads):
     return "no"
 
 
-def day_record(per, dt, sea, today):
-    reads = {m: day_read(per.get(m, {}), dt, sea) for m in ALLMODELS if m in per}
+def day_record(per, dt, face, today):
+    reads = {m: day_read(per.get(m, {}), dt, face) for m in ALLMODELS if m in per}
     v = verdict_of(reads)
     wd = datetime.date.fromisoformat(dt)
     # headline peak: the Met Office read on a GO day (highest-res for UK coast),
@@ -238,15 +247,15 @@ def build():
            "sites": [], "best_pick": None, "outlook": []}
     allbest = []
     for s in SITES:
-        sea = sea_for(s)
-        sm = sea_mean(sea)
+        face = face_for(s)
         per = pull(s["lat"], s["lon"])
         dates = sorted({d for m in DECIDE if m in per for d in per[m]})
-        days = [day_record(per, dt, sea, today) for dt in dates]
+        days = [day_record(per, dt, face, today) for dt in dates]
         out["sites"].append({"name": s["name"],
-                             "sea": round(sm) if sm is not None else None,
-                             "sea_c": comp(sm) if sm is not None else "?",
-                             "sea_arc": [comp(b) for b in sea], "days": days})
+                             "face": round(face) if face is not None else None,
+                             "face_c": comp(face) if face is not None else "?",
+                             "off_from_c": comp((face + 180) % 360) if face is not None else "?",
+                             "days": days})
         for d in days:
             allbest.append((s["name"], d))
     # best pick this week = a day both models AGREE on (verdict go), most hours first
@@ -297,7 +306,7 @@ def render(out):
     for s in out["sites"]:
         by_lead = {d["lead"]: d for d in s["days"]}
         cells = "".join(cell(by_lead.get(c["lead"]), c) for c in cols)
-        sea = f'<span class="sea">sea {s["sea_c"]}</span>' if s["sea"] is not None else ""
+        sea = f'<span class="sea">faces {s["face_c"]} &middot; fly {s["off_from_c"]} wind</span>' if s.get("face") is not None else ""
         rows.append(f'<tr><th class="site">{html.escape(s["name"])}{sea}</th>{cells}</tr>')
     bp = out["best_pick"]
     if bp and bp["peak"]:

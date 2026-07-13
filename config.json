@@ -6,7 +6,7 @@
     "gust_max": 26,
     "hour_start": 8,
     "hour_end": 20,
-    "offshore_arc": 45,
+    "offshore_arc": 50,
     "full_day_hours": 9,
     "firm_days": 7,
     "outlook_days": 14
@@ -31,7 +31,8 @@
         90.0,
         315.0,
         337.5
-      ]
+      ],
+      "face_deg": 25
     },
     {
       "name": "Whitstable",
@@ -43,7 +44,8 @@
         45.0,
         67.5,
         337.5
-      ]
+      ],
+      "face_deg": 5
     },
     {
       "name": "Deal",
@@ -58,7 +60,8 @@
         135.0,
         157.5,
         180.0
-      ]
+      ],
+      "face_deg": 97
     },
     {
       "name": "Cooden",
@@ -72,7 +75,8 @@
         180.0,
         202.5,
         225.0
-      ]
+      ],
+      "face_deg": 163
     },
     {
       "name": "Seaford",
@@ -86,7 +90,8 @@
         225.0,
         247.5,
         270.0
-      ]
+      ],
+      "face_deg": 218
     },
     {
       "name": "Portland",
@@ -107,7 +112,8 @@
         292.5,
         315.0,
         337.5
-      ]
+      ],
+      "face_deg": 270
     },
     {
       "name": "Aldeburgh",
@@ -123,7 +129,8 @@
         157.5,
         180.0,
         202.5
-      ]
+      ],
+      "face_deg": 105
     },
     {
       "name": "Shingle Street",
@@ -137,7 +144,8 @@
         157.5,
         180.0,
         202.5
-      ]
+      ],
+      "face_deg": 123
     }
   ]
 }

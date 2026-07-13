@@ -128,7 +128,7 @@ html+='<div class="dayhead"><div class="cname"></div><div class="strip7">'+dhCol
 D.sites.forEach(function(s,i){
   var firm=s.d.filter(function(d){return d.ld>=0&&d.ld<=7;}),cells="";
   firm.forEach(function(d){var k=vcls(d.v);cells+='<div class="dc" style="'+STY[k]+';font-size:12px;font-weight:700" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+'">'+cellTxt(d)+'</div>';});
-  html+='<div class="card" id="card'+i+'"><div class="chead" onclick="pwTog('+i+')"><div><div class="cname">'+s.n+'</div><span class="csea">sea '+s.sc+'</span></div><div class="strip7">'+cells+'</div><span class="chev"></span></div><div class="panel" id="panel'+i+'"></div></div>';
+  html+='<div class="card" id="card'+i+'"><div class="chead" onclick="pwTog('+i+')"><div><div class="cname">'+s.n+'</div><span class="csea">faces '+s.fc+'</span></div><div class="strip7">'+cells+'</div><span class="chev"></span></div><div class="panel" id="panel'+i+'"></div></div>';
 });
 root.innerHTML=html;
 function bestFirm(s){var f=s.d.filter(function(d){return d.ld>=0&&d.ld<=7;});return f.reduce(function(a,d){return dscore(d)>dscore(a)?d:a;},f[0]);}
@@ -136,7 +136,7 @@ function windColor(v){if(v==null)return '#eee';return v<10?'#d7eefb':v<=18?'#c9e
 function tempColor(t){if(t==null)return '#f3efe6';return t<10?'#eef3f7':t<15?'#fbf0d8':t<20?'#f9e3b2':t<25?'#f3cd8c':t<30?'#ecab63':'#e3884a';}
 function wIcon(c){c=c||0;if(c===0)return '☀';if(c<=2)return '⛅';if(c===3)return '☁';if(c>=45&&c<=48)return '🌫';if(c>=51&&c<=67)return '🌦';if(c>=71&&c<=77)return '🌨';if(c>=80&&c<=82)return '🌧';if(c>=95)return '⛈';return '☁';}
 function angd(a,b){return Math.abs(((a-b+180)%360)-180);}
-function goodHr(s,w,g,dr){if(w==null||g==null||w<D.th.mean_min||w>D.th.mean_max||g>D.th.gust_max)return false;var arc=s.seaarc;if(!arc||!arc.length||dr==null)return true;var blow=(dr+180)%360,tol=D.th.offshore_arc;for(var i=0;i<arc.length;i++){if(angd(blow,arc[i])<=tol)return true;}return false;}
+function goodHr(s,w,g,dr){if(w==null||g==null||w<D.th.mean_min||w>D.th.mean_max||g>D.th.gust_max)return false;if(s.face==null||dr==null)return true;return angd((dr+180)%360,s.face)<=D.th.offshore_arc;}
 function winBlock(s,day){
   if(!day||!day.det){return '<div class="muted">No hourly forecast for this day yet (beyond the sharp model range).</div>';}
   var rows="",gh=[];
@@ -171,8 +171,7 @@ function panelHTML(i){
   var fg=s.d.filter(function(d){return d.ld>=0&&d.ld<=7&&d.v==='go';});
   var mb=s.d.filter(function(d){return d.ld>=0&&d.ld<=7&&d.v==='split';});
   var verdict=fg.length?('Both apps agree on <b>'+fg[0].wd+' '+fg[0].dd+'</b>'+(fg.length>1?', also '+fg.slice(1).map(function(d){return d.wd;}).join(', '):'')+' — go.'):(mb.length?('No day both apps agree this week. Closest: <b>'+mb[0].wd+' '+mb[0].dd+'</b> — only '+(which(mb[0])[0]||'one')+' likes it, your call.'):'No offshore full-day here in the next 7 days — the lightest stretch of summer.');
-  var fromDir=comp(s.sea+180);
-  var note='<div class="blk"><div class="blkh">why this beach, this wind</div><div class="note">The sea lies to the <b>'+s.sc+'</b>. You want wind blowing that way (out to sea), which means it comes <b>from the '+fromDir+'</b> side — that keeps kites over open water, away from the beach. Grey days are usually windy but blowing the wrong way.</div></div>';
+  var note='<div class="blk"><div class="blkh">why this beach, this wind</div><div class="note">This beach faces the open sea to the <b>'+s.fc+'</b>. You need wind blowing that way (out to sea), i.e. <b>from the '+s.off_from+'</b> side — that keeps cut kites over open water, off the beach. Grey days are usually windy but blowing along the shore or onshore.</div></div>';
   var chips='<div class="blk"><div class="blkh">pick a day</div><div class="chips" id="chips'+i+'">'+s.d.filter(function(d){return d.ld>=0&&d.ld<=7;}).map(function(d){return '<div class="chip'+(d.ld===sel.ld?' on':'')+'" onclick="pwDay('+i+','+d.ld+')">'+(d.ld===0?'Today':d.wd)+' '+cellTxt(d)+'</div>';}).join('')+'</div><div id="win'+i+'">'+winBlock(s,sel)+'</div></div>';
   var bars="";
   s.d.filter(function(d){return d.ld>=1;}).forEach(function(d){
@@ -197,7 +196,7 @@ var MAP=null,MARKERS=[],MAPLD=null;
 function bestFirmLd(){var best=0,bp=-1;D.sites.forEach(function(s){s.d.forEach(function(d){if(d.ld>=0&&d.ld<=7){var sc=dscore(d);if(sc>bp){bp=sc;best=d.ld;}}});});return best;}
 function buildMapDays(){document.getElementById('mapdays').innerHTML=D.sites[0].d.filter(function(d){return d.ld>=0&&d.ld<=7;}).map(function(d){return '<div class="chip'+(d.ld===MAPLD?' on':'')+'" onclick="pwMapDay('+d.ld+')">'+(d.ld===0?'Today':d.wd)+' '+d.dd+'</div>';}).join('');}
 function mkHTML(d,deg){return '<div class="mk mk-'+vcls(d.v)+'"><span class="mka" style="transform:rotate('+deg+'deg)">↑</span><span class="mkp">'+mkTxt(d)+'</span></div>';}
-function drawMarkers(){MARKERS.forEach(function(m){MAP.removeLayer(m);});MARKERS=[];D.sites.forEach(function(s,i){var day=dayByLd(s,MAPLD);if(!day)return;var dir=genDir(day),toward=dir==null?0:(dir+180)%360;var icon=L.divIcon({className:'mkwrap',html:mkHTML(day,toward),iconSize:[40,40],iconAnchor:[20,20]});var mk=L.marker([s.lat,s.lon],{icon:icon}).addTo(MAP);var lab=day.v==='go'?'GO — both agree':day.v==='split'?('maybe — '+(which(day)[0]||'one')+' only'):'no fly window';mk.bindPopup('<div class="lpop"><b>'+s.n+'</b><br>'+lab+(day.v==='no'?'':' · '+winSum(s,day))+'<br>sea '+s.sc+' · <a href="#" onclick="pwGoCard('+i+');return false;">hourly →</a></div>');MARKERS.push(mk);});}
+function drawMarkers(){MARKERS.forEach(function(m){MAP.removeLayer(m);});MARKERS=[];D.sites.forEach(function(s,i){var day=dayByLd(s,MAPLD);if(!day)return;var dir=genDir(day),toward=dir==null?0:(dir+180)%360;var icon=L.divIcon({className:'mkwrap',html:mkHTML(day,toward),iconSize:[40,40],iconAnchor:[20,20]});var mk=L.marker([s.lat,s.lon],{icon:icon}).addTo(MAP);var lab=day.v==='go'?'GO — both agree':day.v==='split'?('maybe — '+(which(day)[0]||'one')+' only'):'no fly window';mk.bindPopup('<div class="lpop"><b>'+s.n+'</b><br>'+lab+(day.v==='no'?'':' · '+winSum(s,day))+'<br>faces '+s.fc+' · <a href="#" onclick="pwGoCard('+i+');return false;">hourly →</a></div>');MARKERS.push(mk);});}
 window.pwMapDay=function(ld){MAPLD=ld;buildMapDays();if(MAP)drawMarkers();};
 function fitMap(){if(MAP)MAP.fitBounds(L.latLngBounds(D.sites.map(function(s){return [s.lat,s.lon];})),{padding:[40,40]});}
 function initMap(){if(MAP)return;MAPLD=MAPLD||bestFirmLd();MAP=L.map('lmap',{scrollWheelZoom:false}).setView([51.6,0.6],7);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:18}).addTo(MAP);buildMapDays();drawMarkers();fitMap();}
