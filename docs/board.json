@@ -1,5 +1,5 @@
 {
-"generated": "Tue 14 Jul 2026, 13:18",
+"generated": "Tue 14 Jul 2026, 17:07",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -1038,7 +1038,7 @@
 "peak": {
 "hour": 11,
 "mph": 14,
-"gust": 25,
+"gust": 24,
 "from": "NNE"
 },
 "models": {
@@ -1047,7 +1047,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 4,
+"hours": 6,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1394,11 +1394,11 @@
 "wd": "Tue",
 "dd": "14 Jul",
 "lead": 0,
-"verdict": "split",
+"verdict": "go",
 "peak": {
-"hour": 14,
-"mph": 14,
-"gust": 18,
+"hour": 16,
+"mph": 13,
+"gust": 24,
 "from": "NE"
 },
 "models": {
@@ -1407,15 +1407,15 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 8,
-"go": false
+"hours": 10,
+"go": true
 },
 "ecmwf_ifs025": {
 "hours": 3,
 "go": false
 }
 },
-"agree": false
+"agree": true
 },
 {
 "date": "2026-07-15",
@@ -1424,9 +1424,9 @@
 "lead": 1,
 "verdict": "split",
 "peak": {
-"hour": 14,
-"mph": 13,
-"gust": 24,
+"hour": 13,
+"mph": 14,
+"gust": 25,
 "from": "ENE"
 },
 "models": {
@@ -1435,7 +1435,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 12,
+"hours": 10,
 "go": true
 },
 "ecmwf_ifs025": {
@@ -1463,7 +1463,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 7,
+"hours": 4,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1761,7 +1761,7 @@
 "lead": 0,
 "verdict": "no",
 "peak": {
-"hour": 13,
+"hour": 12,
 "mph": 13,
 "gust": 22,
 "from": "E"
@@ -1772,7 +1772,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 6,
+"hours": 7,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1800,7 +1800,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 3,
+"hours": 8,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1828,7 +1828,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 6,
+"hours": 7,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -2809,20 +2809,20 @@
 "wd": "Tue",
 "dd": "14 Jul",
 "peak": {
-"hour": 14,
-"mph": 14,
-"gust": 18,
+"hour": 16,
+"mph": 13,
+"gust": 24,
 "from": "NE"
 },
-"verdict": "split",
+"verdict": "go",
 "models": {
 "gfs_seamless": {
 "hours": 13,
 "go": true
 },
 "ukmo_seamless": {
-"hours": 8,
-"go": false
+"hours": 10,
+"go": true
 },
 "ecmwf_ifs025": {
 "hours": 3,
