@@ -1,5 +1,5 @@
 {
-"generated": "Wed 15 Jul 2026, 13:22",
+"generated": "Wed 15 Jul 2026, 17:10",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -1414,11 +1414,11 @@
 "wd": "Wed",
 "dd": "15 Jul",
 "lead": 0,
-"verdict": "split",
+"verdict": "no",
 "peak": {
-"hour": 16,
+"hour": 17,
 "mph": 13,
-"gust": 25,
+"gust": 24,
 "from": "NE"
 },
 "models": {
@@ -1427,15 +1427,15 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 9,
-"go": true
+"hours": 8,
+"go": false
 },
 "ecmwf_ifs025": {
 "hours": 1,
 "go": false
 }
 },
-"agree": false
+"agree": true
 },
 {
 "date": "2026-07-16",
@@ -1455,7 +1455,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 4,
+"hours": 2,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1782,7 +1782,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 4,
+"hours": 6,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -2855,28 +2855,28 @@
 }
 ],
 "best_pick": {
-"site": "Seaford",
-"wd": "Thu",
-"dd": "16 Jul",
+"site": "Portland",
+"wd": "Wed",
+"dd": "15 Jul",
 "peak": {
-"hour": 13,
-"mph": 16,
-"gust": 21,
-"from": "ENE"
+"hour": 14,
+"mph": 15,
+"gust": 15,
+"from": "E"
 },
 "verdict": "split",
 "models": {
 "gfs_seamless": {
-"hours": 11,
+"hours": 10,
 "go": true
 },
 "ukmo_seamless": {
-"hours": 4,
+"hours": 6,
 "go": false
 },
 "ecmwf_ifs025": {
-"hours": 12,
-"go": true
+"hours": 1,
+"go": false
 }
 }
 },
