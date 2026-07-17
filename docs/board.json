@@ -1,5 +1,5 @@
 {
-"generated": "Fri 17 Jul 2026, 13:13",
+"generated": "Fri 17 Jul 2026, 17:05",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -421,19 +421,14 @@
 "dd": "19 Jul",
 "lead": 2,
 "verdict": "no",
-"peak": {
-"hour": 12,
-"mph": 12,
-"gust": 24,
-"from": "S"
-},
+"peak": null,
 "models": {
 "gfs_seamless": {
 "hours": 0,
 "go": false
 },
 "ukmo_seamless": {
-"hours": 1,
+"hours": 0,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1127,7 +1122,7 @@
 "lead": 2,
 "verdict": "no",
 "peak": {
-"hour": 8,
+"hour": 9,
 "mph": 11,
 "gust": 19,
 "from": "N"
@@ -1810,7 +1805,7 @@
 "verdict": "no",
 "peak": {
 "hour": 8,
-"mph": 13,
+"mph": 12,
 "gust": 21,
 "from": "NE"
 },
@@ -2187,9 +2182,9 @@
 "lead": 2,
 "verdict": "no",
 "peak": {
-"hour": 10,
-"mph": 13,
-"gust": 23,
+"hour": 15,
+"mph": 12,
+"gust": 24,
 "from": "NNW"
 },
 "models": {
@@ -2198,7 +2193,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 2,
+"hours": 0,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -2509,8 +2504,8 @@
 "lead": 1,
 "verdict": "no",
 "peak": {
-"hour": 15,
-"mph": 12,
+"hour": 13,
+"mph": 11,
 "gust": 23,
 "from": "NNW"
 },
@@ -2535,11 +2530,11 @@
 "wd": "Sun",
 "dd": "19 Jul",
 "lead": 2,
-"verdict": "split",
+"verdict": "no",
 "peak": {
-"hour": 13,
+"hour": 11,
 "mph": 13,
-"gust": 24,
+"gust": 26,
 "from": "NNW"
 },
 "models": {
@@ -2548,15 +2543,15 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 9,
-"go": true
+"hours": 6,
+"go": false
 },
 "ecmwf_ifs025": {
 "hours": 0,
 "go": false
 }
 },
-"agree": false
+"agree": true
 },
 {
 "date": "2026-07-20",
@@ -2825,27 +2820,27 @@
 }
 ],
 "best_pick": {
-"site": "Shingle Street",
-"wd": "Sun",
-"dd": "19 Jul",
+"site": "Cooden",
+"wd": "Wed",
+"dd": "22 Jul",
 "peak": {
-"hour": 13,
+"hour": 16,
 "mph": 13,
-"gust": 24,
-"from": "NNW"
+"gust": 17,
+"from": "N"
 },
 "verdict": "split",
 "models": {
 "gfs_seamless": {
-"hours": 2,
-"go": false
-},
-"ukmo_seamless": {
-"hours": 9,
+"hours": 10,
 "go": true
 },
-"ecmwf_ifs025": {
+"ukmo_seamless": {
 "hours": 0,
+"go": false
+},
+"ecmwf_ifs025": {
+"hours": 6,
 "go": false
 }
 }
