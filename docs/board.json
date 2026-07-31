@@ -1,5 +1,5 @@
 {
-"generated": "Fri 31 Jul 2026, 13:48",
+"generated": "Fri 31 Jul 2026, 17:22",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -1487,8 +1487,8 @@
 "lead": 2,
 "verdict": "no",
 "peak": {
-"hour": 19,
-"mph": 12,
+"hour": 18,
+"mph": 13,
 "gust": 23,
 "from": "ENE"
 },
@@ -1498,7 +1498,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 4,
+"hours": 5,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1847,9 +1847,9 @@
 "lead": 2,
 "verdict": "no",
 "peak": {
-"hour": 17,
-"mph": 12,
-"gust": 19,
+"hour": 9,
+"mph": 11,
+"gust": 18,
 "from": "ENE"
 },
 "models": {
@@ -1858,7 +1858,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 4,
+"hours": 3,
 "go": false
 },
 "ecmwf_ifs025": {
