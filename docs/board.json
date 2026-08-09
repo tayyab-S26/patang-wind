@@ -1,5 +1,5 @@
 {
-"generated": "Sun 9 Aug 2026, 01:10",
+"generated": "Sun 9 Aug 2026, 04:57",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -371,10 +371,10 @@
 "lead": 0,
 "verdict": "no",
 "peak": {
-"hour": 17,
-"mph": 15,
-"gust": 25,
-"from": "SSW"
+"hour": 18,
+"mph": 12,
+"gust": 20,
+"from": "SW"
 },
 "models": {
 "gfs_seamless": {
@@ -1201,7 +1201,7 @@
 "peak": {
 "hour": 9,
 "mph": 15,
-"gust": 9,
+"gust": 22,
 "from": "NNE"
 },
 "models": {
@@ -1475,14 +1475,14 @@
 "lead": 3,
 "verdict": "no",
 "peak": {
-"hour": 19,
+"hour": 18,
 "mph": 16,
-"gust": 21,
-"from": "ENE"
+"gust": 22,
+"from": "E"
 },
 "models": {
 "gfs_seamless": {
-"hours": 4,
+"hours": 2,
 "go": false
 },
 "ukmo_seamless": {
@@ -1505,7 +1505,7 @@
 "peak": {
 "hour": 19,
 "mph": 12,
-"gust": 17,
+"gust": 22,
 "from": "E"
 },
 "models": {
@@ -1556,7 +1556,7 @@
 "peak": {
 "hour": 14,
 "mph": 16,
-"gust": 13,
+"gust": 23,
 "from": "ENE"
 },
 "models": {
@@ -1584,7 +1584,7 @@
 "peak": {
 "hour": 16,
 "mph": 14,
-"gust": 10,
+"gust": 22,
 "from": "ENE"
 },
 "models": {
@@ -1827,8 +1827,8 @@
 "go": true
 },
 "ecmwf_ifs025": {
-"hours": 9,
-"go": true
+"hours": 8,
+"go": false
 }
 },
 "agree": true
@@ -1949,7 +1949,7 @@
 "peak": {
 "hour": 13,
 "mph": 12,
-"gust": 6,
+"gust": 13,
 "from": "E"
 },
 "models": {
@@ -2161,7 +2161,7 @@
 "peak": {
 "hour": 9,
 "mph": 11,
-"gust": 13,
+"gust": 12,
 "from": "NW"
 },
 "models": {
@@ -2327,7 +2327,7 @@
 "peak": {
 "hour": 18,
 "mph": 13,
-"gust": 20,
+"gust": 22,
 "from": "WNW"
 },
 "models": {
