@@ -1,5 +1,5 @@
 {
-"generated": "Mon 10 Aug 2026, 01:13",
+"generated": "Mon 10 Aug 2026, 05:19",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -189,7 +189,7 @@
 "peak": {
 "hour": 9,
 "mph": 13,
-"gust": 11,
+"gust": 21,
 "from": "WSW"
 },
 "models": {
@@ -217,7 +217,7 @@
 "peak": {
 "hour": 20,
 "mph": 14,
-"gust": 8,
+"gust": 17,
 "from": "WSW"
 },
 "models": {
@@ -534,7 +534,7 @@
 "peak": {
 "hour": 8,
 "mph": 14,
-"gust": 10,
+"gust": 22,
 "from": "SW"
 },
 "models": {
@@ -585,7 +585,7 @@
 "peak": {
 "hour": 20,
 "mph": 13,
-"gust": 11,
+"gust": 12,
 "from": "SE"
 },
 "models": {
@@ -884,7 +884,7 @@
 "peak": {
 "hour": 12,
 "mph": 13,
-"gust": 8,
+"gust": 20,
 "from": "W"
 },
 "models": {
@@ -1206,7 +1206,7 @@
 "peak": {
 "hour": 10,
 "mph": 12,
-"gust": 18,
+"gust": 14,
 "from": "NNE"
 },
 "models": {
@@ -1303,7 +1303,7 @@
 "peak": {
 "hour": 18,
 "mph": 14,
-"gust": 15,
+"gust": 22,
 "from": "NNE"
 },
 "models": {
@@ -1331,7 +1331,7 @@
 "peak": {
 "hour": 18,
 "mph": 13,
-"gust": 20,
+"gust": 16,
 "from": "NNE"
 },
 "models": {
@@ -1436,7 +1436,7 @@
 "peak": {
 "hour": 16,
 "mph": 12,
-"gust": 22,
+"gust": 23,
 "from": "E"
 },
 "models": {
@@ -1445,7 +1445,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 3,
+"hours": 4,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1464,7 +1464,7 @@
 "peak": {
 "hour": 19,
 "mph": 15,
-"gust": 23,
+"gust": 24,
 "from": "E"
 },
 "models": {
@@ -1492,7 +1492,7 @@
 "peak": {
 "hour": 19,
 "mph": 13,
-"gust": 21,
+"gust": 22,
 "from": "E"
 },
 "models": {
@@ -1571,7 +1571,7 @@
 "peak": {
 "hour": 9,
 "mph": 12,
-"gust": 23,
+"gust": 18,
 "from": "NNE"
 },
 "models": {
@@ -1666,14 +1666,14 @@
 "lead": 10,
 "verdict": "no",
 "peak": {
-"hour": 12,
-"mph": 14,
-"gust": 17,
-"from": "ENE"
+"hour": 18,
+"mph": 13,
+"gust": 20,
+"from": "NE"
 },
 "models": {
 "gfs_seamless": {
-"hours": 6,
+"hours": 5,
 "go": false
 },
 "ukmo_seamless": {
@@ -1696,7 +1696,7 @@
 "peak": {
 "hour": 19,
 "mph": 16,
-"gust": 23,
+"gust": 20,
 "from": "NE"
 },
 "models": {
@@ -1724,7 +1724,7 @@
 "peak": {
 "hour": 9,
 "mph": 13,
-"gust": 22,
+"gust": 19,
 "from": "NE"
 },
 "models": {
@@ -1752,12 +1752,12 @@
 "peak": {
 "hour": 17,
 "mph": 13,
-"gust": 26,
-"from": "E"
+"gust": 16,
+"from": "ENE"
 },
 "models": {
 "gfs_seamless": {
-"hours": 4,
+"hours": 7,
 "go": false
 },
 "ukmo_seamless": {
@@ -2031,14 +2031,14 @@
 "lead": 10,
 "verdict": "no",
 "peak": {
-"hour": 13,
+"hour": 14,
 "mph": 16,
-"gust": 7,
-"from": "E"
+"gust": 19,
+"from": "ESE"
 },
 "models": {
 "gfs_seamless": {
-"hours": 6,
+"hours": 4,
 "go": false
 },
 "ukmo_seamless": {
@@ -2061,7 +2061,7 @@
 "peak": {
 "hour": 19,
 "mph": 13,
-"gust": 15,
+"gust": 14,
 "from": "E"
 },
 "models": {
@@ -2314,7 +2314,7 @@
 "peak": {
 "hour": 13,
 "mph": 15,
-"gust": 7,
+"gust": 22,
 "from": "W"
 },
 "models": {
@@ -2659,7 +2659,7 @@
 "peak": {
 "hour": 14,
 "mph": 15,
-"gust": 9,
+"gust": 21,
 "from": "WNW"
 },
 "models": {
@@ -2866,7 +2866,7 @@
 {
 "wd": "Thu",
 "dd": "20 Aug",
-"site": "Seaford",
+"site": "Cooden",
 "verdict": "no"
 },
 {
