@@ -1,5 +1,5 @@
 {
-"generated": "Tue 11 Aug 2026, 01:11",
+"generated": "Tue 11 Aug 2026, 05:00",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -74,7 +74,7 @@
 "peak": {
 "hour": 18,
 "mph": 12,
-"gust": 10,
+"gust": 16,
 "from": "SSE"
 },
 "models": {
@@ -99,7 +99,12 @@
 "dd": "14 Aug",
 "lead": 3,
 "verdict": "no",
-"peak": null,
+"peak": {
+"hour": 19,
+"mph": 11,
+"gust": 16,
+"from": "SW"
+},
 "models": {
 "gfs_seamless": {
 "hours": 0,
@@ -110,7 +115,7 @@
 "go": false
 },
 "ecmwf_ifs025": {
-"hours": 0,
+"hours": 1,
 "go": false
 }
 },
@@ -309,7 +314,7 @@
 "peak": {
 "hour": 18,
 "mph": 16,
-"gust": 13,
+"gust": 23,
 "from": "WSW"
 },
 "models": {
@@ -419,7 +424,7 @@
 "peak": {
 "hour": 18,
 "mph": 12,
-"gust": 11,
+"gust": 17,
 "from": "SSE"
 },
 "models": {
@@ -447,7 +452,7 @@
 "peak": {
 "hour": 20,
 "mph": 12,
-"gust": 14,
+"gust": 15,
 "from": "SSE"
 },
 "models": {
@@ -460,7 +465,7 @@
 "go": false
 },
 "ecmwf_ifs025": {
-"hours": 0,
+"hours": 2,
 "go": false
 }
 },
@@ -636,7 +641,7 @@
 "peak": {
 "hour": 16,
 "mph": 11,
-"gust": 6,
+"gust": 17,
 "from": "SSW"
 },
 "models": {
@@ -976,7 +981,7 @@
 "peak": {
 "hour": 20,
 "mph": 12,
-"gust": 8,
+"gust": 20,
 "from": "SW"
 },
 "models": {
@@ -1004,7 +1009,7 @@
 "peak": {
 "hour": 14,
 "mph": 15,
-"gust": 6,
+"gust": 22,
 "from": "WSW"
 },
 "models": {
@@ -1173,7 +1178,7 @@
 "go": false
 },
 "ecmwf_ifs025": {
-"hours": 3,
+"hours": 0,
 "go": false
 }
 },
@@ -1211,7 +1216,7 @@
 "peak": {
 "hour": 8,
 "mph": 16,
-"gust": 5,
+"gust": 25,
 "from": "NNE"
 },
 "models": {
@@ -1238,13 +1243,13 @@
 "verdict": "no",
 "peak": {
 "hour": 9,
-"mph": 13,
-"gust": 25,
+"mph": 14,
+"gust": 19,
 "from": "NNE"
 },
 "models": {
 "gfs_seamless": {
-"hours": 1,
+"hours": 2,
 "go": false
 },
 "ukmo_seamless": {
@@ -1409,12 +1414,12 @@
 "wd": "Tue",
 "dd": "11 Aug",
 "lead": 0,
-"verdict": "no",
+"verdict": "split",
 "peak": {
-"hour": 17,
-"mph": 14,
-"gust": 25,
-"from": "ENE"
+"hour": 16,
+"mph": 13,
+"gust": 24,
+"from": "E"
 },
 "models": {
 "gfs_seamless": {
@@ -1422,15 +1427,15 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 7,
-"go": false
+"hours": 9,
+"go": true
 },
 "ecmwf_ifs025": {
 "hours": 0,
 "go": false
 }
 },
-"agree": true
+"agree": false
 },
 {
 "date": "2026-08-12",
@@ -1440,17 +1445,17 @@
 "verdict": "no",
 "peak": {
 "hour": 20,
-"mph": 12,
-"gust": 22,
+"mph": 11,
+"gust": 21,
 "from": "ENE"
 },
 "models": {
 "gfs_seamless": {
-"hours": 2,
+"hours": 1,
 "go": false
 },
 "ukmo_seamless": {
-"hours": 2,
+"hours": 1,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -1515,7 +1520,7 @@
 "peak": {
 "hour": 10,
 "mph": 12,
-"gust": 14,
+"gust": 13,
 "from": "N"
 },
 "models": {
@@ -1528,7 +1533,7 @@
 "go": false
 },
 "ecmwf_ifs025": {
-"hours": 1,
+"hours": 0,
 "go": false
 }
 },
@@ -1585,17 +1590,17 @@
 "wd": "Tue",
 "dd": "18 Aug",
 "lead": 7,
-"verdict": "no",
+"verdict": "split",
 "peak": {
-"hour": 11,
-"mph": 12,
-"gust": 23,
-"from": "NNE"
+"hour": 12,
+"mph": 13,
+"gust": 17,
+"from": "ENE"
 },
 "models": {
 "gfs_seamless": {
-"hours": 0,
-"go": false
+"hours": 9,
+"go": true
 },
 "ukmo_seamless": {
 "hours": 0,
@@ -1606,7 +1611,7 @@
 "go": false
 }
 },
-"agree": true
+"agree": false
 },
 {
 "date": "2026-08-19",
@@ -1617,7 +1622,7 @@
 "peak": {
 "hour": 17,
 "mph": 13,
-"gust": 11,
+"gust": 21,
 "from": "ENE"
 },
 "models": {
@@ -1645,7 +1650,7 @@
 "peak": {
 "hour": 11,
 "mph": 14,
-"gust": 15,
+"gust": 21,
 "from": "ENE"
 },
 "models": {
@@ -1673,7 +1678,7 @@
 "peak": {
 "hour": 20,
 "mph": 12,
-"gust": 18,
+"gust": 24,
 "from": "ENE"
 },
 "models": {
@@ -1778,7 +1783,7 @@
 "peak": {
 "hour": 13,
 "mph": 13,
-"gust": 16,
+"gust": 14,
 "from": "ESE"
 },
 "models": {
@@ -1805,8 +1810,8 @@
 "verdict": "go",
 "peak": {
 "hour": 14,
-"mph": 14,
-"gust": 24,
+"mph": 13,
+"gust": 22,
 "from": "E"
 },
 "models": {
@@ -1957,14 +1962,14 @@
 "lead": 7,
 "verdict": "no",
 "peak": {
-"hour": 11,
+"hour": 10,
 "mph": 12,
-"gust": 26,
-"from": "ENE"
+"gust": 18,
+"from": "NE"
 },
 "models": {
 "gfs_seamless": {
-"hours": 2,
+"hours": 4,
 "go": false
 },
 "ukmo_seamless": {
@@ -2033,7 +2038,7 @@
 "peak": {
 "hour": 14,
 "mph": 13,
-"gust": 11,
+"gust": 12,
 "from": "ESE"
 },
 "models": {
@@ -2207,7 +2212,7 @@
 "peak": {
 "hour": 10,
 "mph": 15,
-"gust": 15,
+"gust": 22,
 "from": "NW"
 },
 "models": {
@@ -2419,7 +2424,7 @@
 "peak": {
 "hour": 14,
 "mph": 15,
-"gust": 5,
+"gust": 20,
 "from": "W"
 },
 "models": {
@@ -2552,7 +2557,7 @@
 "peak": {
 "hour": 10,
 "mph": 14,
-"gust": 15,
+"gust": 18,
 "from": "NW"
 },
 "models": {
@@ -2580,7 +2585,7 @@
 "peak": {
 "hour": 9,
 "mph": 12,
-"gust": 10,
+"gust": 15,
 "from": "NNW"
 },
 "models": {
@@ -2769,7 +2774,7 @@
 "peak": {
 "hour": 14,
 "mph": 14,
-"gust": 4,
+"gust": 21,
 "from": "W"
 },
 "models": {
@@ -2825,8 +2830,8 @@
 "dd": "12 Aug",
 "peak": {
 "hour": 14,
-"mph": 14,
-"gust": 24,
+"mph": 13,
+"gust": 22,
 "from": "E"
 },
 "verdict": "go",
