@@ -1,5 +1,5 @@
 {
-"generated": "Tue 18 Aug 2026, 00:51",
+"generated": "Tue 18 Aug 2026, 04:28",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -54,10 +54,10 @@
 "lead": 1,
 "verdict": "no",
 "peak": {
-"hour": 20,
-"mph": 11,
-"gust": 19,
-"from": "SW"
+"hour": 16,
+"mph": 14,
+"gust": 23,
+"from": "WSW"
 },
 "models": {
 "gfs_seamless": {
@@ -65,7 +65,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 1,
+"hours": 0,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -424,9 +424,9 @@
 "lead": 1,
 "verdict": "no",
 "peak": {
-"hour": 20,
-"mph": 13,
-"gust": 26,
+"hour": 19,
+"mph": 11,
+"gust": 17,
 "from": "SW"
 },
 "models": {
@@ -435,7 +435,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 0,
+"hours": 1,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -777,7 +777,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 8,
+"hours": 7,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -2161,9 +2161,9 @@
 "lead": 0,
 "verdict": "go",
 "peak": {
-"hour": 13,
+"hour": 14,
 "mph": 12,
-"gust": 22,
+"gust": 21,
 "from": "WNW"
 },
 "models": {
@@ -2172,7 +2172,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 10,
+"hours": 9,
 "go": true
 },
 "ecmwf_ifs025": {
@@ -2523,7 +2523,7 @@
 "peak": {
 "hour": 14,
 "mph": 12,
-"gust": 23,
+"gust": 22,
 "from": "WNW"
 },
 "models": {
@@ -2560,7 +2560,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 1,
+"hours": 2,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -2874,9 +2874,9 @@
 "wd": "Tue",
 "dd": "18 Aug",
 "peak": {
-"hour": 13,
+"hour": 14,
 "mph": 12,
-"gust": 22,
+"gust": 21,
 "from": "WNW"
 },
 "verdict": "go",
@@ -2886,7 +2886,7 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 10,
+"hours": 9,
 "go": true
 },
 "ecmwf_ifs025": {
