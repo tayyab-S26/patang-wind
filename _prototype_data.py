@@ -85,14 +85,18 @@ def main():
     for s in B.SITES:
         face = B.face_for(s)
         per = B.pull(s["lat"], s["lon"])
+        rainper = B.rain_pull(s["lat"], s["lon"])
         detmap = det_pull(s["lat"], s["lon"])
         dates = sorted({d for m in B.DECIDE if m in per for d in per[m]})
         days = []
         for dt in dates:
-            rec = B.day_record(per, dt, face, today)
+            rec = B.day_record(per, dt, face, today, rainper)
             m = rec["models"]
+            w = rec["wet"]
             row = {"dd": rec["dd"], "wd": rec["wd"], "ld": rec["lead"], "v": rec["verdict"],
                    "pk": rec["peak"],
+                   # wet: true / false / null (null = no rain forecast this far out)
+                   "wet": {"w": w["wet"], "h": w["hours"], "sp": w["span"]},
                    "xc": m.get("gfs_seamless", {"hours": 0, "go": False}),
                    "met": m.get("ukmo_seamless", {"hours": 0, "go": False}),
                    "ec": m.get("ecmwf_ifs025", {"hours": 0, "go": False})}
@@ -109,18 +113,20 @@ def main():
 
     def hrs(d):
         return d["xc"]["hours"] + d["met"]["hours"]
-    rank = {"go": 2, "split": 1, "no": 0}
-    firm = sorted([(n, d) for n, d in allbest if 0 <= d["ld"] <= B.TH["firm_days"] and d["v"] == "go"],
-                  key=lambda x: -hrs(x[1]))
-    pick = firm[0] if firm else None
-    if not pick:
-        sp = sorted([(n, d) for n, d in allbest if 0 <= d["ld"] <= B.TH["firm_days"] and d["v"] == "split"],
-                    key=lambda x: -hrs(x[1]))
-        pick = sp[0] if sp else None
+    rank = {"go": 3, "wet": 2, "split": 1, "no": 0}
+    # dry-and-agreed first, then agreed-but-wet, then a model split
+    pick = None
+    for want in ("go", "wet", "split"):
+        cand = sorted([(n, d) for n, d in allbest
+                       if 0 <= d["ld"] <= B.TH["firm_days"] and d["v"] == want],
+                      key=lambda x: -hrs(x[1]))
+        if cand:
+            pick = cand[0]
+            break
     if pick:
         n, d = pick
         pk = d["pk"] or {}
-        out["best"] = {"s": n, "wd": d["wd"], "dd": d["dd"], "v": d["v"],
+        out["best"] = {"s": n, "wd": d["wd"], "dd": d["dd"], "v": d["v"], "wet": d["wet"],
                        "h": pk.get("hour"), "mph": pk.get("mph"), "gust": pk.get("gust"), "frm": pk.get("from")}
     from collections import defaultdict
     byday = defaultdict(list)

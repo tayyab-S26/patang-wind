@@ -9,7 +9,9 @@
     "offshore_arc": 50,
     "full_day_hours": 9,
     "firm_days": 7,
-    "outlook_days": 14
+    "outlook_days": 14,
+    "wet_mm": 0.5,
+    "wet_hours": 3
   },
   "decide_models": [
     "gfs_seamless",

@@ -110,17 +110,26 @@ JS = r'''
 const COMP=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 function comp(d){return COMP[Math.round((d%360)/22.5)%16];}
 function hl(h){var ap=h<12?"a":"p";var x=h%12||12;return x+ap;}
-function vcls(v){return v==='go'?'hi':v==='split'?'mid':'lo';}
+function vcls(v){return v==='go'?'hi':(v==='split'||v==='wet')?'mid':'lo';}
 function which(d){var y=[];if(d.xc&&d.xc.go)y.push('XC');if(d.met&&d.met.go)y.push('Met');return y;}
-function cellTxt(d){if(d.v==='go')return 'GO';if(d.v==='split')return (which(d)[0]||'?')+'?';return '–';}
-function mkTxt(d){return d.v==='go'?'✓':d.v==='split'?'?':'–';}
-function dscore(d){return (d.v==='go'?200:d.v==='split'?100:0)+((d.xc?d.xc.hours:0)+(d.met?d.met.hours:0));}
+function cellTxt(d){if(d.v==='go')return 'GO';if(d.v==='wet')return '☔';if(d.v==='split')return (which(d)[0]||'?')+'?';return '–';}
+function mkTxt(d){return d.v==='go'?'✓':d.v==='wet'?'☔':d.v==='split'?'?':'–';}
+function dscore(d){return (d.v==='go'?200:d.v==='wet'?150:d.v==='split'?100:0)+((d.xc?d.xc.hours:0)+(d.met?d.met.hours:0));}
+/* Rain in plain words. w===null means no model reaches this day — say so, never
+   render it as 'dry', or a day we cannot judge reads as one we've cleared. */
+function rainTxt(d){var w=d&&d.wet;if(!w)return '';
+  if(w.w===null||w.w===undefined)return 'no rain forecast this far out';
+  if(!w.w)return 'dry enough';
+  return 'rain'+(w.sp?' '+hl(w.sp[0])+'–'+hl(w.sp[1]+1):'')+' · '+w.h+' wet hrs';}
 var STY={hi:"background:#e7f3e3;color:#2f7d3f",mid:"background:#fbeed4;color:#9a6b12",lo:"background:#f4efe6;color:#8a8170"};
 var root=document.getElementById("pwroot");
 var b=D.best,html="";
-html+='<div class="hero"><div><div class="hlbl">best full-day this week</div><div class="hsite">'+b.s+'</div><div class="hmeta">'+b.wd+' '+b.dd+' · '+b.mph+' mph, gust '+b.gust+' · wind '+b.frm+' (offshore)</div></div><div class="hnum"><b style="color:'+(b.v==='go'?'#2f7d3f':'#c98f12')+'">'+(b.v==='go'?'GO':'MAYBE')+'</b><span>'+(b.v==='go'?'XC + Met Office agree':'one model only — coin-flip')+'</span></div></div>';
+var hbadge={go:'GO',wet:'WET',split:'MAYBE'}[b.v]||'MAYBE';
+var hnote={go:'XC + Met Office agree',wet:'wind agreed — but '+rainTxt(b),split:'one model only — coin-flip'}[b.v]||'';
+html+='<div class="hero"><div><div class="hlbl">best full-day this week</div><div class="hsite">'+b.s+'</div><div class="hmeta">'+b.wd+' '+b.dd+' · '+b.mph+' mph, gust '+b.gust+' · wind '+b.frm+' (offshore)</div></div><div class="hnum"><b style="color:'+(b.v==='go'?'#2f7d3f':'#c98f12')+'">'+hbadge+'</b><span>'+hnote+'</span></div></div>';
 html+='<details><summary>How to read this — tap to open</summary>'
 +'<p><b>GO (green)</b> means the two apps you check on the day — <b>XCWeather</b> and the <b>Met Office</b> — <b>both</b> forecast a full offshore day. <b>maybe (amber)</b> means they split: one says go, one says no — the cell shows which one. Grey means neither.</p>'
++'<p><b>☔ wet (amber)</b> means the wind call stands — both apps agree — but one of them forecasts '+D.th.wet_mm+'mm+ of rain for '+D.th.wet_hours+'+ of the flying hours, so it&#39;s not a day to drive to. Rain past about day 8 comes from XC (GFS) alone; the Met Office model doesn&#39;t reach that far.</p>'
 +'<p><b>A good day</b> = wind 11–18 mph, gusts up to 26, blowing <b>offshore</b> (out to sea so kites fly over water), for <b>at least 9 hours</b> between 8am and 8pm — a full day, because it&#39;s only worth leaving work for a full day, not a lucky couple of hours.</p>'
 +'<p><b>Plan early, commit late.</b> A third model (ECMWF) rides along silently — tap any day to see all three. Summer winds are light; this fills with green from October to spring.</p></details>';
 var dhCols=D.sites[0].d.filter(function(d){return d.ld>=0&&d.ld<=7;});
@@ -152,15 +161,17 @@ function winBlock(s,day){
   });
   var tbl='<div class="xcw"><table><tr><th>time</th><th></th><th>wind</th><th>gust</th><th>°C</th><th>rain</th><th></th></tr>'+rows+'</table></div>';
   var pk=day.pk||{},sum;
-  if(gh.length){var a=Math.min.apply(null,gh),b=Math.max.apply(null,gh);sum='<div class="wsum">Fly-window <b>'+hl(a)+'–'+hl(b+1)+'</b> · '+(pk.mph||'?')+' mph, gust '+(pk.gust||'?')+' · wind '+(pk.from||'?')+' — the green rows</div>';}
+  var rt=rainTxt(day),rsuf=rt?' · <b'+(day.v==='wet'?' style="color:#9a6b12"':'')+'>'+rt+'</b>':'';
+  if(gh.length){var a=Math.min.apply(null,gh),b=Math.max.apply(null,gh);sum='<div class="wsum">Fly-window <b>'+hl(a)+'–'+hl(b+1)+'</b> · '+(pk.mph||'?')+' mph, gust '+(pk.gust||'?')+' · wind '+(pk.from||'?')+' — the green rows'+rsuf+'</div>';}
   else{sum='<div class="wsum muted">No offshore in-band window this day — too light or wrong direction.</div>';}
   function mrow(lbl,rd,silent){var go=rd&&rd.go,h=rd?rd.hours:0;
     return '<div><span style="min-width:88px">'+lbl+(silent?' <span style="color:#a9a090">·watching</span>':'')+'</span>'
       +'<b style="color:'+(go?'#2f7d3f':'#a9a090')+'">'+(go?'✓ full day':'✗ only '+h+'h')+'</b></div>';}
   var msg=day.v==='go'?'Both your apps agree — the trustworthy call.'
+         :day.v==='wet'?('Both your apps agree on the wind — but it rains: '+rainTxt(day)+'. Your call whether the group minds.')
          :day.v==='split'?('Your two apps disagree — a coin-flip, your judgement call.')
          :'Neither app gives a full offshore day.';
-  if(day.v==='go'&&day.ec&&!day.ec.go)msg+=' ECMWF is the lone holdout — logged.';
+  if((day.v==='go'||day.v==='wet')&&day.ec&&!day.ec.go)msg+=' ECMWF is the lone holdout — logged.';
   var conf='<div class="blk"><div class="blkh">the two apps you check — plus a silent watcher</div><div class="conf">'
    +mrow('XC (GFS)',day.xc,false)+mrow('Met Office',day.met,false)+mrow('ECMWF',day.ec,true)
    +'<div style="color:#8a8170;margin-top:6px">'+msg+'</div></div></div>';
@@ -169,15 +180,19 @@ function winBlock(s,day){
 function panelHTML(i){
   var s=D.sites[i],sel=bestFirm(s);
   var fg=s.d.filter(function(d){return d.ld>=0&&d.ld<=7&&d.v==='go';});
+  var wt=s.d.filter(function(d){return d.ld>=0&&d.ld<=7&&d.v==='wet';});
   var mb=s.d.filter(function(d){return d.ld>=0&&d.ld<=7&&d.v==='split';});
-  var verdict=fg.length?('Both apps agree on <b>'+fg[0].wd+' '+fg[0].dd+'</b>'+(fg.length>1?', also '+fg.slice(1).map(function(d){return d.wd;}).join(', '):'')+' — go.'):(mb.length?('No day both apps agree this week. Closest: <b>'+mb[0].wd+' '+mb[0].dd+'</b> — only '+(which(mb[0])[0]||'one')+' likes it, your call.'):'No offshore full-day here in the next 7 days — the lightest stretch of summer.');
+  var verdict=fg.length?('Both apps agree on <b>'+fg[0].wd+' '+fg[0].dd+'</b>'+(fg.length>1?', also '+fg.slice(1).map(function(d){return d.wd;}).join(', '):'')+' — go.')
+    :wt.length?('Both apps agree on the wind for <b>'+wt[0].wd+' '+wt[0].dd+'</b>, but it rains ('+rainTxt(wt[0])+') — your call.')
+    :mb.length?('No day both apps agree this week. Closest: <b>'+mb[0].wd+' '+mb[0].dd+'</b> — only '+(which(mb[0])[0]||'one')+' likes it, your call.')
+    :'No offshore full-day here in the next 7 days — the lightest stretch of summer.';
   var note='<div class="blk"><div class="blkh">why this beach, this wind</div><div class="note">This beach faces the open sea to the <b>'+s.fc+'</b>. You need wind blowing that way (out to sea), i.e. <b>from the '+s.off_from+'</b> side — that keeps cut kites over open water, off the beach. Grey days are usually windy but blowing along the shore or onshore.</div></div>';
   var chips='<div class="blk"><div class="blkh">pick a day</div><div class="chips" id="chips'+i+'">'+s.d.filter(function(d){return d.ld>=0&&d.ld<=7;}).map(function(d){return '<div class="chip'+(d.ld===sel.ld?' on':'')+'" onclick="pwDay('+i+','+d.ld+')">'+(d.ld===0?'Today':d.wd)+' '+cellTxt(d)+'</div>';}).join('')+'</div><div id="win'+i+'">'+winBlock(s,sel)+'</div></div>';
   var bars="";
   s.d.filter(function(d){return d.ld>=1;}).forEach(function(d){
-    var hp=(d.v==='go'?40:d.v==='split'?24:5)+2,firm=d.ld<=7;
-    var col=d.v==='go'?"#2f7d3f":d.v==='split'?"#c98f12":"#b9afa0";
-    var lab={go:'both agree',split:'split',no:'no window'}[d.v];
+    var hp=(d.v==='go'?40:d.v==='wet'?32:d.v==='split'?24:5)+2,firm=d.ld<=7;
+    var col=d.v==='go'?"#2f7d3f":(d.v==='wet'||d.v==='split')?"#c98f12":"#b9afa0";
+    var lab={go:'both agree',wet:'agreed but wet',split:'split',no:'no window'}[d.v];
     bars+='<div class="sb" title="'+d.wd+' '+d.dd+': '+lab+'"><div class="sbar" style="height:'+hp+'px;background:'+col+';opacity:'+(firm?.9:.4)+'"></div><div class="sl">'+d.wd[0]+'</div></div>';
   });
   var strip='<div class="blk"><div class="blkh">next two weeks — solid = firm, faded = rough outlook</div><div class="strip">'+bars+'</div></div>';
@@ -196,7 +211,7 @@ var MAP=null,MARKERS=[],MAPLD=null;
 function bestFirmLd(){var best=0,bp=-1;D.sites.forEach(function(s){s.d.forEach(function(d){if(d.ld>=0&&d.ld<=7){var sc=dscore(d);if(sc>bp){bp=sc;best=d.ld;}}});});return best;}
 function buildMapDays(){document.getElementById('mapdays').innerHTML=D.sites[0].d.filter(function(d){return d.ld>=0&&d.ld<=7;}).map(function(d){return '<div class="chip'+(d.ld===MAPLD?' on':'')+'" onclick="pwMapDay('+d.ld+')">'+(d.ld===0?'Today':d.wd)+' '+d.dd+'</div>';}).join('');}
 function mkHTML(d,deg){return '<div class="mk mk-'+vcls(d.v)+'"><span class="mka" style="transform:rotate('+deg+'deg)">↑</span><span class="mkp">'+mkTxt(d)+'</span></div>';}
-function drawMarkers(){MARKERS.forEach(function(m){MAP.removeLayer(m);});MARKERS=[];D.sites.forEach(function(s,i){var day=dayByLd(s,MAPLD);if(!day)return;var dir=genDir(day),toward=dir==null?0:(dir+180)%360;var icon=L.divIcon({className:'mkwrap',html:mkHTML(day,toward),iconSize:[40,40],iconAnchor:[20,20]});var mk=L.marker([s.lat,s.lon],{icon:icon}).addTo(MAP);var lab=day.v==='go'?'GO — both agree':day.v==='split'?('maybe — '+(which(day)[0]||'one')+' only'):'no fly window';mk.bindPopup('<div class="lpop"><b>'+s.n+'</b><br>'+lab+(day.v==='no'?'':' · '+winSum(s,day))+'<br>faces '+s.fc+' · <a href="#" onclick="pwGoCard('+i+');return false;">hourly →</a></div>');MARKERS.push(mk);});}
+function drawMarkers(){MARKERS.forEach(function(m){MAP.removeLayer(m);});MARKERS=[];D.sites.forEach(function(s,i){var day=dayByLd(s,MAPLD);if(!day)return;var dir=genDir(day),toward=dir==null?0:(dir+180)%360;var icon=L.divIcon({className:'mkwrap',html:mkHTML(day,toward),iconSize:[40,40],iconAnchor:[20,20]});var mk=L.marker([s.lat,s.lon],{icon:icon}).addTo(MAP);var lab=day.v==='go'?'GO — both agree':day.v==='wet'?('☔ wet — '+rainTxt(day)):day.v==='split'?('maybe — '+(which(day)[0]||'one')+' only'):'no fly window';mk.bindPopup('<div class="lpop"><b>'+s.n+'</b><br>'+lab+(day.v==='no'?'':' · '+winSum(s,day))+'<br>faces '+s.fc+' · <a href="#" onclick="pwGoCard('+i+');return false;">hourly →</a></div>');MARKERS.push(mk);});}
 window.pwMapDay=function(ld){MAPLD=ld;buildMapDays();if(MAP)drawMarkers();};
 function fitMap(){if(MAP)MAP.fitBounds(L.latLngBounds(D.sites.map(function(s){return [s.lat,s.lon];})),{padding:[40,40]});}
 function initMap(){if(MAP)return;MAPLD=MAPLD||bestFirmLd();MAP=L.map('lmap',{scrollWheelZoom:false}).setView([51.6,0.6],7);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:18}).addTo(MAP);buildMapDays();drawMarkers();fitMap();}
@@ -216,12 +231,15 @@ head = ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         '<div class="nav"><button class="nb on" data-s="forecast">Forecast</button><button class="nb" data-s="map">Map</button><button class="nb" data-s="live">Live wind</button></div>'
         '<div id="sec-forecast" class="sec on"><div id="pwroot"></div></div>'
         '<div id="sec-map" class="sec"><div class="chips" id="mapdays" style="margin-bottom:10px"></div><div id="lmap"></div>'
-        '<div class="maplegend">arrow = wind direction &middot; circle = verdict (green GO / amber split / grey no) &middot; tap a beach for its hourly</div></div>'
+        '<div class="maplegend">arrow = wind direction &middot; circle = verdict (green GO / amber &#9748; wet or split / grey no) &middot; tap a beach for its hourly</div></div>'
         '<div id="sec-live" class="sec"><div id="livewrap"></div>'
         '<p class="maplegend" style="margin-top:8px">Live animated wind from Windy &mdash; drag the time bar at the bottom. This is Windy&#39;s own map (no beach highlighting); use the Map tab for your spots.</p></div>'
         '<p class="foot">Each day is judged on the two models you check — <b>XCWeather (GFS)</b> and the '
         '<b>Met Office (UKMO)</b>, via <a href="https://open-meteo.com">Open-Meteo</a>. GREEN only when both '
-        'agree it&#39;s a full offshore day (9+ hrs of 8am–8pm); amber when they split. ECMWF rides along '
+        'agree it&#39;s a full offshore day (9+ hrs of 8am–8pm); amber when they split. An agreed day still '
+        'drops to <b>&#9748; wet</b> when either forecasts ' + str(data["th"]["wet_mm"]) + 'mm+ of rain for '
+        + str(data["th"]["wet_hours"]) + '+ of the flying hours &mdash; the wind call stands, it just isn&#39;t '
+        'worth the drive. Past about day 8 rain is GFS only (the Met Office model stops there). ECMWF rides along '
         'silently so we can later check whose call comes true at each beach. '
         'Gusts are the least certain part — read it as a ranking, not a promise. Auto-updates planned 4&times;/day.</p>'
         '</div>')

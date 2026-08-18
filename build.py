@@ -174,6 +174,69 @@ def pull(lat, lon):
     return per
 
 
+def rain_pull(lat, lon):
+    """Hourly rain (mm) for both decision models, one API call.
+
+    Rain is judged on the SAME two models as the wind — XCWeather's GFS and the
+    Met Office (UKMO) — so the page never has to explain a third source.
+
+    🔴 UKMO only reaches ~day 8: past that Open-Meteo returns null for every
+    hour (measured: 166 of 336 hours null over a 14-day request). If rain came
+    from UKMO alone the far days would carry NO rain data and could never be
+    downgraded, so they'd look drier — and therefore better — than the near
+    days. GFS reaches all 14, so beyond day 8 the wet test simply runs on GFS.
+    Returns {model: {date: [(hr, mm), ...]}} for the flying hours only, with
+    null hours dropped (a null is 'no data', never 'no rain')."""
+    url = ("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s"
+           "&hourly=precipitation&timezone=Europe/London&forecast_days=%d&models=%s"
+           % (lat, lon, TH["outlook_days"], ",".join(DECIDE)))
+    try:
+        d = get(url)
+    except Exception:
+        return {}
+    H = d.get("hourly", {})
+    times = H.get("time", [])
+    per = {}
+    for m in DECIDE:
+        pr = H.get("precipitation_" + m)
+        if not pr:
+            continue
+        byday = defaultdict(list)
+        for i, t in enumerate(times):
+            hr = int(t[11:13])
+            v = pr[i] if i < len(pr) else None
+            if v is not None and TH["hour_start"] <= hr <= TH["hour_end"]:
+                byday[t[:10]].append((hr, v))
+        per[m] = byday
+    return per
+
+
+def wet_read(rainper, date):
+    """Is this day wet enough to spoil a full day out?
+
+    A 'wet hour' is one carrying at least wet_mm of rain inside the flying
+    window; the day is wet once wet_hours of them stack up. Either model saying
+    so is enough — GREEN is the claim this app has to be able to stand behind,
+    so we downgrade readily rather than defend a green day it rained on.
+
+    wet is None (never False) when NO model has rain for the day: no data is
+    not a dry forecast, and a day we cannot judge must not be quietly passed."""
+    by, span = {}, []
+    for m in DECIDE:
+        hours = rainper.get(m, {}).get(date)
+        if hours is None:
+            continue
+        hrs = sorted(h for h, mm in hours if mm >= TH["wet_mm"])
+        by[m] = len(hrs)
+        if len(hrs) >= TH["wet_hours"]:
+            span.append((hrs[0], hrs[-1]))
+    if not by:
+        return {"wet": None, "by": {}, "span": None, "hours": 0}
+    worst = max(by.values())
+    return {"wet": worst >= TH["wet_hours"], "by": by, "hours": worst,
+            "span": [min(s[0] for s in span), max(s[1] for s in span)] if span else None}
+
+
 def good(m, g, dd, face):
     if m is None or g is None:
         return False
@@ -217,9 +280,14 @@ def verdict_of(reads):
     return "no"
 
 
-def day_record(per, dt, face, today):
+def day_record(per, dt, face, today, rainper=None):
     reads = {m: day_read(per.get(m, {}), dt, face) for m in ALLMODELS if m in per}
     v = verdict_of(reads)
+    wet = wet_read(rainper or {}, dt)
+    # Rain only ever takes a day DOWN, and only from GO — an amber day is already
+    # a judgement call, and a grey day has no window to spoil.
+    if v == "go" and wet["wet"]:
+        v = "wet"
     wd = datetime.date.fromisoformat(dt)
     # headline peak: the Met Office read on a GO day (highest-res for UK coast),
     # else whichever decision model likes it, else any read.
@@ -235,7 +303,7 @@ def day_record(per, dt, face, today):
             if r and r["peak"]:
                 peak = r["peak"]; break
     return {"date": dt, "wd": wd.strftime("%a"), "dd": wd.strftime("%-d %b"),
-            "lead": (wd - today).days, "verdict": v, "peak": peak,
+            "lead": (wd - today).days, "verdict": v, "peak": peak, "wet": wet,
             "models": {m: {"hours": reads[m]["hours"], "go": reads[m]["go"]} for m in reads},
             "agree": len({reads[m]["go"] for m in DECIDE if m in reads}) == 1}
 
@@ -249,8 +317,9 @@ def build():
     for s in SITES:
         face = face_for(s)
         per = pull(s["lat"], s["lon"])
+        rainper = rain_pull(s["lat"], s["lon"])
         dates = sorted({d for m in DECIDE if m in per for d in per[m]})
-        days = [day_record(per, dt, face, today) for dt in dates]
+        days = [day_record(per, dt, face, today, rainper) for dt in dates]
         out["sites"].append({"name": s["name"],
                              "face": round(face) if face is not None else None,
                              "face_c": comp(face) if face is not None else "?",
@@ -261,20 +330,18 @@ def build():
     # best pick this week = a day both models AGREE on (verdict go), most hours first
     def hrs(d):
         return sum(d["models"].get(m, {}).get("hours", 0) for m in DECIDE)
-    firm = [(n, d) for n, d in allbest if 0 <= d["lead"] <= TH["firm_days"] and d["verdict"] == "go"]
-    firm.sort(key=lambda x: -hrs(x[1]))
-    if firm:
-        n, d = firm[0]
-        out["best_pick"] = {"site": n, "wd": d["wd"], "dd": d["dd"], "peak": d["peak"],
-                            "verdict": "go", "models": d["models"]}
-    else:  # nothing agreed — surface the best split day so the week isn't blank
-        split = [(n, d) for n, d in allbest if 0 <= d["lead"] <= TH["firm_days"] and d["verdict"] == "split"]
-        split.sort(key=lambda x: -hrs(x[1]))
-        if split:
-            n, d = split[0]
+    # A dry agreed day first; then an agreed day that's merely wet (the wind call
+    # still stands); only then a day the two models split on.
+    for want in ("go", "wet", "split"):
+        cand = [(n, d) for n, d in allbest
+                if 0 <= d["lead"] <= TH["firm_days"] and d["verdict"] == want]
+        cand.sort(key=lambda x: -hrs(x[1]))
+        if cand:
+            n, d = cand[0]
             out["best_pick"] = {"site": n, "wd": d["wd"], "dd": d["dd"], "peak": d["peak"],
-                                "verdict": "split", "models": d["models"]}
-    rank = {"go": 2, "split": 1, "no": 0}
+                                "verdict": want, "wet": d["wet"], "models": d["models"]}
+            break
+    rank = {"go": 3, "wet": 2, "split": 1, "no": 0}
     byday = defaultdict(list)
     for n, d in allbest:
         if TH["firm_days"] < d["lead"] <= TH["outlook_days"] - 1:
@@ -288,12 +355,25 @@ def build():
     print("wrote docs/index.html + docs/board.json |", len(out["sites"]), "sites | best:", out["best_pick"])
 
 
-VCLASS = {"go": "hi", "split": "mid", "no": "lo"}
-VWORD = {"go": "GO", "split": "maybe", "no": "—"}
+VCLASS = {"go": "hi", "wet": "mid", "split": "mid", "no": "lo"}
+VWORD = {"go": "GO", "wet": "wet", "split": "maybe", "no": "—"}
 
 
 def short(m):
     return MODEL_LABEL.get(m, m).split()[0]
+
+
+def rain_phrase(wet):
+    """Plain-English rain note for a day, or '' when there's nothing to say."""
+    if not wet:
+        return ""
+    if wet.get("wet") is None:
+        return "no rain forecast this far out"
+    if not wet.get("wet"):
+        return "dry enough"
+    sp = wet.get("span")
+    when = f" {fmt_hour(sp[0])}–{fmt_hour(sp[1] + 1)}" if sp else ""
+    return f'rain{when} ({wet["hours"]} wet hrs)'
 
 
 def render(out):
@@ -311,15 +391,17 @@ def render(out):
     bp = out["best_pick"]
     if bp and bp["peak"]:
         pk = bp["peak"]
-        go = bp["verdict"] == "go"
-        badge = "GO" if go else "MAYBE"
-        note = "XC + Met Office both agree" if go else "only one model likes it — a coin-flip"
+        v = bp["verdict"]
+        badge = {"go": "GO", "wet": "WET", "split": "MAYBE"}[v]
+        note = {"go": "XC + Met Office both agree",
+                "wet": "wind agreed, but it rains — " + rain_phrase(bp.get("wet")),
+                "split": "only one model likes it — a coin-flip"}[v]
         hero = (f'<div class="hero"><div><div class="lbl">best window this week</div>'
                 f'<div class="hsite">{html.escape(bp["site"])}</div>'
                 f'<div class="hmeta">{bp["wd"]} {bp["dd"]} &middot; {fmt_hour(pk["hour"])} &middot; '
                 f'{pk["mph"]} mph, gust {pk["gust"]} &middot; wind {pk["from"]} (offshore)</div>'
-                f'<div class="hnote">{note}</div></div>'
-                f'<div class="hnum {VCLASS[bp["verdict"]]}"><span>{badge}</span></div></div>')
+                f'<div class="hnote">{html.escape(note)}</div></div>'
+                f'<div class="hnum {VCLASS[v]}"><span>{badge}</span></div></div>')
     else:
         hero = '<div class="hero none">No day this week where both models agree. Try the outlook below.</div>'
     outlook = "".join(
@@ -328,9 +410,10 @@ def render(out):
         for o in out["outlook"])
     crit = (f'{th["mean_min"]}–{th["mean_max"]} mph &middot; gust &le;{th["gust_max"]} '
             f'&middot; offshore &middot; {th["full_day_hours"]}+ hrs of {th["hour_start"]:02d}:00–{th["hour_end"]:02d}:00 '
-            f'&middot; <b>XC + Met Office must agree</b>')
+            f'&middot; <b>XC + Met Office must agree</b> &middot; and not raining')
     return PAGE.format(generated=out["generated"], crit=crit, hero=hero, head=head,
-                       rows="".join(rows), outlook=outlook)
+                       rows="".join(rows), outlook=outlook,
+                       wet_mm=th["wet_mm"], wet_hours=th["wet_hours"])
 
 
 def cell(d, c):
@@ -341,10 +424,14 @@ def cell(d, c):
     peak = d["peak"]
     label = c["wd"] + " " + c["dd"]
     ms = d.get("models") or {}
-    tip = {"go": "both agree — GO", "split": "split — coin-flip", "no": "no window"}[v]
+    tip = {"go": "both agree — GO", "wet": "wind agreed, but wet",
+           "split": "split — coin-flip", "no": "no window"}[v]
     title = f"{label} · {tip}"
     if peak:
         title += f' · {fmt_hour(peak["hour"])} {peak["mph"]} mph, gust {peak["gust"]}, {peak["from"]}'
+    rp = rain_phrase(d.get("wet"))
+    if rp:
+        title += f" · {rp}"
     if ms:
         title += " · " + ", ".join(
             f'{MODEL_LABEL.get(m, m)} {ms[m]["hours"]}h {"✓" if ms[m]["go"] else "✗"}'
@@ -353,6 +440,9 @@ def cell(d, c):
         return f'<td class="cell lo" title="{html.escape(title)}"><span class="pct">&ndash;</span></td>'
     if v == "go":
         main, sub = "GO", (f'<span class="sub">{fmt_hour(peak["hour"])} {peak["from"]}</span>' if peak else "")
+    elif v == "wet":
+        main = "☔"
+        sub = f'<span class="sub">{fmt_hour(peak["hour"])} {peak["from"]}</span>' if peak else ""
     else:
         yes = [short(m) for m in DECIDE if ms.get(m, {}).get("go")]
         main = (yes[0] if yes else "?") + "?"
@@ -418,6 +508,7 @@ tbody tr+tr td,tbody tr+tr th{{border-top:1px solid var(--line)}}
 </table></div>
 <div class="legend">
 <span><span class="dot" style="background:var(--hi-bg);border:1px solid var(--hi)"></span><b>GO</b> — XC &amp; Met Office both agree</span>
+<span><span class="dot" style="background:var(--mid-bg);border:1px solid var(--mid)"></span><b>☔ wet</b> — wind agreed, but rain over the day</span>
 <span><span class="dot" style="background:var(--mid-bg);border:1px solid var(--mid)"></span><b>maybe</b> — they split (coin-flip); cell shows which app</span>
 <span><span class="dot" style="background:var(--lo-bg);border:1px solid var(--line)"></span>no offshore full-day</span>
 <span>tap a cell for both apps' hours</span>
@@ -426,7 +517,10 @@ tbody tr+tr td,tbody tr+tr th{{border-top:1px solid var(--line)}}
 <div class="outlook">{outlook}</div>
 <p class="foot">Each day is judged on the two models you check on the day — <b>XCWeather (GFS)</b> and
 the <b>Met Office (UKMO)</b>, via <a href="https://open-meteo.com">Open-Meteo</a>. GREEN only when
-<b>both</b> agree it's a full offshore day (9+ hrs of 8am–8pm); amber when they split. ECMWF rides
+<b>both</b> agree it's a full offshore day (9+ hrs of 8am–8pm); amber when they split. A day they
+agree on still drops to <b>&#9748; wet</b> if either forecasts {wet_mm}mm+ of rain for {wet_hours}+ of
+the flying hours — the wind call stands, it's just not a day to drive to. Rain past ~day 8 is GFS
+only (the Met Office model doesn't reach that far). ECMWF rides
 along silently so we can later check whose call comes true at each beach.
 Gusts are the least certain part — treat as a ranking, not a promise.
 Summer winds are light; the board greens up Oct–Apr. Auto-updates ~4&times;/day.</p>
