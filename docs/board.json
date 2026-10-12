@@ -1,5 +1,5 @@
 {
-"generated": "Mon 12 Oct 2026, 21:20",
+"generated": "Mon 12 Oct 2026, 20:21",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -606,9 +606,9 @@
 "wet": false,
 "by": {
 "gfs_seamless": 0,
-"ukmo_seamless": 0
+"ukmo_seamless": 1
 },
-"hours": 0,
+"hours": 1,
 "span": null
 },
 "models": {
@@ -1657,9 +1657,9 @@
 "wet": false,
 "by": {
 "gfs_seamless": 0,
-"ukmo_seamless": 1
+"ukmo_seamless": 0
 },
-"hours": 1,
+"hours": 0,
 "span": null
 },
 "models": {
@@ -1750,7 +1750,7 @@
 "verdict": "split",
 "peak": {
 "hour": 16,
-"mph": 16,
+"mph": 14,
 "gust": 21,
 "from": "N"
 },
@@ -2119,9 +2119,9 @@
 "lead": 15,
 "verdict": "no",
 "peak": {
-"hour": 10,
-"mph": 15,
-"gust": 22,
+"hour": 9,
+"mph": 16,
+"gust": 24,
 "from": "N"
 },
 "wet": {
@@ -2132,7 +2132,7 @@
 },
 "models": {
 "gfs_seamless": {
-"hours": 4,
+"hours": 2,
 "go": false
 },
 "ukmo_seamless": {
@@ -2197,9 +2197,9 @@
 "wet": false,
 "by": {
 "gfs_seamless": 0,
-"ukmo_seamless": 0
+"ukmo_seamless": 1
 },
-"hours": 0,
+"hours": 1,
 "span": null
 },
 "models": {
@@ -2674,9 +2674,9 @@
 "lead": 15,
 "verdict": "no",
 "peak": {
-"hour": 11,
-"mph": 15,
-"gust": 22,
+"hour": 9,
+"mph": 16,
+"gust": 25,
 "from": "N"
 },
 "wet": {
@@ -2687,7 +2687,7 @@
 },
 "models": {
 "gfs_seamless": {
-"hours": 4,
+"hours": 1,
 "go": false
 },
 "ukmo_seamless": {
@@ -2875,7 +2875,12 @@
 "dd": "17 Oct",
 "lead": 5,
 "verdict": "no",
-"peak": null,
+"peak": {
+"hour": 16,
+"mph": 17,
+"gust": 22,
+"from": "NE"
+},
 "wet": {
 "wet": false,
 "by": {
@@ -2887,7 +2892,7 @@
 },
 "models": {
 "gfs_seamless": {
-"hours": 0,
+"hours": 4,
 "go": false
 },
 "ukmo_seamless": {
@@ -2942,7 +2947,7 @@
 "peak": {
 "hour": 20,
 "mph": 18,
-"gust": 21,
+"gust": 25,
 "from": "E"
 },
 "wet": {
@@ -2955,7 +2960,7 @@
 },
 "models": {
 "gfs_seamless": {
-"hours": 1,
+"hours": 2,
 "go": false
 },
 "ukmo_seamless": {
@@ -3141,7 +3146,7 @@
 },
 "models": {
 "gfs_seamless": {
-"hours": 11,
+"hours": 12,
 "go": true
 },
 "ukmo_seamless": {
@@ -3305,9 +3310,9 @@
 "wet": false,
 "by": {
 "gfs_seamless": 0,
-"ukmo_seamless": 1
+"ukmo_seamless": 0
 },
-"hours": 1,
+"hours": 0,
 "span": null
 },
 "models": {
@@ -3830,9 +3835,9 @@
 "wet": false,
 "by": {
 "gfs_seamless": 0,
-"ukmo_seamless": 0
+"ukmo_seamless": 1
 },
-"hours": 0,
+"hours": 1,
 "span": null
 },
 "models": {
@@ -3978,7 +3983,7 @@
 },
 "models": {
 "gfs_seamless": {
-"hours": 2,
+"hours": 1,
 "go": false
 },
 "ukmo_seamless": {
