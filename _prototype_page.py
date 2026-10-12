@@ -282,11 +282,11 @@ document.querySelectorAll('.nb').forEach(function(b){b.addEventListener('click',
 
 head = ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
-        '<title>Patang Wind — prototype</title>'
+        '<title>Patang Wind — beach planner</title>'
         '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>'
         '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>'
         '<style>' + CSS + '</style></head><body><div class="wrap">'
-        '<div class="top"><h1>Patang Wind</h1><span class="tag">prototype</span></div>'
+        '<div class="top"><h1>Patang Wind</h1></div>'
         '<p class="sub">UK beach game planner · updated ' + data["g"] + '</p>'
         + ('<p class="sub" style="opacity:.7;font-size:11px">' + data["src"] + '</p>' if data.get("src") else '') +
         '<div class="nav"><button class="nb on" data-s="forecast">Forecast</button><button class="nb" data-s="live">Wind map</button></div>'
@@ -297,11 +297,12 @@ head = ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         '<b>XCWeather</b> column is NOAA&#39;s GFS model on the same 0.25&deg; grid XCWeather draws from, and the '
         '<b>Met Office</b> column is the Met Office&#39;s own blended site forecast (their open data). GREEN only when both '
         'agree it&#39;s a full offshore day (9+ hrs of 8am&ndash;8pm); amber when they split. The hourly table shows '
-        'XCWeather&#39;s numbers from 5am to 9pm; only 8am&ndash;8pm counts. An agreed day still '
+        'either app&#39;s numbers (switch above it) from 5am to 9pm; only 8am&ndash;8pm counts. An agreed day still '
         'drops to <b>&#9748; wet</b> when either forecasts ' + str(data["th"]["wet_mm"]) + 'mm+ of rain for '
         + str(data["th"]["wet_hours"]) + '+ of the flying hours (rain still comes via <a href="https://open-meteo.com">Open-Meteo</a>). '
         'ECMWF rides along silently so we can later check whose call comes true at each beach. '
         'Gusts are the least certain part — read it as a ranking, not a promise. Updates every 4 hours.</p>'
+        '<p class="foot" style="margin-top:8px">Data: Met Office site forecasts &copy; Crown copyright, Met Office, licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> (from the Met Office open data on AWS). GFS forecasts from NOAA/NCEP. Rain and the ECMWF watcher via <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0). Wind map by <a href="https://www.windy.com">Windy</a>.</p>'
         '</div>')
 foot = '<script>\nconst D=' + json.dumps(data, separators=(",", ":")) + ';\n(function(){' + JS + '})();\n</script></body></html>'
 

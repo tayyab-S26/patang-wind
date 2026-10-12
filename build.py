@@ -516,15 +516,16 @@ tbody tr+tr td,tbody tr+tr th{{border-top:1px solid var(--line)}}
 </div>
 <p class="olbl">10–14 day outlook &middot; rough, low confidence</p>
 <div class="outlook">{outlook}</div>
-<p class="foot">Each day is judged on the two models you check on the day — <b>XCWeather (GFS)</b> and
-the <b>Met Office (UKMO)</b>, via <a href="https://open-meteo.com">Open-Meteo</a>. GREEN only when
+<p class="foot">Each day is judged on the two apps you check, using the numbers they show: <b>XCWeather</b>
+(NOAA&#39;s GFS on XCWeather&#39;s own 0.25&deg; grid) and the <b>Met Office</b> (its own blended site forecast). GREEN only when
 <b>both</b> agree it's a full offshore day (9+ hrs of 8am–8pm); amber when they split. A day they
 agree on still drops to <b>&#9748; wet</b> if either forecasts {wet_mm}mm+ of rain for {wet_hours}+ of
-the flying hours — the wind call stands, it's just not a day to drive to. Rain past ~day 8 is GFS
-only (the Met Office model doesn't reach that far). ECMWF rides
+the flying hours — the wind call stands, it's just not a day to drive to. Rain comes via Open-Meteo; past ~day 8 it
+is GFS only. ECMWF rides
 along silently so we can later check whose call comes true at each beach.
 Gusts are the least certain part — treat as a ranking, not a promise.
-Summer winds are light; the board greens up Oct–Apr. Auto-updates ~4&times;/day.</p>
+Summer winds are light; the board greens up Oct–Apr. Updates every 4 hours.</p>
+<p class="foot" style="margin-top:8px">Data: Met Office site forecasts &copy; Crown copyright, Met Office, licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> (from the Met Office open data on AWS). GFS forecasts from NOAA/NCEP. Rain and the ECMWF watcher via <a href="https://open-meteo.com">Open-Meteo</a> (CC BY 4.0). Wind map by <a href="https://www.windy.com">Windy</a>.</p>
 </div></body></html>""".replace("{n}", "the")
 
 
