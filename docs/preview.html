@@ -55,18 +55,23 @@ details p{margin:7px 0;color:#5c5446;line-height:1.6}
 .muted{color:#8a8170;font-size:13px}
 .foot{color:#8a8170;font-size:12px;margin-top:26px;line-height:1.7}
 .foot a{color:#5c5446}
-.xcw{overflow-x:auto;margin:2px 0 8px}
-.xcw table{border-collapse:collapse;width:100%;font-size:12.5px}
-.xcw th{font-size:10px;color:#a59c8a;font-weight:500;text-transform:uppercase;padding:0 0 5px}
-.xcw td{padding:3px 3px;text-align:center;border-top:1px solid #f2ecdf}
-.xcw td.tm{color:#5c5446;font-variant-numeric:tabular-nums;text-align:left;white-space:nowrap}
-.xcw td.ar span{display:inline-block;color:#3b3aa0;font-weight:700;font-size:15px;line-height:1}
-.xcw .wc{display:inline-block;min-width:28px;padding:2px 5px;border-radius:5px;font-weight:600;color:#3a3320}
-.xcw .tc{display:inline-block;min-width:26px;padding:2px 5px;border-radius:5px;color:#5a3a1a}
-.xcw td.rn{color:#9aa0a8;font-size:11.5px}
-.xcw td.ic{font-size:15px}
-.xcw tr.gd td{background:#eef7ea}
-.xcw tr.gd td.tm{box-shadow:inset 3px 0 0 #2f7d3f;font-weight:600;color:#2f7d3f}
+.xcw{overflow-x:auto;margin:8px 0 10px;border-radius:8px;border:1px solid #e3e3e3}
+.xcday{background:#f1f1f1;padding:9px 12px;font-size:19px;color:#222;display:flex;align-items:baseline;gap:6px;border-bottom:1px solid #e0e0e0}
+.xcday small{font-size:11px;color:#8a8a8a}
+.xcday em{margin-left:auto;font-style:normal;font-size:11px;color:#8a8a8a}
+.xcw table{border-collapse:collapse;width:100%;font-size:16px;background:#fff}
+.xcw td{padding:0 6px;height:40px;text-align:center;white-space:nowrap;border-top:2px solid #fff}
+.xcw td.tm{background:#ececec;color:#333;text-align:left;padding-left:10px;width:78px;font-variant-numeric:tabular-nums}
+.xcw td.ar{width:52px}
+.xcw td.ar span{display:inline-block;color:#3d2bb3;font-weight:900;font-size:26px;line-height:1}
+.xcw td.to{color:#b9b9b9;font-size:12px;width:26px;padding:0}
+.xcw td.rn{color:#333}
+.xcw td.rn.wetc{background:#e6f9fd}
+.xcw td.ic{font-size:21px;width:48px}
+.xcw tr.gd td.tm{box-shadow:inset 5px 0 0 #2f7d3f;font-weight:700;color:#1f6a30}
+.xcw tr.gd td.ar span{color:#1f8a36}
+.xckey{font-size:11.5px;color:#8a8170;margin:-2px 0 10px}
+@media (max-width:430px){.xcw table{font-size:14px}.xcw td{height:34px;padding:0 3px}.xcw td.tm{width:58px;padding-left:6px}.xcw td.ar{width:34px}.xcw td.ar span{font-size:20px}.xcw td.ic{width:30px;font-size:17px}}
 .nav{display:flex;gap:6px;margin:4px 0 16px}
 .nb{border:1px solid #e7ded0;background:#fff;border-radius:9px;padding:7px 15px;font-size:13.5px;color:#5c5446;cursor:pointer}
 .nb.on{background:#26211a;color:#fbf8f1;border-color:#26211a}
@@ -157,8 +162,8 @@ D.sites.forEach(function(s,i){
 html+='</div><div class="colR" id="side"></div></div>';
 root.innerHTML=html;
 function bestFirm(s){var f=s.d.filter(function(d){return d.ld>=0&&d.ld<=7;});return f.reduce(function(a,d){return dscore(d)>dscore(a)?d:a;},f[0]);}
-function windColor(v){if(v==null)return '#eee';return v<10?'#d7eefb':v<=18?'#c9edcc':v<=24?'#f3e7a3':v<=31?'#f4cd92':'#e89090';}
-function tempColor(t){if(t==null)return '#f3efe6';return t<10?'#eef3f7':t<15?'#fbf0d8':t<20?'#f9e3b2':t<25?'#f3cd8c':t<30?'#ecab63':'#e3884a';}
+function windColor(v){if(v==null)return '#eee';return v<9?'#a9f3fb':v<13?'#c9f7fc':v<19?'#a6f79e':v<25?'#fbfb86':v<32?'#fbc9a0':v<39?'#f9a08c':'#f47c7c';}
+function tempColor(t){if(t==null)return '#f3efe6';return t<5?'#cfe8f5':t<10?'#d9e6a8':t<16?'#d9cf5c':t<19?'#e0b85a':t<22?'#dba24c':t<26?'#d98e45':'#d7743c';}
 function wIcon(c){c=c||0;if(c===0)return '☀';if(c<=2)return '⛅';if(c===3)return '☁';if(c>=45&&c<=48)return '🌫';if(c>=51&&c<=67)return '🌦';if(c>=71&&c<=77)return '🌨';if(c>=80&&c<=82)return '🌧';if(c>=95)return '⛈';return '☁';}
 function angd(a,b){return Math.abs(((a-b+180)%360)-180);}
 function goodHr(s,w,g,dr){if(w==null||g==null||w<D.th.mean_min||w>D.th.mean_max||g>D.th.gust_max)return false;if(s.face==null||dr==null)return true;return angd((dr+180)%360,s.face)<=D.th.offshore_arc;}
@@ -171,12 +176,13 @@ function winBlock(s,day){
     if(gd)gh.push(h);
     rows+='<tr class="'+(gd?'gd':'')+'"><td class="tm">'+(h<10?'0'+h:h)+':00</td>'
       +'<td class="ar"><span style="transform:rotate('+((dr+180)%360)+'deg)">↑</span></td>'
-      +'<td><span class="wc" style="background:'+windColor(w)+'">'+(w==null?'–':w)+'</span></td>'
-      +'<td><span class="wc" style="background:'+windColor(g)+'">'+(g==null?'–':g)+'</span></td>'
-      +'<td><span class="tc" style="background:'+tempColor(tp)+'">'+(tp==null?'–':tp)+'°</span></td>'
-      +'<td class="rn">'+(rn>0?rn+' mm':'0')+'</td><td class="ic">'+wIcon(wc)+'</td></tr>';
+      +'<td style="background:'+windColor(w)+'">'+(w==null?'–':w+' mph')+'</td>'
+      +'<td class="to">to</td>'
+      +'<td style="background:'+windColor(g)+'">'+(g==null?'–':g+' mph')+'</td>'
+      +'<td style="background:'+tempColor(tp)+'">'+(tp==null?'–':tp+' °C')+'</td>'
+      +'<td class="rn'+(rn>0?' wetc':'')+'">'+(rn>0?rn:'0')+' mm</td><td class="ic">'+wIcon(wc)+'</td></tr>';
   });
-  var tbl=!day.det?'<div class="muted" style="margin:8px 0">No hour-by-hour table this far out — the two apps&#39; good-hour counts are below.</div>':'<div class="xcw"><table><tr><th>time</th><th></th><th>wind</th><th>gust</th><th>°C</th><th>rain</th><th></th></tr>'+rows+'</table></div>';
+  var tbl=!day.det?'<div class="muted" style="margin:8px 0">No hour-by-hour table this far out — the two apps&#39; good-hour counts are below.</div>':'<div class="xcw"><div class="xcday">'+day.wd+' '+day.dd+' <small>BST</small><em>wind to gust · Met Office numbers</em></div><table>'+rows+'</table></div><div class="xckey">Green bar on the time = a good hour (11–18 mph, gust up to 26, blowing offshore). Arrow shows where the wind is going.</div>';
   var pk=day.pk||{},sum;
   var rt=rainTxt(day),rsuf=rt?' · <b'+(day.v==='wet'?' style="color:#9a6b12"':'')+'>'+rt+'</b>':'';
   if(!day.det){sum='';}
