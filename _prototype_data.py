@@ -87,6 +87,7 @@ def main():
         per = B.truesrc.overlay(B.pull(s["lat"], s["lon"]), s["name"])
         rainper = B.rain_pull(s["lat"], s["lon"])
         detmap = det_pull(s["lat"], s["lon"])
+        metmap = {}
         if B.truesrc.enabled():
             # the hour-by-hour table shows XCWeather's own numbers (NOAA GFS 0.25),
             # 5am-9pm; an hour NOAA's run does not hold keeps the old row
@@ -104,6 +105,17 @@ def main():
                 for h, r in old.items():
                     new.setdefault(h, r)
                 detmap[dt] = [new[h] for h in sorted(new)]
+            # the same table in the Met Office's own numbers (their site forecast)
+            def mo_code(sym, rain):
+                if sym is None or sym < 0:
+                    return 61 if (rain or 0) >= 0.2 else 2
+                return (0 if sym <= 1 else 2 if sym <= 3 else 45 if sym <= 6 else 3 if sym <= 8 else
+                        61 if sym <= 12 else 80 if sym <= 15 else 71 if sym <= 27 else 95)
+            for dt, mrows in B.truesrc.load().get("met", {}).get(s["name"], {}).items():
+                metmap[dt] = [[r[0], round(r[1]), round(r[2]), None if r[3] is None else int(r[3]),
+                               None if r[6].get("t") is None else round(r[6]["t"]),
+                               round(r[4] or 0, 1), mo_code(r[6].get("sym"), r[4])]
+                              for r in mrows if r[1] is not None and r[2] is not None]
         dates = sorted({d for m in B.DECIDE if m in per for d in per[m]})
         days = []
         for dt in dates:
@@ -119,6 +131,8 @@ def main():
                    "ec": m.get("ecmwf_ifs025", {"hours": 0, "go": False})}
             if 0 <= rec["lead"] <= (B.TH["outlook_days"] - 1 if B.truesrc.enabled() else B.TH["firm_days"]):
                 row["det"] = detmap.get(dt)
+                if metmap.get(dt):
+                    row["detm"] = metmap[dt]
             days.append(row)
         out["sites"].append({"n": s["name"], "lat": round(s["lat"], 5), "lon": round(s["lon"], 5),
                              "face": round(face) if face is not None else None,

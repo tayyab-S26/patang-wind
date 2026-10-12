@@ -70,6 +70,9 @@ details p{margin:7px 0;color:#5c5446;line-height:1.6}
 .xcday{background:#f1f1f1;padding:9px 12px;font-size:19px;color:#222;display:flex;align-items:baseline;gap:6px;border-bottom:1px solid #e0e0e0}
 .xcday small{font-size:11px;color:#8a8a8a}
 .xcday em{margin-left:auto;font-style:normal;font-size:11px;color:#8a8a8a}
+.srcsw{margin-left:auto;display:flex;border:1px solid #cfcfcf;border-radius:8px;overflow:hidden}
+.srcsw button{border:0;background:#fff;color:#555;font-size:12.5px;padding:5px 11px;cursor:pointer}
+.srcsw button.on{background:#26211a;color:#fbf8f1;font-weight:600}
 .xcw table{border-collapse:collapse;width:100%;font-size:16px;background:#fff}
 .xcw td{padding:0 6px;height:40px;text-align:center;white-space:nowrap;border-top:2px solid #fff}
 .xcw td.tm{background:#ececec;color:#333;text-align:left;padding-left:10px;width:78px;font-variant-numeric:tabular-nums}
@@ -191,11 +194,12 @@ function tempColor(t){if(t==null)return '#f3efe6';return t<5?'#cfe8f5':t<10?'#d9
 function wIcon(c){c=c||0;if(c===0)return '☀';if(c<=2)return '⛅';if(c===3)return '☁';if(c>=45&&c<=48)return '🌫';if(c>=51&&c<=67)return '🌦';if(c>=71&&c<=77)return '🌨';if(c>=80&&c<=82)return '🌧';if(c>=95)return '⛈';return '☁';}
 function angd(a,b){return Math.abs(((a-b+180)%360)-180);}
 function goodHr(s,w,g,dr){if(w==null||g==null||w<D.th.mean_min||w>D.th.mean_max||g>D.th.gust_max)return false;if(s.face==null||dr==null)return true;return angd((dr+180)%360,s.face)<=D.th.offshore_arc;}
+var SRC='xc',CURI=null,CURLD=null;
+window.pwSrc=function(v){SRC=v;if(CURI!==null)pwDay(CURI,CURLD);};
 function winBlock(s,day){
   if(!day){return '<div class="muted">No forecast for this day.</div>';}
-  var rows="",gh=[];
-  (day.det||[]).forEach(function(){});
-  (day.det||[]).forEach(function(r){
+  var rows="",gh=[],DET=(SRC==='met'?day.detm:day.det);
+  (DET||[]).forEach(function(r){
     var h=r[0],w=r[1],g=r[2],dr=r[3],tp=r[4],rn=r[5],wc=r[6],gd=goodHr(s,w,g,dr);
     var inw=h>=D.th.hour_start&&h<=D.th.hour_end;
     if(gd&&inw)gh.push(h);
@@ -207,10 +211,11 @@ function winBlock(s,day){
       +'<td style="background:'+tempColor(tp)+'">'+(tp==null?'–':tp+' °C')+'</td>'
       +'<td class="rn'+(rn>0?' wetc':'')+'">'+(rn>0?rn:'0')+' mm</td><td class="ic">'+wIcon(wc)+'</td></tr>';
   });
-  var tbl=!day.det?'<div class="muted" style="margin:8px 0">No hour-by-hour table this far out — the two apps&#39; good-hour counts are below.</div>':'<div class="xcw"><div class="xcday">'+day.wd+' '+day.dd+' <small>BST</small><em>wind to gust · XCWeather numbers</em></div><table>'+rows+'</table></div><div class="xckey">Green bar on the time = a good hour (11–18 mph, gust up to 26, blowing offshore). Darker grey times are outside 8am–8pm, shown but not counted in the verdict. Arrow shows where the wind is going.</div>';
+  var tog='<span class="srcsw"><button class="'+(SRC==='xc'?'on':'')+'" onclick="pwSrc(\'xc\')">XCWeather</button><button class="'+(SRC==='met'?'on':'')+'" onclick="pwSrc(\'met\')">Met Office</button></span>';
+  var tbl=!DET?'<div class="xcw"><div class="xcday">'+day.wd+' '+day.dd+tog+'</div></div><div class="muted" style="margin:8px 0">No '+(SRC==='met'?'Met Office':'XCWeather')+' hour-by-hour numbers for this day.</div>':'<div class="xcw"><div class="xcday">'+day.wd+' '+day.dd+' <small>BST</small>'+tog+'</div><table>'+rows+'</table></div><div class="xckey">Green bar on the time = a good hour (11–18 mph, gust up to 26, blowing offshore). Darker grey times are outside 8am–8pm, shown but not counted in the verdict. Arrow shows where the wind is going.</div>';
   var pk=day.pk||{},sum;
   var rt=rainTxt(day),rsuf=rt?' · <b'+(day.v==='wet'?' style="color:#9a6b12"':'')+'>'+rt+'</b>':'';
-  if(!day.det){sum='';}
+  if(!DET){sum='';}
   else if(gh.length){var a=Math.min.apply(null,gh),b=Math.max.apply(null,gh);sum='<div class="wsum">Fly-window <b>'+hl(a)+'–'+hl(b+1)+'</b> · '+(pk.mph||'?')+' mph, gust '+(pk.gust||'?')+' · wind '+(pk.from||'?')+' — the green rows'+rsuf+'</div>';}
   else{sum='<div class="wsum muted">No offshore in-band window this day — too light or wrong direction.</div>';}
   function mrow(lbl,rd,silent){var go=rd&&rd.go,h=rd?rd.hours:0;
@@ -236,6 +241,7 @@ function panelHTML(i){
     :mb.length?('No day both apps agree this week. Closest: <b>'+mb[0].wd+' '+mb[0].dd+'</b> — only '+(which(mb[0])[0]||'one')+' likes it, your call.')
     :'No offshore full-day here in the next 7 days — the lightest stretch of summer.';
   var note='<div class="blk"><div class="blkh" style="display:block">why this beach, this wind</div><div class="note">This beach faces the open sea to the <b>'+s.fc+'</b>. You need wind blowing that way (out to sea), i.e. <b>from the '+s.off_from+'</b> side — that keeps cut kites over open water, off the beach. Grey days are usually windy but blowing along the shore or onshore.</div></div>';
+  CURI=i;CURLD=sel.ld;
   var chips='<div class="blk"><div class="blkh">pick a day</div><div class="chips" id="chips'+i+'">'+s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}).map(function(d){return '<div class="chip'+(d.ld===sel.ld?' on':'')+'" onclick="pwDay('+i+','+d.ld+')">'+(d.ld===0?'Today':d.wd)+' '+cellTxt(d)+'</div>';}).join('')+'</div><div id="win'+i+'">'+winBlock(s,sel)+'</div></div>';
   var bars="";
   s.d.filter(function(d){return d.ld>=1;}).forEach(function(d){
@@ -250,7 +256,7 @@ function panelHTML(i){
 function showSide(i,ld){var s=D.sites[i];document.getElementById("side").innerHTML='<div class="sidehd">'+s.n+'<span>faces '+s.fc+' · offshore wind comes from the '+s.off_from+'</span></div>'+panelHTML(i);document.querySelectorAll(".card").forEach(function(c,k){c.classList.toggle("sel",k===i);});if(ld!=null)pwDay(i,ld);}
 window.pwTog=function(i){if(WIDE){showSide(i,null);return;}var c=document.getElementById("card"+i),open=c.classList.contains("open");if(!open){if(!document.getElementById("panel"+i).innerHTML){document.getElementById("panel"+i).innerHTML=panelHTML(i);}c.classList.add("open");}else{c.classList.remove("open");}};
 window.pwOpen=function(e,i,ld){e.stopPropagation();if(WIDE){showSide(i,ld);return;}var c=document.getElementById("card"+i);if(!document.getElementById("panel"+i).innerHTML){document.getElementById("panel"+i).innerHTML=panelHTML(i);}c.classList.add("open");pwDay(i,ld);};
-window.pwDay=function(i,ld){var s=D.sites[i],day=s.d.filter(function(d){return d.ld===ld;})[0],w=document.getElementById("win"+i);if(w)w.innerHTML=winBlock(s,day);var ch=document.getElementById("chips"+i);if(ch){ch.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});var idx=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}).findIndex(function(d){return d.ld===ld;});if(idx>=0)ch.children[idx].classList.add("on");}};
+window.pwDay=function(i,ld){CURI=i;CURLD=ld;var s=D.sites[i],day=s.d.filter(function(d){return d.ld===ld;})[0],w=document.getElementById("win"+i);if(w)w.innerHTML=winBlock(s,day);var ch=document.getElementById("chips"+i);if(ch){ch.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});var idx=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}).findIndex(function(d){return d.ld===ld;});if(idx>=0)ch.children[idx].classList.add("on");}};
 function median(a){a=a.slice().sort(function(x,y){return x-y;});return a.length?a[Math.floor(a.length/2)]:null;}
 function circMean(arr){var x=0,y=0,n=0;arr.forEach(function(d){if(d!=null){x+=Math.cos(d*Math.PI/180);y+=Math.sin(d*Math.PI/180);n++;}});return n?(Math.atan2(y,x)*180/Math.PI+360)%360:null;}
 function dayByLd(s,ld){return s.d.filter(function(d){return d.ld===ld;})[0];}

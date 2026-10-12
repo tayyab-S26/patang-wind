@@ -29,7 +29,8 @@ MS_MPH = 2.236936
 P_SPEED, P_DIR = "wind_speed_at_10m", "wind_direction_at_10m"
 P_GUST1, P_GUST3 = "wind_gust_at_10m_max-PT01H", "wind_gust_at_10m_max-PT03H"
 P_RAIN1, P_RAIN3 = "precipitation_accumulation-PT01H", "precipitation_accumulation-PT03H"
-PARAMS = (P_SPEED, P_DIR, P_GUST1, P_GUST3, P_RAIN1, P_RAIN3)
+P_TEMP, P_SYM1, P_SYM3 = "temperature_at_screen_level", "weather_symbols-PT01H", "weather_symbols-PT03H"
+PARAMS = (P_SPEED, P_DIR, P_GUST1, P_GUST3, P_RAIN1, P_RAIN3, P_TEMP, P_SYM1, P_SYM3)
 KEY_RE = re.compile(r"/(\d{8}T\d{4}Z)-B(\d{8}T\d{4}Z)-([A-Za-z0-9_\-]+)\.nc$")
 CACHE = os.environ.get("PATANG_MO_CACHE")       # optional folder, dev only
 
@@ -179,6 +180,11 @@ def pull(sites, days=14, hour_start=8, hour_end=20, now=None):
         r = P_RAIN1 if (P_RAIN1, v) in best else P_RAIN3
         if (r, v) in best:
             jobs.append((r, v))
+        if (P_TEMP, v) in best:
+            jobs.append((P_TEMP, v))
+        for sy in (P_SYM1, P_SYM3):
+            if (sy, v) in best:
+                jobs.append((sy, v))
     near = nearest_sites(sites, best[(P_SPEED, vts[0])][1])
     want = sorted({v[0] for v in near.values()})
     with ThreadPoolExecutor(max_workers=16) as ex:
@@ -197,7 +203,11 @@ def pull(sites, days=14, hour_start=8, hour_end=20, now=None):
             pc = sp["_pct"]
             row = {"sp": _pct(sp[sid], pc, 50), "lo": _pct(sp[sid], pc, 10), "hi": _pct(sp[sid], pc, 90),
                    "dir": data.get((P_DIR, v), {}).get(sid), "gust": None, "gust_hi": None,
-                   "rain": None, "rain_hi": None}
+                   "rain": None, "rain_hi": None, "t": None, "sym": None}
+            tv = data.get((P_TEMP, v), {}).get(sid)
+            if tv is not None:      # kelvin; percentiles -> the median
+                tv = _pct(tv, data[(P_TEMP, v)]["_pct"], 50) if isinstance(tv, list) else tv
+                row["t"] = tv - 273.15
             # an hourly max / total is stamped with the END of its hour; the Met
             # Office site shows it against the hour it STARTS (checked 11 Oct 2026)
             nxt = (datetime.datetime.strptime(v, fmt) + datetime.timedelta(hours=1)).strftime(fmt)
@@ -211,6 +221,11 @@ def pull(sites, days=14, hour_start=8, hour_end=20, now=None):
                 if sid in r:      # metres over the period -> mm per hour
                     row["rain"] = _pct(r[sid], r["_pct"], 50) * 1000 / div
                     row["rain_hi"] = _pct(r[sid], r["_pct"], 90) * 1000 / div
+                    break
+            for p in (P_SYM1, P_SYM3):
+                sy = data.get((p, nxt if p == P_SYM1 and (p, nxt) in data else v), {}).get(sid)
+                if sy is not None:
+                    row["sym"] = int(sy[len(sy) // 2] if isinstance(sy, list) else sy)
                     break
             steps[datetime.datetime.strptime(v, fmt).replace(tzinfo=UTC)] = row
         ts = sorted(steps)
@@ -240,7 +255,9 @@ def pull(sites, days=14, hour_start=8, hour_end=20, now=None):
                      None if per["rain"] is None else round(per["rain"], 2), bool(frac) or gap >= 2,
                      {"lo": mph(lin(a["lo"], b["lo"])), "hi": mph(lin(a["hi"], b["hi"])),
                       "gust_hi": mph(per["gust_hi"]),
-                      "rain_hi": None if per["rain_hi"] is None else round(per["rain_hi"], 2)}))
+                      "rain_hi": None if per["rain_hi"] is None else round(per["rain_hi"], 2),
+                      "t": None if lin(a["t"], b["t"]) is None else round(lin(a["t"], b["t"]), 1),
+                      "sym": per["sym"]}))
         out[s["name"]] = byday
     meta = {"blend_newest": blends[-1] if blends else None, "blend_oldest": blends[0] if blends else None,
             "files": len(data), "asked": len(jobs), "valid_times": len(vts),
