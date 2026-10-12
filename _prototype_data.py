@@ -167,6 +167,11 @@ def main():
     for ld in sorted(byday):
         n, d = max(byday[ld], key=lambda x: (rank[x[1]["v"]], hrs(x[1])))
         out["outlook"].append({"wd": d["wd"], "dd": d["dd"], "s": n, "v": d["v"]})
+    # our CAA kite permissions, as published in the NOTAMs (kite warnings at our beaches only)
+    import src_notam
+    items, meta = src_notam.pull(B.SITES)
+    out["notam"] = {"items": items, "meta": meta,
+                    "checked": datetime.datetime.now().strftime("%a %-d %b, %H:%M")}
     json.dump(out, open(OUT, "w"), separators=(",", ":"))
     print("wrote", OUT, "| sites", len(out["sites"]), "| best", out["best"])
 

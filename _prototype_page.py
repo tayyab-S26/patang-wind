@@ -70,6 +70,12 @@ details p{margin:7px 0;color:#5c5446;line-height:1.6}
 .xcday{background:#f1f1f1;padding:9px 12px;font-size:19px;color:#222;display:flex;align-items:baseline;gap:6px;border-bottom:1px solid #e0e0e0}
 .xcday small{font-size:11px;color:#8a8a8a}
 .xcday em{margin-left:auto;font-style:normal;font-size:11px;color:#8a8a8a}
+.permbar{background:#eef3fb;border:1px solid #c9d8f0;border-radius:10px;padding:8px 12px;margin:0 0 12px;font-size:13px;color:#2c3e5c}
+.permbar a{color:#2c5aa0}
+.permbar .pi{margin-top:4px;font-size:13px}
+.permbar .none{color:#6b7a90}
+.nbadge{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;color:#fff;background:#2c5aa0;border-radius:4px;padding:1px 5px;vertical-align:middle}
+.dc.perm{box-shadow:inset 0 0 0 2px #2c5aa0}
 .srcsw{margin-left:auto;display:flex;border:1px solid #cfcfcf;border-radius:8px;overflow:hidden}
 .srcsw button{border:0;background:#fff;color:#555;font-size:12.5px;padding:5px 11px;cursor:pointer}
 .srcsw button.on{background:#26211a;color:#fbf8f1;font-weight:600}
@@ -173,6 +179,14 @@ var b=D.best,html="";
 var hbadge={go:'GO',wet:'WET',split:'MAYBE'}[b.v]||'MAYBE';
 var hnote={go:'XC + Met Office agree',wet:'wind agreed — but '+rainTxt(b),split:'one model only — coin-flip'}[b.v]||'';
 html+='<div class="heads"><div class="hero"><div><div class="hlbl">best full-day this week</div><div class="hsite">'+b.s+'</div><div class="hmeta">'+b.wd+' '+b.dd+' · '+b.mph+' mph, gust '+b.gust+' · wind '+b.frm+' (offshore)</div></div><div class="hnum"><b style="color:'+(b.v==='go'?'#2f7d3f':'#c98f12')+'">'+hbadge+'</b><span>'+hnote+'</span></div></div>';
+function dIso(d){var y=new Date().getFullYear(),m={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12}[d.dd.split(' ')[1]],dd=+d.dd.split(' ')[0];if(new Date().getMonth()===11&&m===1)y++;return y+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd;}
+var NT=(D.notam&&D.notam.items)||[],NM=(D.notam&&D.notam.meta)||{};
+function ntDate(iso){var d=new Date(iso);return d.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'});}
+function ntFt(t){var m=t.match(/MAX HGT ([0-9]+FT[^.]*)/);return m?m[1].toLowerCase():'';}
+function ntDays(n){var out={};if(!n.from||!n.to)return out;var a=new Date(n.from),b=new Date(n.to);for(var t=new Date(a);t<=b;t=new Date(t.getTime()+3600e3*6)){out[t.toLocaleDateString('en-CA',{timeZone:'Europe/London'})]=1;}out[b.toLocaleDateString('en-CA',{timeZone:'Europe/London'})]=1;return out;}
+function siteNt(name){return NT.filter(function(n){return n.beach===name;});}
+html+='<div class="permbar"><b>Kite permission (NOTAM)</b> · '+(NM.error?'<span class="none">could not check the NOTAMs this time ('+NM.error+')</span>':NT.length?NT.length+' active at our beaches':'<span class="none">none active at our beaches</span>')+' · <a href="https://notaminfo.com/nationalmap" target="_blank" rel="noopener">NOTAM map</a>'
+  +NT.map(function(n){return '<div class="pi">✈ <b>'+n.beach+'</b> · '+n.ref+' · '+ntDate(n.from)+' → '+ntDate(n.to)+(ntFt(n.text)?' · max '+ntFt(n.text):'')+'</div>';}).join('')+'</div>';
 html+='<details><summary>How to read this — tap to open</summary>'
 +'<p><b>GO (green)</b> means the two apps you check on the day — <b>XCWeather</b> and the <b>Met Office</b> — <b>both</b> forecast a full offshore day. <b>maybe (amber)</b> means they split: one says go, one says no — the cell shows which one. Grey means neither.</p>'
 +'<p><b>☔ wet (amber)</b> means the wind call stands — both apps agree — but one of them forecasts '+D.th.wet_mm+'mm+ of rain for '+D.th.wet_hours+'+ of the flying hours, so it&#39;s not a day to drive to. Rain past about day 8 comes from XC (GFS) alone; the Met Office model doesn&#39;t reach that far.</p>'
@@ -181,9 +195,10 @@ html+='<details><summary>How to read this — tap to open</summary>'
 var dhCols=D.sites[0].d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;});
 html+='<div class="cols"><div class="colL"><div class="dayhead"><div class="cname"><span class="widehint">small numbers = good hours<br>XC · Met Office (9+ = full day)</span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')+'</div><div class="dhchev"></div></div>';
 D.sites.forEach(function(s,i){
-  var firm=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}),cells="";
-  firm.forEach(function(d){var k=vcls(d.v);cells+='<div class="dc'+(d.ld>7?' out':'')+'" style="'+STY[k]+';font-size:12px;font-weight:700" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+'">'+cellTxt(d)+'<small>'+(d.xc?d.xc.hours:0)+'·'+(d.met?d.met.hours:0)+'</small></div>';});
-  html+='<div class="card" id="card'+i+'"><div class="chead" onclick="pwTog('+i+')"><div><div class="cname">'+s.n+'</div><span class="csea">faces '+s.fc+'</span></div><div class="strip7">'+cells+'</div><span class="chev"></span></div><div class="panel" id="panel'+i+'"></div></div>';
+  var firm=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}),cells="",pd={};
+  siteNt(s.n).forEach(function(n){var x=ntDays(n);for(var k in x)pd[k]=1;});
+  firm.forEach(function(d){var k=vcls(d.v);cells+='<div class="dc'+(d.ld>7?' out':'')+(pd[dIso(d)]?' perm':'')+'" style="'+STY[k]+';font-size:12px;font-weight:700" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+'">'+cellTxt(d)+'<small>'+(d.xc?d.xc.hours:0)+'·'+(d.met?d.met.hours:0)+'</small></div>';});
+  html+='<div class="card" id="card'+i+'"><div class="chead" onclick="pwTog('+i+')"><div><div class="cname">'+s.n+(siteNt(s.n).length?'<span class="nbadge">NOTAM</span>':'')+'</div><span class="csea">faces '+s.fc+'</span></div><div class="strip7">'+cells+'</div><span class="chev"></span></div><div class="panel" id="panel'+i+'"></div></div>';
 });
 html+='</div><div class="colR" id="side"></div></div>';
 root.innerHTML=html;
@@ -253,7 +268,7 @@ function panelHTML(i){
   var strip='<div class="blk"><div class="blkh" style="display:block">next two weeks — solid = firm, faded = rough outlook</div><div class="strip">'+bars+'</div></div>';
   return '<div class="verdict">'+verdict+'</div>'+chips+note+strip;
 }
-function showSide(i,ld){var s=D.sites[i];document.getElementById("side").innerHTML='<div class="sidehd">'+s.n+'<span>faces '+s.fc+' · offshore wind comes from the '+s.off_from+'</span></div>'+panelHTML(i);document.querySelectorAll(".card").forEach(function(c,k){c.classList.toggle("sel",k===i);});if(ld!=null)pwDay(i,ld);}
+function showSide(i,ld){var s=D.sites[i],pn=siteNt(s.n).map(function(n){return '<div class="permbar" style="margin:6px 0 4px">✈ <b>Permission '+n.ref+'</b> · '+ntDate(n.from)+' → '+ntDate(n.to)+(ntFt(n.text)?' · max '+ntFt(n.text):'')+'<div class="pi" style="font-size:12px;color:#4a5a72">'+n.text+'</div></div>';}).join('');document.getElementById("side").innerHTML='<div class="sidehd">'+s.n+'<span>faces '+s.fc+' · offshore wind comes from the '+s.off_from+'</span></div>'+pn+panelHTML(i);document.querySelectorAll(".card").forEach(function(c,k){c.classList.toggle("sel",k===i);});if(ld!=null)pwDay(i,ld);}
 window.pwTog=function(i){if(WIDE){showSide(i,null);return;}var c=document.getElementById("card"+i),open=c.classList.contains("open");if(!open){if(!document.getElementById("panel"+i).innerHTML){document.getElementById("panel"+i).innerHTML=panelHTML(i);}c.classList.add("open");}else{c.classList.remove("open");}};
 window.pwOpen=function(e,i,ld){e.stopPropagation();if(WIDE){showSide(i,ld);return;}var c=document.getElementById("card"+i);if(!document.getElementById("panel"+i).innerHTML){document.getElementById("panel"+i).innerHTML=panelHTML(i);}c.classList.add("open");pwDay(i,ld);};
 window.pwDay=function(i,ld){CURI=i;CURLD=ld;var s=D.sites[i],day=s.d.filter(function(d){return d.ld===ld;})[0],w=document.getElementById("win"+i);if(w)w.innerHTML=winBlock(s,day);var ch=document.getElementById("chips"+i);if(ch){ch.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});var idx=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}).findIndex(function(d){return d.ld===ld;});if(idx>=0)ch.children[idx].classList.add("on");}};
