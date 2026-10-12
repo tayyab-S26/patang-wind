@@ -228,6 +228,7 @@ head = ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         '<style>' + CSS + '</style></head><body><div class="wrap">'
         '<div class="top"><h1>Patang Wind</h1><span class="tag">prototype</span></div>'
         '<p class="sub">UK beach game planner · updated ' + data["g"] + '</p>'
+        + ('<p class="sub" style="opacity:.7;font-size:11px">' + data["src"] + '</p>' if data.get("src") else '') +
         '<div class="nav"><button class="nb on" data-s="forecast">Forecast</button><button class="nb" data-s="map">Map</button><button class="nb" data-s="live">Live wind</button></div>'
         '<div id="sec-forecast" class="sec on"><div id="pwroot"></div></div>'
         '<div id="sec-map" class="sec"><div class="chips" id="mapdays" style="margin-bottom:10px"></div><div id="lmap"></div>'

@@ -80,13 +80,21 @@ def det_pull(lat, lon):
 def main():
     gen = datetime.datetime.now()
     today = gen.date()
-    out = {"g": gen.strftime("%a %-d %b, %H:%M"), "th": B.TH, "sites": [], "best": None, "outlook": []}
+    out = {"g": gen.strftime("%a %-d %b, %H:%M"), "src": B.truesrc.stamp(), "th": B.TH, "sites": [], "best": None, "outlook": []}
     allbest = []
     for s in B.SITES:
         face = B.face_for(s)
-        per = B.pull(s["lat"], s["lon"])
+        per = B.truesrc.overlay(B.pull(s["lat"], s["lon"]), s["name"])
         rainper = B.rain_pull(s["lat"], s["lon"])
         detmap = det_pull(s["lat"], s["lon"])
+        if B.truesrc.enabled():
+            for dt, rows in detmap.items():
+                true = {r[0]: r for r in per.get("ukmo_seamless", {}).get(dt, [])}
+                for row in rows:
+                    t = true.get(row[0])
+                    if t and t[1] is not None:
+                        row[1], row[2] = round(t[1]), round(t[2])
+                        row[3] = int(round(t[3])) if t[3] is not None else row[3]
         dates = sorted({d for m in B.DECIDE if m in per for d in per[m]})
         days = []
         for dt in dates:

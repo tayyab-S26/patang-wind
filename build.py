@@ -10,6 +10,7 @@ full offshore day; AMBER when they split (a coin-flip); grey when neither bites.
 Writes a static page to docs/ that GitHub Pages serves. Runs from a GitHub Action.
 """
 import urllib.request, json, datetime, re, math, os, html, time
+import truesrc
 from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -316,7 +317,7 @@ def build():
     allbest = []
     for s in SITES:
         face = face_for(s)
-        per = pull(s["lat"], s["lon"])
+        per = truesrc.overlay(pull(s["lat"], s["lon"]), s["name"])
         rainper = rain_pull(s["lat"], s["lon"])
         dates = sorted({d for m in DECIDE if m in per for d in per[m]})
         days = [day_record(per, dt, face, today, rainper) for dt in dates]
