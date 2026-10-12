@@ -32,8 +32,9 @@ def _url(day, cyc, fh):
     script = "filter_gfs_0p25_1hr.pl" if hourly else "filter_gfs_0p25.pl"
     return (f"{BASE}{script}?dir=%2Fgfs.{day}%2F{cyc:02d}%2Fatmos"
             f"&file=gfs.t{cyc:02d}z.pgrb2.0p25.f{fh:03d}"
-            "&var_UGRD=on&var_VGRD=on&var_GUST=on&var_APCP=on"
-            "&lev_10_m_above_ground=on&lev_surface=on&subregion="
+            "&var_UGRD=on&var_VGRD=on&var_GUST=on&var_APCP=on&var_TMP=on&var_TCDC=on"
+            "&lev_10_m_above_ground=on&lev_2_m_above_ground=on&lev_surface=on"
+            "&lev_entire_atmosphere=on&subregion="
             + "".join(f"&{k}={v}" for k, v in BOX.items()))
 
 
@@ -66,7 +67,7 @@ def _decode(raw):
         n = ec.codes_get(g, "totalLength")
         name = ec.codes_get(g, "shortName")
         step = str(ec.codes_get(g, "stepRange"))
-        keep = name in ("10u", "10v", "gust")
+        keep = name in ("10u", "10v", "gust", "2t", "tcc")
         if name == "tp" and "-" in step:
             a, b = step.split("-")
             # the 0-N running total is kept only when it IS the bucket (N <= 6)
@@ -151,7 +152,9 @@ def pull(sites, days=14, hour_start=8, hour_end=20):
                 else:
                     amt = tot - _bilinear(prev["tp"], s["lat"], s["lon"])
                 rain = max(0.0, amt) / (1 if h <= 120 else 3)   # mm per hour
-            steps[h] = (u, v, gust, rain)
+            temp = _bilinear(g["2t"], s["lat"], s["lon"]) - 273.15 if "2t" in g else None
+            cloud = _bilinear(g["tcc"], s["lat"], s["lon"]) if "tcc" in g else None
+            steps[h] = (u, v, gust, rain, temp, cloud)
         byday = {}
         hs = sorted(steps)
         for k, h in enumerate(hs):
@@ -165,6 +168,8 @@ def pull(sites, days=14, hour_start=8, hour_end=20):
                 v = a[1] + (b[1] - a[1]) * frac
                 gust = a[2] + (b[2] - a[2]) * frac
                 rain = b[3] if frac else a[3]
+                temp = None if a[4] is None or b[4] is None else a[4] + (b[4] - a[4]) * frac
+                cloud = b[5] if frac else a[5]
                 valid = run + datetime.timedelta(hours=base + (3 * frac if frac else 0))
                 loc = valid.astimezone(LON)
                 if not (hour_start <= loc.hour <= hour_end):
@@ -173,7 +178,9 @@ def pull(sites, days=14, hour_start=8, hour_end=20):
                 dirf = (math.degrees(math.atan2(-u, -v))) % 360
                 byday.setdefault(loc.strftime("%Y-%m-%d"), []).append(
                     (loc.hour, round(spd, 1), round(gust * MS_MPH, 1), round(dirf),
-                     None if rain is None else round(rain, 2), bool(frac) or base > 120))
+                     None if rain is None else round(rain, 2), bool(frac) or base > 120,
+                     {"t": None if temp is None else round(temp, 1),
+                      "cc": None if cloud is None else round(cloud)}))
         out[s["name"]] = byday
     return out, {"run": f"{day} {cyc:02d}Z", "hours": len(grids), "asked": len(fhs)}
 

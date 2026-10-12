@@ -11,7 +11,9 @@
     "firm_days": 7,
     "outlook_days": 14,
     "wet_mm": 0.5,
-    "wet_hours": 3
+    "wet_hours": 3,
+    "show_start": 5,
+    "show_end": 21
   },
   "decide_models": [
     "gfs_seamless",
@@ -149,5 +151,6 @@
       ],
       "face_deg": 123
     }
-  ]
+  ],
+  "true_sources": true
 }

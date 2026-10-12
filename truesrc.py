@@ -40,7 +40,8 @@ def load():
         _T = json.load(open(CACHE))
         return _T
     th, sites = CFG["thresholds"], CFG["sites"]
-    kw = dict(days=th["outlook_days"], hour_start=th["hour_start"], hour_end=th["hour_end"])
+    kw = dict(days=th["outlook_days"], hour_start=min(th["hour_start"], th.get("show_start", th["hour_start"])),
+              hour_end=max(th["hour_end"], th.get("show_end", th["hour_end"])))
     out = {"meta": {}}
     for key, modname in (("gfs", "src_gfs025"), ("met", "src_metoffice")):
         try:
@@ -67,6 +68,8 @@ def overlay(per, site_name):
         for date in set(per[model]) | set(true):
             hours = {r[0]: tuple(r[:4]) for r in per[model].get(date, [])}
             for r in true.get(date, []):
+                if not (CFG["thresholds"]["hour_start"] <= r[0] <= CFG["thresholds"]["hour_end"]):
+                    continue                      # shown, not judged
                 if r[1] is not None and r[2] is not None:
                     hours[r[0]] = (r[0], r[1], r[2], r[3])
             merged[date] = [hours[h] for h in sorted(hours)]

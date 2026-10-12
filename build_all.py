@@ -10,6 +10,13 @@ Action calls every few hours, and what you run locally to refresh by hand:
 import subprocess, sys, os
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+# The XC and Met Office columns read NOAA GRIB and Met Office NetCDF files
+# (src_gfs025 / src_metoffice). The scheduled runner starts bare, so install
+# their readers here: the workflow file itself can't be edited from this repo's
+# token. If this fails the build still runs, and the page footer says which
+# column fell back to the Open-Meteo stand-in.
+if os.environ.get("GITHUB_ACTIONS"):
+    subprocess.call([sys.executable, "-m", "pip", "install", "-q", "h5py", "numpy", "eccodes"])
 for script in ["build.py", "_prototype_data.py", "_prototype_page.py"]:
     print("== running", script)
     subprocess.check_call([sys.executable, os.path.join(ROOT, script)])

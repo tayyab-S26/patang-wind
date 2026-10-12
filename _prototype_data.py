@@ -88,13 +88,22 @@ def main():
         rainper = B.rain_pull(s["lat"], s["lon"])
         detmap = det_pull(s["lat"], s["lon"])
         if B.truesrc.enabled():
-            for dt, rows in detmap.items():
-                true = {r[0]: r for r in per.get("ukmo_seamless", {}).get(dt, [])}
-                for row in rows:
-                    t = true.get(row[0])
-                    if t and t[1] is not None:
-                        row[1], row[2] = round(t[1]), round(t[2])
-                        row[3] = int(round(t[3])) if t[3] is not None else row[3]
+            # the hour-by-hour table shows XCWeather's own numbers (NOAA GFS 0.25),
+            # 5am-9pm; an hour NOAA's run does not hold keeps the old row
+            xc = B.truesrc.load().get("gfs", {}).get(s["name"], {})
+            for dt, xrows in xc.items():
+                old = {r[0]: r for r in detmap.get(dt, [])}
+                new = {}
+                for r in xrows:
+                    ex = r[6] if len(r) > 6 and isinstance(r[6], dict) else {}
+                    rain = r[4] or 0
+                    cc = ex.get("cc")
+                    code = 80 if rain >= 1 else 61 if rain >= 0.2 else 3 if cc is None or cc >= 85 else 2 if cc >= 25 else 0
+                    new[r[0]] = [r[0], round(r[1]), round(r[2]), int(r[3]),
+                                 None if ex.get("t") is None else round(ex["t"]), round(rain, 1), code]
+                for h, r in old.items():
+                    new.setdefault(h, r)
+                detmap[dt] = [new[h] for h in sorted(new)]
         dates = sorted({d for m in B.DECIDE if m in per for d in per[m]})
         days = []
         for dt in dates:
@@ -108,7 +117,7 @@ def main():
                    "xc": m.get("gfs_seamless", {"hours": 0, "go": False}),
                    "met": m.get("ukmo_seamless", {"hours": 0, "go": False}),
                    "ec": m.get("ecmwf_ifs025", {"hours": 0, "go": False})}
-            if 0 <= rec["lead"] <= B.TH["firm_days"]:
+            if 0 <= rec["lead"] <= (B.TH["outlook_days"] - 1 if B.truesrc.enabled() else B.TH["firm_days"]):
                 row["det"] = detmap.get(dt)
             days.append(row)
         out["sites"].append({"n": s["name"], "lat": round(s["lat"], 5), "lon": round(s["lon"], 5),
