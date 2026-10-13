@@ -172,6 +172,21 @@ def main():
     items, meta = src_notam.pull(B.SITES)
     out["notam"] = {"items": items, "meta": meta,
                     "checked": datetime.datetime.now().strftime("%a %-d %b, %H:%M")}
+    # The trail: every build appends what each app said for each beach-day, so we can
+    # watch a call firm up or fall apart run by run (his method, 13 Oct 2026) and later
+    # score it against what happened. One line per build, docs/trail/YYYY-MM.jsonl.
+    try:
+        meta = B.truesrc.load().get("meta", {}) if B.truesrc.enabled() else {}
+        line = {"run": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
+                "gfs": meta.get("gfs", {}).get("run"), "mo": meta.get("met", {}).get("blend_newest"),
+                "b": {s["n"]: {d["dd"]: [d["xc"]["hours"], d["met"]["hours"], d["ec"]["hours"], d["v"], d["ld"]]
+                               for d in s["d"]} for s in out["sites"]}}
+        tdir = os.path.join(ROOT, "docs", "trail")
+        os.makedirs(tdir, exist_ok=True)
+        with open(os.path.join(tdir, datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m") + ".jsonl"), "a") as f:
+            f.write(json.dumps(line, separators=(",", ":")) + "\n")
+    except Exception as e:
+        print("trail log skipped:", e)
     json.dump(out, open(OUT, "w"), separators=(",", ":"))
     print("wrote", OUT, "| sites", len(out["sites"]), "| best", out["best"])
 
