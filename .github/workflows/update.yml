@@ -21,6 +21,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Rebuild board + prototype
+        env:
+          MO_OBS_KEY: ${{ secrets.MO_OBS_KEY }}
         run: python build_all.py
       - name: Commit if the forecast changed
         run: |
