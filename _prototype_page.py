@@ -148,7 +148,12 @@ details{background:var(--paper);border:1px solid var(--line);border-radius:12px;
 summary{cursor:pointer;font-weight:600;color:var(--ink);padding:8px 0}
 details p{margin:8px 0;color:var(--ink2);line-height:1.6;max-width:72ch}
 #livewrap{height:80vh;min-height:520px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#dfe7f2}
-.maplegend{font-size:12.5px;color:var(--ink3);margin-top:8px;line-height:1.5}
+.maplegend{font-size:13px;color:var(--ink2);margin-top:8px;line-height:1.5}
+.maplegend b{color:var(--ink)}
+.livet{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2)}
+.livet button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 11px;font:600 12px var(--body);color:var(--ink2);cursor:pointer}
+.livet button.on{background:var(--indigo);border-color:var(--indigo);color:#fff}
+#livebeaches{align-items:center}
 .foot{color:var(--ink3);font-size:12.5px;margin-top:22px;line-height:1.65;max-width:110ch}
 .foot a{color:var(--ink2)}
 .foot b{color:var(--ink2)}
@@ -361,9 +366,10 @@ window.pwMapDay=function(ld){MAPLD=ld;buildMapDays();if(MAP)drawMarkers();};
 function fitMap(){if(MAP)MAP.fitBounds(L.latLngBounds(D.sites.map(function(s){return [s.lat,s.lon];})),{padding:[40,40]});}
 function initMap(){if(MAP)return;MAPLD=MAPLD||bestFirmLd();MAP=L.map('lmap',{scrollWheelZoom:true,wheelPxPerZoomLevel:90}).setView([51.6,0.6],7);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:18}).addTo(MAP);buildMapDays();drawMarkers();fitMap();}
 window.pwGoCard=function(i){pwShowSec('forecast');if(WIDE){showSide(i,null);return;}var c=document.getElementById('card'+i);if(!document.getElementById('panel'+i).innerHTML){document.getElementById('panel'+i).innerHTML=panelHTML(i);}c.classList.add('open');c.scrollIntoView({block:'start'});};
-var LIVEI=null;
-function liveSrc(st){return 'https://embed.windy.com/embed2.html?lat='+st.lat+'&lon='+st.lon+'&detailLat='+st.lat+'&detailLon='+st.lon+'&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=&type=map&location=coordinates&detail=true&metricWind=mph&metricTemp=%C2%B0C&radarRange=-1';}
-window.pwLive=function(i){LIVEI=i;document.getElementById('livebeaches').innerHTML=D.sites.map(function(st,k){return '<div class="chip'+(k===i?' on':'')+'" onclick="pwLive('+k+')">'+st.n+'</div>';}).join('');document.getElementById('livewrap').innerHTML='<iframe width="100%" height="100%" style="border:0" loading="lazy" src="'+liveSrc(D.sites[i])+'"></iframe>';};
+var LIVEI=null,LIVEC='now';
+function liveSrc(st){return 'https://embed.windy.com/embed2.html?lat='+st.lat+'&lon='+st.lon+'&detailLat='+st.lat+'&detailLon='+st.lon+'&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar='+LIVEC+'&pressure=&type=map&location=coordinates&detail=true&metricWind=mph&metricTemp=%C2%B0C&radarRange=-1';}
+window.pwLiveT=function(c){LIVEC=c;pwLive(LIVEI);};
+window.pwLive=function(i){LIVEI=i;document.getElementById('livebeaches').innerHTML=D.sites.map(function(st,k){return '<div class="chip'+(k===i?' on':'')+'" onclick="pwLive('+k+')">'+st.n+'</div>';}).join('')+'<span class="livet">Start the map at '+[['now','now'],['12','12 hours on'],['24','24 hours on']].map(function(o){return '<button class="'+(LIVEC===o[0]?'on':'')+'" onclick="pwLiveT(\''+o[0]+'\')">'+o[1]+'</button>';}).join('')+'</span>';document.getElementById('livewrap').innerHTML='<iframe width="100%" height="100%" style="border:0" loading="lazy" src="'+liveSrc(D.sites[i])+'"></iframe>';};
 function pwShowSec(name){['forecast','live'].forEach(function(n){document.getElementById('sec-'+n).classList.toggle('on',n===name);});document.querySelectorAll('.nb').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-s')===name);});if(name==='live'&&LIVEI===null){var bi=0;D.sites.forEach(function(st,k){if(D.best&&st.n===D.best.s)bi=k;});pwLive(bi);}}
 if(WIDE){var bi=0,bld=null;D.sites.forEach(function(s,k){if(D.best&&s.n===D.best.s){bi=k;s.d.forEach(function(d){if(d.dd===D.best.dd)bld=d.ld;});}});showSide(bi,bld);}
 document.querySelectorAll('.nb').forEach(function(b){b.addEventListener('click',function(){pwShowSec(b.getAttribute('data-s'));});});
@@ -382,8 +388,9 @@ head = ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         ''
         
         '<div id="sec-forecast" class="sec on"><div id="pwroot"></div></div>'
-        '<div id="sec-live" class="sec"><div class="chips" id="livebeaches" style="margin-bottom:10px"></div><div id="livewrap"></div>'
-        '<p class="maplegend" style="margin-top:8px">Windy&#39;s own map and forecast. Pick a beach above: the strip at the bottom shows its dates and every hour&#39;s wind, gusts and direction (arrows). Drag the time bar to move the map through the days.</p></div>'
+        '<div id="sec-live" class="sec"><div class="chips" id="livebeaches" style="margin-bottom:10px"></div>'
+        '<p class="maplegend" style="margin:0 0 10px"><b>To move through the days and hours, drag the small orange time label</b> (the one showing the hour, at the top left of the strip) along the bar. Clicking on a day or hour in the strip does nothing: that part belongs to Windy and cannot be changed from this page. Pick a beach above to move the strip to it.</p>'
+        '<div id="livewrap"></div></div>'
         '<p class="foot">Each day is judged on the two apps you check, using the numbers they show: the '
         '<b>XCWeather</b> column is NOAA&#39;s GFS model on the same 0.25&deg; grid XCWeather draws from, and the '
         '<b>Met Office</b> column is the Met Office&#39;s own blended site forecast (their open data). GREEN only when both '
