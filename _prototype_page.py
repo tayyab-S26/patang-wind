@@ -255,11 +255,11 @@ function wkWord(p){return p>=50?'Worth applying':p>=30?'A coin flip':p>=10?'A lo
 function wkCls(p){return p>=50?'hi':p>=30?'mid':'lo';}
 html+='<div class="wk">'+(WK.days.length?WK.days.map(function(d){
   var top=d.rows.filter(function(r){return r.p>=3||r.p6>=10;}).slice(0,2),best=d.rows[0]||{p:0};
-  var ap=d.apply_in>0?'Apply by '+d.apply:d.apply_in===0?'Apply today':'Past the two-day deadline';
+  var ap=d.apply_in>0?'Ask for the NOTAM by '+d.apply+' morning':d.apply_in===0?'Ask for the NOTAM this morning':'Past the two-working-day deadline';
   return '<div class="wkd"><div class="wkh"><b>'+d.name+'</b><span class="wkap'+(d.apply_in<0?' late':'')+'">'+ap+'</span></div>'
     +'<div class="wkv '+wkCls(best.p)+'">'+(top.length?wkWord(best.p)+' at '+best.b:'No beach has a real chance')+'</div>'
     +top.map(function(r){return '<div class="wkr" title="'+Object.keys(r.by).map(function(k){return k+' '+r.by[k]+'%';}).join(', ')+'"><span class="wkn">'+r.b+'</span><span class="wkt"><i class="'+wkCls(r.p)+'" style="width:'+Math.max(2,r.p)+'%"></i></span><b>'+r.p+'%</b><span class="wks">centres '+r.lo+' to '+r.hi+'%, 6 hours+ '+r.p6+'%</span></div>';}).join('')
-    +'</div>';}).join('')+'<div class="wkf">Odds of a full offshore day (9+ good hours) from 140 runs of four weather centres. "Centres" is how far they disagree; "6 hours+" is the odds of a shorter session'+(WK.asof?', worked out '+new Date(WK.asof).toLocaleString('en-GB',{weekday:'short',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}):'')+'.'+(WK.error?' The latest update failed, so these are the previous figures.':'')+'</div>'
+    +'</div>';}).join('')+'<div class="wkf">Odds of a full offshore day (9+ good hours) from 140 runs of four weather centres. "Centres" is how far they disagree; "6 hours+" is the odds of a shorter session. The CAA needs the NOTAM request 2 working days ahead (14 days if you have no kite permission yet)'+(WK.asof?', worked out '+new Date(WK.asof).toLocaleString('en-GB',{weekday:'short',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}):'')+'.'+(WK.error?' The latest update failed, so these are the previous figures.':'')+'</div>'
   :'<div class="wkf">Weekend odds could not be worked out this time'+(WK.error?' ('+WK.error+')':'')+'.</div>')+'</div>';
 html+='<details><summary>How to read this</summary>'
 +'<p><b>GO (green)</b> means the two apps you check on the day — <b>XCWeather</b> and the <b>Met Office</b> — <b>both</b> forecast a full offshore day. <b>maybe (amber)</b> means they split: one says go, one says no — the cell shows which one. Grey means neither.</p>'

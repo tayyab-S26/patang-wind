@@ -182,7 +182,14 @@ def main():
         wk = {"asof": odds.get("asof"), "error": odds.get("error"), "days": []}
         for wd_ in odds.get("dates", wdates):
             dt_ = datetime.date.fromisoformat(wd_)
-            ap = dt_ - datetime.timedelta(days=2)
+            # CAA: with a Kite Permission in place, the NOTAM request must be in at least
+            # 2 WORKING days before the start (caa.co.uk, airspace notification of kites;
+            # office hours Mon-Fri 08:30-16:30). So Saturday and Sunday both mean Thursday.
+            ap, left = dt_, 2
+            while left:
+                ap -= datetime.timedelta(days=1)
+                if ap.weekday() < 5:
+                    left -= 1
             rows = []
             for s in out["sites"]:
                 o = odds.get("b", {}).get(s["n"], {}).get(wd_)
