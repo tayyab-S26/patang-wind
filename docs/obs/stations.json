@@ -1,0 +1,72 @@
+{
+ "Sheerness": {
+  "geohash": "u10t6c",
+  "area": "Essex",
+  "km": 13.5,
+  "lat": 51.5561,
+  "lon": 0.8295
+ },
+ "Leysdown": {
+  "geohash": "u10t6c",
+  "area": "Essex",
+  "km": 20.5,
+  "lat": 51.5561,
+  "lon": 0.8295
+ },
+ "Whitstable": {
+  "geohash": "u10t6c",
+  "area": "Essex",
+  "km": 25.2,
+  "lat": 51.5561,
+  "lon": 0.8295
+ },
+ "Deal": {
+  "geohash": "u10fys",
+  "area": "Kent",
+  "km": 8.6,
+  "lat": 51.1331,
+  "lon": 1.3458
+ },
+ "Cooden": {
+  "geohash": "u101x2",
+  "area": "East Sussex",
+  "km": 9.8,
+  "lat": 50.8914,
+  "lon": 0.3241
+ },
+ "Seaford": {
+  "geohash": "u101x2",
+  "area": "East Sussex",
+  "km": 20.9,
+  "lat": 50.8914,
+  "lon": 0.3241
+ },
+ "Portland": {
+  "geohash": "gbyr2j",
+  "area": "Dorset",
+  "km": 0.5,
+  "lat": 50.5234,
+  "lon": -2.4554
+ },
+ "Aldeburgh": {
+  "geohash": "u128tb",
+  "area": "Suffolk",
+  "km": 44.2,
+  "lat": 52.1219,
+  "lon": 0.9613
+ },
+ "Shingle Street": {
+  "geohash": "u128tb",
+  "area": "Suffolk",
+  "km": 35.1,
+  "lat": 52.1219,
+  "lon": 0.9613
+ },
+ "Salthouse": {
+  "geohash": "u12v1x",
+  "area": "Norfolk",
+  "km": 2.0,
+  "lat": 52.9514,
+  "lon": 1.1261
+ }
+}

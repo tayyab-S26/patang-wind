@@ -20,4 +20,11 @@ if os.environ.get("GITHUB_ACTIONS"):
 for script in ["build.py", "_prototype_data.py", "_prototype_page.py"]:
     print("== running", script)
     subprocess.check_call([sys.executable, os.path.join(ROOT, script)])
+# measured wind from the Met Office stations near each beach (kept only 48 h at source,
+# so every build banks what is new). Needs MO_OBS_KEY; without it this step says so and moves on.
+try:
+    import json, src_obs
+    print("== observations:", src_obs.collect(json.load(open(os.path.join(ROOT, "config.json")))["sites"]))
+except Exception as e:
+    print("== observations skipped:", e)
 print("== done: docs/index.html, docs/board.json, docs/prototype.html")
