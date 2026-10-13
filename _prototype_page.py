@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a standalone, interactive prototype page (docs/prototype.html) from
+"""Generate the main page (docs/prototype.html) from
 the rich dataset. Self-contained (own warm theme, no external deps). Separate
 from the live index.html so both can be compared at different links.
 """
@@ -9,153 +9,191 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 RICH = os.path.join(ROOT, "rich.json")
 data = json.load(open(RICH))
 
-CSS = """
+CSS = r'''
+:root{--ink:#0f1b3d;--ink2:#4a5878;--ink3:#8592ad;--sky:#eef3fa;--paper:#fff;--line:#dbe3ef;--mist:#f3f6fb;
+--indigo:#22308f;--indigo2:#3a4bc0;--rani:#e0245e;--saffron:#f5a300;--parrot:#12a150;--parrot-d:#0b7a3b;
+--disp:"Bricolage Grotesque","Hanken Grotesk",system-ui,sans-serif;--body:"Hanken Grotesk",system-ui,-apple-system,sans-serif}
 *{box-sizing:border-box}
-body{margin:0;background:#fbf8f1;color:#26211a;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums}
-.wrap{max-width:760px;margin:0 auto;padding:22px 14px 70px}
-.top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-h1{font-size:22px;font-weight:600;margin:0}
-.tag{font-size:11px;color:#9a7b16;background:#f7efd6;border:1px solid #e6d6a6;border-radius:20px;padding:2px 9px}
-.sub{color:#8a8170;font-size:13px;margin:3px 0 16px}
-.hero{display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #c9a227;border-radius:14px;padding:14px 16px;margin-bottom:10px}
-.hlbl{font-size:12px;color:#5c5446}
-.hsite{font-size:18px;font-weight:500}
-.hmeta{font-size:13px;color:#5c5446;margin-top:1px}
-.hnum{margin-left:auto;text-align:right;line-height:1}
-.hnum b{font-family:Georgia,'Times New Roman',serif;font-size:40px;font-weight:500;color:#2f7d3f}
-.hnum span{display:block;font-size:11px;color:#8a8170}
-details{background:#f4efe6;border-radius:10px;padding:6px 14px;margin-bottom:16px;font-size:14px}
-summary{cursor:pointer;font-size:13px;color:#5c5446;padding:5px 0}
-details p{margin:7px 0;color:#5c5446;line-height:1.6}
-.card{border:1px solid #e7ded0;border-radius:12px;margin-bottom:8px;background:#fff;overflow:hidden}
-.chead{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer}
-.chead:hover{background:#faf6ec}
-.cname{font-weight:600;font-size:14.5px;min-width:96px}
-.csea{font-size:11px;color:#8a8170;display:block;font-weight:400}
-.strip7{display:flex;gap:3px;margin-left:auto}
-.dc{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer}
-.dayhead{display:flex;align-items:center;gap:10px;padding:2px 13px 6px}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--sky);color:var(--ink);font:15px/1.5 var(--body);font-variant-numeric:tabular-nums}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--rani);outline-offset:2px}
+.wrap{max-width:780px;margin:0 auto;padding:18px 14px 64px}
+
+/* top bar */
+.bar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{width:26px;height:32px;flex:none}
+h1{font:700 24px/1 var(--disp);letter-spacing:-.02em;margin:0}
+.nav{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.nb{border:0;background:transparent;border-radius:999px;padding:7px 16px;font-size:14px;font-weight:600;color:var(--ink2);cursor:pointer}
+.nb.on{background:var(--indigo);color:#fff}
+.upd{margin-left:auto;text-align:right;font-size:12.5px;color:var(--ink2);line-height:1.35}
+.upd span{display:block;font-size:11px;color:var(--ink3)}
+.sec{display:none}.sec.on{display:block}
+
+/* the call that matters */
+.hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;gap:8px 28px;align-items:center;
+  background:linear-gradient(118deg,#1a2577 0%,#2a3aa6 52%,#4a5fd6 100%);color:#fff;border-radius:18px;padding:22px 150px 22px 26px;margin-bottom:12px}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:5px;background:var(--parrot)}
+.hero.v-mid::after{background:var(--saffron)}
+.hverd{font:800 44px/0.98 var(--disp);letter-spacing:-.03em}
+.hsite{font:600 19px/1.2 var(--disp);margin-top:8px;opacity:.96}
+.hmeta{font-size:14.5px;line-height:1.45;margin-top:6px;color:#d7dcf7;max-width:46ch}
+.hmeters{min-width:230px;font-size:12.5px;color:#d7dcf7}
+.hm{display:grid;grid-template-columns:86px 1fr 34px;align-items:center;gap:8px;margin:7px 0}
+.hm .trk{position:relative;height:8px;border-radius:5px;background:rgba(255,255,255,.2)}
+.hm .trk i{position:absolute;inset:0 auto 0 0;border-radius:5px;background:#fff}
+.hm .trk u{position:absolute;top:-4px;bottom:-4px;left:69.2%;width:2px;background:var(--saffron)}
+.hm b{color:#fff;font-weight:700;text-align:right}
+.hmk{font-size:11.5px;color:#b9c1ee;margin-top:2px}
+.kite{position:absolute;right:26px;top:50%;width:104px;height:150px;margin-top:-78px;transform-origin:50% 40%;transform:rotate(14deg);animation:sway 5.5s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(11deg) translateY(0)}50%{transform:rotate(18deg) translateY(-5px)}}
+@media (prefers-reduced-motion:reduce){.kite{animation:none}}
+
+/* permission line */
+.permbar{display:block;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--indigo);border-radius:10px;padding:9px 14px;margin:0 0 12px;font-size:13.5px;color:var(--ink2)}
+.permbar b{color:var(--ink)}
+.permbar a{color:var(--indigo);font-weight:600;text-underline-offset:2px}
+.permbar .pi{margin-top:5px;color:var(--ink)}
+.permbar .none{color:var(--ink2)}
+.nbadge{display:inline-block;margin-left:7px;font-size:10.5px;font-weight:700;color:#fff;background:var(--indigo);border-radius:4px;padding:1px 6px;vertical-align:2px}
+
+/* the board: one sheet, ten rows */
+.board{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.dayhead{display:flex;align-items:flex-end;gap:10px;padding:12px 14px 8px;border-bottom:1px solid var(--line);background:var(--mist)}
 .dayhead .cname{min-width:96px}
-.dh{width:32px;display:flex;flex-direction:column;align-items:center;line-height:1.12}
-.dh b{font-size:10px;font-weight:600;color:#8a8170}
-.dh span{font-size:9px;color:#b3a892}
+.strip7{display:flex;gap:3px;margin-left:auto}
+.dh{width:32px;display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.dh b{font-size:10.5px;font-weight:600;color:var(--ink3)}
+.dh span{font-size:10px;color:var(--ink3)}
+.dh.we b,.dh.we span{color:var(--ink)}
+.dh.td b{color:var(--rani)}
 .dhchev{width:10px;flex:none}
-.chev{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #b3a892;transition:transform .15s;flex:none}
+.card{border-bottom:1px solid var(--line);background:var(--paper)}
+.card:last-child{border-bottom:0}
+.chead{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;position:relative}
+.chead:hover{background:#f8fafd}
+.cname{font:600 15.5px/1.2 var(--disp);letter-spacing:-.01em;min-width:96px}
+.csea{font:400 12px/1.3 var(--body);color:var(--ink3);display:block;margin-top:1px}
+.dc{position:relative;width:32px;height:32px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:var(--mist);color:var(--ink3)}
+.dc .lab{font-size:10.5px;font-weight:700;line-height:1;letter-spacing:.01em}
+.dc .bars{display:none}
+.dc.v-hi{background:var(--parrot);color:#fff}
+.dc.v-mid{background:#ffefc2;color:#7a4f00}
+.dc.perm{box-shadow:inset 0 0 0 2px var(--indigo)}
+.dc:hover{filter:brightness(.96)}
+.chev{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--ink3);transition:transform .15s;flex:none}
 .card.open .chev{transform:rotate(180deg)}
-.panel{display:none;padding:2px 14px 16px;border-top:1px solid #f0e8d9}
+.panel{display:none;padding:4px 14px 16px;border-top:1px solid var(--line);background:#fcfdff}
 .card.open .panel{display:block}
-.verdict{font-size:14px;margin:13px 0 14px;line-height:1.55}
-.blk{margin:15px 0}
-.blkh{font-size:12px;color:#8a8170;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}
-.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
-.chip{border:1px solid #e7ded0;border-radius:8px;padding:5px 9px;font-size:12px;cursor:pointer;color:#5c5446;background:#faf6ec}
-.chip.on{border-color:#c9a227;color:#9a7b16;background:#f7efd6;font-weight:600}
-.hours{display:flex;align-items:flex-end;gap:4px;height:70px}
-.hb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px}
-.hbar{width:100%;max-width:20px;border-radius:3px 3px 0 0}
-.hl{font-size:10px;color:#a59c8a}
-.wsum{font-size:13.5px;margin-top:10px}
-.conf div{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12.5px;color:#5c5446}
-.cftrk{flex:1;height:9px;border-radius:5px;background:#f0e8d9}
-.cfbar{height:9px;border-radius:5px;background:#2f7d3f;min-width:2px}
-.note{font-size:13px;color:#5c5446;line-height:1.6;background:#f4efe6;border-radius:9px;padding:11px 13px}
+.widehint{display:none}
+.colR{display:none}
+
+/* detail */
+.verdict{font-size:14.5px;margin:12px 0;line-height:1.5;color:var(--ink)}
+.blk{margin:14px 0}
+.blkh{font-size:12.5px;font-weight:600;color:var(--ink2);margin-bottom:7px}
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.chip{border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12px;font-weight:500;cursor:pointer;color:var(--ink2);background:var(--paper)}
+.chip:hover{border-color:var(--ink3)}
+.chip.on{border-color:var(--indigo);color:#fff;background:var(--indigo);font-weight:600}
+.wsum{font-size:14px;margin-top:8px;color:var(--ink)}
+.muted{color:var(--ink3);font-size:13.5px}
+.conf div{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:13px;color:var(--ink2)}
+.note{font-size:13.5px;color:var(--ink2);line-height:1.55;background:var(--mist);border-radius:10px;padding:11px 13px}
 .strip{display:flex;align-items:flex-end;gap:3px;height:52px}
 .sb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
-.sbar{width:100%;max-width:18px;border-radius:2px 2px 0 0;min-height:2px}
-.sl{font-size:10px;color:#a59c8a}
-.muted{color:#8a8170;font-size:13px}
-.foot{color:#8a8170;font-size:12px;margin-top:26px;line-height:1.7}
-.foot a{color:#5c5446}
-.xcw{overflow-x:auto;margin:8px 0 10px;border-radius:8px;border:1px solid #e3e3e3}
-.xcday{background:#f1f1f1;padding:9px 12px;font-size:19px;color:#222;display:flex;align-items:baseline;gap:6px;border-bottom:1px solid #e0e0e0}
-.xcday small{font-size:11px;color:#8a8a8a}
-.xcday em{margin-left:auto;font-style:normal;font-size:11px;color:#8a8a8a}
-.permbar{background:#eef3fb;border:1px solid #c9d8f0;border-radius:10px;padding:8px 12px;margin:0 0 12px;font-size:13px;color:#2c3e5c}
-.permbar a{color:#2c5aa0}
-.permbar .pi{margin-top:4px;font-size:13px}
-.permbar .none{color:#6b7a90}
-.nbadge{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;color:#fff;background:#2c5aa0;border-radius:4px;padding:1px 5px;vertical-align:middle}
-.dc.perm{box-shadow:inset 0 0 0 2px #2c5aa0}
-.srcsw{margin-left:auto;display:flex;border:1px solid #cfcfcf;border-radius:8px;overflow:hidden}
-.srcsw button{border:0;background:#fff;color:#555;font-size:12.5px;padding:5px 11px;cursor:pointer}
-.srcsw button.on{background:#26211a;color:#fbf8f1;font-weight:600}
-.xcw table{border-collapse:collapse;width:100%;font-size:16px;background:#fff}
-.xcw td{padding:0 6px;height:40px;text-align:center;white-space:nowrap;border-top:2px solid #fff}
-.xcw td.tm{background:#ececec;color:#333;text-align:left;padding-left:10px;width:78px;font-variant-numeric:tabular-nums}
-.xcw td.ar{width:52px}
-.xcw td.ar span{display:inline-block;color:#3d2bb3;font-weight:900;font-size:26px;line-height:1}
-.xcw td.to{color:#b9b9b9;font-size:12px;width:26px;padding:0}
-.xcw td.rn{color:#333}
-.xcw td.rn.wetc{background:#e6f9fd}
-.xcw td.ic{font-size:21px;width:48px}
-.xcw tr.gd td.tm{box-shadow:inset 5px 0 0 #2f7d3f;font-weight:700;color:#1f6a30}
-.xcw tr.gd td.ar span{color:#1f8a36}
-.xcw tr.off td.tm{background:#d6d6d6}
-.xckey{font-size:11.5px;color:#8a8170;margin:-2px 0 10px}
-@media (max-width:430px){.xcw table{font-size:14px}.xcw td{height:34px;padding:0 3px}.xcw td.tm{width:58px;padding-left:6px}.xcw td.ar{width:34px}.xcw td.ar span{font-size:20px}.xcw td.ic{width:30px;font-size:17px}}
-.nav{display:flex;gap:6px;margin:4px 0 16px}
-.nb{border:1px solid #e7ded0;background:#fff;border-radius:9px;padding:7px 15px;font-size:13.5px;color:#5c5446;cursor:pointer}
-.nb.on{background:#26211a;color:#fbf8f1;border-color:#26211a}
-.sec{display:none}
-.sec.on{display:block}
-#lmap{height:60vh;min-height:380px;border-radius:12px;border:1px solid #e7ded0}
-#livewrap{height:80vh;min-height:520px;border-radius:12px;overflow:hidden;border:1px solid #e7ded0;background:#eaf0f4}
-.maplegend{font-size:12px;color:#8a8170;margin-top:8px;line-height:1.5}
-.mkwrap{background:transparent;border:0}
-.mk{width:40px;height:40px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.mk .mka{font-size:13px;line-height:1;color:#fff;opacity:.92}
-.mk .mkp{font-size:12px;line-height:1.1;font-weight:700;color:#fff}
-.mk-hi{background:#2f7d3f}.mk-mid{background:#cf9518}.mk-lo{background:#a9a090}
-.lpop b{font-size:14px}.lpop a{color:#2f7d3f;font-weight:600}
-.leaflet-container{font:13px -apple-system,BlinkMacSystemFont,sans-serif}
-.colR{display:none}
-.dc small{display:none}
-.widehint{display:none}
+.sbar{width:100%;max-width:18px;border-radius:3px 3px 0 0;min-height:2px}
+.sl{font-size:10px;color:var(--ink3)}
+.xcw{overflow-x:auto;margin:8px 0 8px;border-radius:12px;border:1px solid var(--line);background:var(--paper)}
+.xcday{background:var(--mist);padding:8px 10px 8px 14px;font:700 18px/1.2 var(--disp);letter-spacing:-.01em;color:var(--ink);display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--line)}
+.xcday small{font:500 11px var(--body);color:var(--ink3)}
+.srcsw{margin-left:auto;display:flex;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:2px;gap:2px}
+.srcsw button{border:0;background:transparent;border-radius:999px;color:var(--ink2);font:600 12.5px var(--body);padding:5px 12px;cursor:pointer}
+.srcsw button.on{background:var(--indigo);color:#fff}
+.xcw table{border-collapse:collapse;width:100%;font-size:15.5px;font-weight:500;background:var(--paper);color:#10203f}
+.xcw td{padding:0 6px;height:38px;text-align:center;white-space:nowrap;border-top:2px solid #fff}
+.xcw td.tm{background:#e6ecf5;color:var(--ink);text-align:left;padding-left:12px;width:78px;font-weight:600}
+.xcw td.ar{width:50px}
+.xcw td.ar span{display:inline-block;color:var(--indigo);font-weight:900;font-size:24px;line-height:1}
+.xcw td.to{color:#a9b4c8;font-size:12px;width:26px;padding:0;font-weight:400}
+.xcw td.rn{color:var(--ink2);font-weight:400}
+.xcw td.rn.wetc{background:#e3f4fb;color:var(--ink)}
+.xcw td.ic{font-size:20px;width:46px}
+.xcw tr.gd td.tm{box-shadow:inset 5px 0 0 var(--parrot);color:var(--parrot-d);font-weight:700}
+.xcw tr.gd td.ar span{color:var(--parrot)}
+.xcw tr.off td.tm{background:#d3dbe8;color:var(--ink2)}
+.xckey{font-size:12px;color:var(--ink3);margin:0 0 10px;line-height:1.5}
+details{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:4px 16px;margin:12px 0;font-size:14px}
+summary{cursor:pointer;font-weight:600;color:var(--ink);padding:8px 0}
+details p{margin:8px 0;color:var(--ink2);line-height:1.6;max-width:72ch}
+#livewrap{height:80vh;min-height:520px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#dfe7f2}
+.maplegend{font-size:12.5px;color:var(--ink3);margin-top:8px;line-height:1.5}
+.foot{color:var(--ink3);font-size:12.5px;margin-top:22px;line-height:1.65;max-width:110ch}
+.foot a{color:var(--ink2)}
+.foot b{color:var(--ink2)}
+
 @media (min-width:1100px){
-  .wrap{max-width:none;padding:22px 32px 70px}
-  .colL .hero{margin-bottom:12px}
+  .wrap{max-width:none;padding:18px 32px 64px}
+  .cols{display:grid;grid-template-columns:minmax(800px,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+  .colL,.colR{min-width:0}
   .colL details{margin-top:14px}
-  #side .verdict{margin:6px 0 8px}
+  .colR{display:block;position:sticky;top:14px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px 16px;max-height:calc(100vh - 28px);overflow:auto}
+  .sidehd{font:700 22px/1.15 var(--disp);letter-spacing:-.02em}
+  .sidehd span{display:block;font:400 13px/1.4 var(--body);letter-spacing:0;color:var(--ink3);margin-top:2px}
+  #side .verdict{margin:8px 0}
   #side .blk{margin:8px 0}
   #side .blkh{display:none}
-  #side .chips{margin-bottom:8px;gap:4px}
+  #side .chips{margin-bottom:8px}
   #side .chip{padding:4px 7px;font-size:11.5px}
   #side .wsum{margin:0 0 6px}
   #side .xcw{margin:6px 0 8px}
-  #side .xcw td{height:32px}
-  #side .xcw table{font-size:15px}
-  #side .xcday{padding:6px 12px;font-size:17px}
-  .cols{display:grid;grid-template-columns:minmax(780px,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
-  .colL,.colR{min-width:0}
-  .colR{display:block;position:sticky;top:14px;background:#fff;border:1px solid #e7ded0;border-radius:12px;padding:12px 16px 16px;max-height:calc(100vh - 28px);overflow:auto}
-  .sidehd{font-size:17px;font-weight:600}
-  .sidehd span{font-size:12px;color:#8a8170;font-weight:400;margin-left:6px}
+  #side .xcw td{height:31px}
+  #side .xcw table{font-size:14.5px}
   .strip7{flex:1;margin-left:14px;gap:4px}
-  .chead>div:first-child,.dayhead>.cname{width:150px;min-width:150px;flex:none}
-  .dc{flex:1;width:auto;min-width:36px;height:44px;flex-direction:column;line-height:1.15;font-size:13px}
-  .dc small{display:block;font-size:9px;font-weight:500;opacity:.8}
-  .dc.out{opacity:.62}
+  .chead>div:first-child,.dayhead>.cname{width:158px;min-width:158px;flex:none}
   .dh{flex:1;width:auto;min-width:36px}
-  .dh b{font-size:11px}.dh span{font-size:10px}
-  #lmap{height:74vh}
-  #livewrap{height:calc(100vh - 240px);min-height:560px}
-  .card.sel{border-color:#c9a227;box-shadow:0 0 0 1px #c9a227}
+  .dh b{font-size:11.5px}.dh span{font-size:11px}
+  .dc{flex:1;width:auto;min-width:36px;height:46px;justify-content:flex-end;padding:0 0 5px}
+  .dc .lab{position:absolute;top:5px;left:0;right:0;text-align:center;font-size:11px}
+  .dc .bars{display:flex;align-items:flex-end;gap:3px;height:20px}
+  .dc .bars i{display:block;width:7px;border-radius:2px 2px 0 0;background:#c3cddd;min-height:2px}
+  .dc .bars i.f{background:var(--ink2)}
+  .dc.v-hi .bars i{background:rgba(255,255,255,.55)}
+  .dc.v-hi .bars i.f{background:#fff}
+  .dc.v-mid .bars i{background:#e3cf95}
+  .dc.v-mid .bars i.f{background:#c98500}
+  .dc.out{opacity:.6}
+  .card.sel .chead{background:#f6f8fd}
+  .card.sel .chead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rani)}
   .chev,.dhchev{display:none}
-  .widehint{display:block;font-size:10px;color:#a59c8a;font-weight:400}
+  .widehint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink3);font-weight:400;line-height:1.25}
+  .widehint{font-size:11.5px;color:var(--ink2)}
+  .widehint .lg{display:flex;align-items:flex-end;gap:2px;height:14px}
+  .widehint i{display:block;width:6px;border-radius:2px 2px 0 0;background:var(--ink2)}
+  #livewrap{height:calc(100vh - 170px);min-height:560px}
 }
 @media (min-width:1600px){#side .chips{flex-wrap:nowrap}#side .chip{flex:1;text-align:center;white-space:nowrap;padding:4px 3px}}
-@media (max-width:430px){
-  .chead{gap:7px;padding:11px 10px}
-  .dayhead{gap:7px;padding:2px 10px 6px}
-  .cname{min-width:76px;font-size:13px}
-  .csea{font-size:10.5px}
-  .strip7{gap:2px}
-  .dc{width:26px;height:26px;font-size:10px;border-radius:5px}
-  .dh{width:26px}
-  .dh b{font-size:9px}
-  .dh span{font-size:8px}
+@media (max-width:700px){
+  .hero{grid-template-columns:1fr;padding:18px 96px 20px 18px}
+  .hverd{font-size:34px}
+  .hmeters{min-width:0;margin-top:6px}
+  .kite{width:70px;height:101px;right:14px;top:16px;margin-top:0}
+  .upd{margin-left:0;text-align:left;width:100%}
 }
-"""
+@media (max-width:430px){
+  .chead{gap:7px;padding:10px 10px}
+  .dayhead{gap:7px;padding:10px 10px 7px}
+  .cname{min-width:78px;font-size:14px}
+  .strip7{gap:2px}
+  .dc{width:26px;height:26px;border-radius:6px}
+  .dc .lab{font-size:9px}
+  .dh{width:26px}.dh b{font-size:9px}.dh span{font-size:9px}
+  .xcw table{font-size:13.5px}.xcw td{height:33px;padding:0 3px}.xcw td.tm{width:56px;padding-left:7px}
+  .xcw td.ar{width:32px}.xcw td.ar span{font-size:19px}.xcw td.ic{width:30px;font-size:17px}
+}
+'''
 
 JS = r'''
 const COMP=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
@@ -178,34 +216,40 @@ var WIDE=window.matchMedia("(min-width:1100px)").matches,MAXLD=WIDE?13:7;
 var b=D.best,html="";
 var hbadge={go:'GO',wet:'WET',split:'MAYBE'}[b.v]||'MAYBE';
 var hnote={go:'XC + Met Office agree',wet:'wind agreed — but '+rainTxt(b),split:'one model only — coin-flip'}[b.v]||'';
-html+='<div class="heads"><div class="hero"><div><div class="hlbl">best full-day this week</div><div class="hsite">'+b.s+'</div><div class="hmeta">'+b.wd+' '+b.dd+' · '+b.mph+' mph, gust '+b.gust+' · wind '+b.frm+' (offshore)</div></div><div class="hnum"><b style="color:'+(b.v==='go'?'#2f7d3f':'#c98f12')+'">'+hbadge+'</b><span>'+hnote+'</span></div></div>';
+var FULLD={Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'},FULLM={Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July',Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December'};
+var bday=null;D.sites.forEach(function(s){if(s.n===b.s)s.d.forEach(function(d){if(d.dd===b.dd)bday=d;});});
+var bxc=bday&&bday.xc?bday.xc.hours:0,bmet=bday&&bday.met?bday.met.hours:0;
+var hverd=(b.v==='go'?'Go on ':b.v==='wet'?'Wet on ':'Maybe ')+(FULLD[b.wd]||b.wd);
+var hwhy=b.v==='go'?'Both apps call a full day.':b.v==='wet'?'Both apps like the wind, but it rains.':'Only '+((bday&&which(bday)[0])==='Met'?'the Met Office calls':'XCWeather calls')+' a full day.';
+function meter(lbl,h){return '<div class="hm"><span>'+lbl+'</span><span class="trk"><i style="width:'+Math.min(100,Math.round(h/13*100))+'%"></i><u></u></span><b>'+h+' h</b></div>';}
+html+='<div class="heads"><div class="hero '+(b.v==='go'?'v-hi':'v-mid')+'"><div><div class="hverd">'+hverd+'</div><div class="hsite">'+b.s+', '+b.dd.split(' ')[0]+' '+(FULLM[b.dd.split(' ')[1]]||'')+'</div><div class="hmeta">'+b.mph+' mph gusting '+b.gust+', from the '+b.frm+' and out to sea. '+hwhy+'</div></div><div class="hmeters">'+meter('XCWeather',bxc)+meter('Met Office',bmet)+'<div class="hmk">Good hours between 8am and 8pm. The mark is 9, a full day.</div></div><svg class="kite" viewBox="0 0 104 150" aria-hidden="true"><path d="M52 62 C40 96 60 118 30 150" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.2"/><path d="M52 4 L52 54 L12 54 Z" fill="#e0245e"/><path d="M52 4 L92 54 L52 54 Z" fill="#f5a300"/><path d="M12 54 L52 54 L52 112 Z" fill="#f5a300"/><path d="M92 54 L52 54 L52 112 Z" fill="#e0245e"/><path d="M52 4 L52 112" stroke="#0f1b3d" stroke-opacity=".5" stroke-width="1.4"/><path d="M12 54 Q52 34 92 54" fill="none" stroke="#0f1b3d" stroke-opacity=".5" stroke-width="1.4"/><path d="M52 112 L44 128 L60 128 Z" fill="#12a150"/></svg></div>';
 function dIso(d){var y=new Date().getFullYear(),m={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12}[d.dd.split(' ')[1]],dd=+d.dd.split(' ')[0];if(new Date().getMonth()===11&&m===1)y++;return y+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd;}
 var NT=(D.notam&&D.notam.items)||[],NM=(D.notam&&D.notam.meta)||{};
 function ntDate(iso){var d=new Date(iso);return d.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'});}
 function ntFt(t){var m=t.match(/MAX HGT ([0-9]+FT[^.]*)/);return m?m[1].toLowerCase():'';}
 function ntDays(n){var out={};if(!n.from||!n.to)return out;var a=new Date(n.from),b=new Date(n.to);for(var t=new Date(a);t<=b;t=new Date(t.getTime()+3600e3*6)){out[t.toLocaleDateString('en-CA',{timeZone:'Europe/London'})]=1;}out[b.toLocaleDateString('en-CA',{timeZone:'Europe/London'})]=1;return out;}
 function siteNt(name){return NT.filter(function(n){return n.beach===name;});}
-html+='<div class="permbar"><b>Kite permission (NOTAM)</b> · '+(NM.error?'<span class="none">could not check the NOTAMs this time ('+NM.error+')</span>':NT.length?NT.length+' active at our beaches':'<span class="none">none active at our beaches</span>')+' · <a href="https://notaminfo.com/nationalmap" target="_blank" rel="noopener">NOTAM map</a>'
-  +NT.map(function(n){return '<div class="pi">✈ <b>'+n.beach+'</b> · '+n.ref+' · '+ntDate(n.from)+' → '+ntDate(n.to)+(ntFt(n.text)?' · max '+ntFt(n.text):'')+'</div>';}).join('')+'</div>';
-html+='<details><summary>How to read this — tap to open</summary>'
+html+='<div class="permbar"><b>Kite permission</b> '+(NM.error?'<span class="none">could not be checked this time ('+NM.error+').</span>':NT.length?(NT.length===1?'is published for one of our beaches.':'is published for '+NT.length+' of our beaches.'):'<span class="none">none published for our beaches yet.</span>')+' <a href="https://notaminfo.com/nationalmap" target="_blank" rel="noopener">Open the NOTAM map</a>' 
+  +NT.map(function(n){return '<div class="pi"><b>'+n.beach+'</b>, '+n.ref+', '+ntDate(n.from)+' to '+ntDate(n.to)+(ntFt(n.text)?', up to '+ntFt(n.text):'')+'</div>';}).join('')+'</div>';
+html+='<details><summary>How to read this</summary>'
 +'<p><b>GO (green)</b> means the two apps you check on the day — <b>XCWeather</b> and the <b>Met Office</b> — <b>both</b> forecast a full offshore day. <b>maybe (amber)</b> means they split: one says go, one says no — the cell shows which one. Grey means neither.</p>'
 +'<p><b>☔ wet (amber)</b> means the wind call stands — both apps agree — but one of them forecasts '+D.th.wet_mm+'mm+ of rain for '+D.th.wet_hours+'+ of the flying hours, so it&#39;s not a day to drive to. Rain past about day 8 comes from XC (GFS) alone; the Met Office model doesn&#39;t reach that far.</p>'
 +'<p><b>A good day</b> = wind 11–18 mph, gusts up to 26, blowing <b>offshore</b> (out to sea so kites fly over water), for <b>at least 9 hours</b> between 8am and 8pm — a full day, because it&#39;s only worth leaving work for a full day, not a lucky couple of hours.</p>'
 +'<p><b>Plan early, commit late.</b> A third model (ECMWF) rides along silently — tap any day to see all three. Summer winds are light; this fills with green from October to spring.</p></details></div>';
 var dhCols=D.sites[0].d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;});
-html+='<div class="cols"><div class="colL"><div class="dayhead"><div class="cname"><span class="widehint">small numbers = good hours<br>XC · Met Office (9+ = full day)</span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')+'</div><div class="dhchev"></div></div>';
+html+='<div class="cols"><div class="colL"><div class="board"><div class="dayhead"><div class="cname"><span class="widehint"><span class="lg"><i style="height:14px"></i><i style="height:9px"></i></span><span>Bars: good hours from<br>XCWeather and Met Office</span></span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh'+((d.wd==='Sat'||d.wd==='Sun')?' we':'')+(d.ld===0?' td':'')+'"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')+'</div><div class="dhchev"></div></div>';
 D.sites.forEach(function(s,i){
   var firm=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}),cells="",pd={};
   siteNt(s.n).forEach(function(n){var x=ntDays(n);for(var k in x)pd[k]=1;});
-  firm.forEach(function(d){var k=vcls(d.v);cells+='<div class="dc'+(d.ld>7?' out':'')+(pd[dIso(d)]?' perm':'')+'" style="'+STY[k]+';font-size:12px;font-weight:700" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+'">'+cellTxt(d)+'<small>'+(d.xc?d.xc.hours:0)+'·'+(d.met?d.met.hours:0)+'</small></div>';});
+  firm.forEach(function(d){var k=vcls(d.v);var xh=d.xc?d.xc.hours:0,mh=d.met?d.met.hours:0,lab=d.v==='no'?'':cellTxt(d).replace('?','');cells+='<div class="dc v-'+k+(d.ld>7?' out':'')+(pd[dIso(d)]?' perm':'')+'" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+': XCWeather '+xh+' good hours, Met Office '+mh+'">'+'<span class="lab">'+lab+'</span><span class="bars"><i class="'+(xh>=9?'f':'')+'" style="height:'+Math.round(xh/13*100)+'%"></i><i class="'+(mh>=9?'f':'')+'" style="height:'+Math.round(mh/13*100)+'%"></i></span></div>';});
   html+='<div class="card" id="card'+i+'"><div class="chead" onclick="pwTog('+i+')"><div><div class="cname">'+s.n+(siteNt(s.n).length?'<span class="nbadge">NOTAM</span>':'')+'</div><span class="csea">faces '+s.fc+'</span></div><div class="strip7">'+cells+'</div><span class="chev"></span></div><div class="panel" id="panel'+i+'"></div></div>';
 });
-html+='</div><div class="colR" id="side"></div></div>';
+html+='</div></div><div class="colR" id="side"></div></div>';
 root.innerHTML=html;
-if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);cl.appendChild(root.querySelector('details'));}
+if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);cl.insertBefore(root.querySelector('.permbar'),cl.children[1]);cl.appendChild(root.querySelector('details'));}
 function bestFirm(s){var f=s.d.filter(function(d){return d.ld>=0&&d.ld<=7;});return f.reduce(function(a,d){return dscore(d)>dscore(a)?d:a;},f[0]);}
-function windColor(v){if(v==null)return '#eee';return v<9?'#a9f3fb':v<13?'#c9f7fc':v<19?'#a6f79e':v<25?'#fbfb86':v<32?'#fbc9a0':v<39?'#f9a08c':'#f47c7c';}
-function tempColor(t){if(t==null)return '#f3efe6';return t<5?'#cfe8f5':t<10?'#d9e6a8':t<16?'#d9cf5c':t<19?'#e0b85a':t<22?'#dba24c':t<26?'#d98e45':'#d7743c';}
+function windColor(v){if(v==null)return '#eee';return v<9?'#bfeaf5':v<13?'#d6f2f8':v<19?'#b2ecb0':v<25?'#f6f29a':v<32?'#f8cfa6':v<39?'#f4a994':'#ee8585';}
+function tempColor(t){if(t==null)return '#f3efe6';return t<5?'#d6e9f5':t<10?'#e3ecb8':t<16?'#e6dd82':t<19?'#ebc97c':t<22?'#e8b56c':t<26?'#e5a062':'#e08656';}
 function wIcon(c){c=c||0;if(c===0)return '☀';if(c<=2)return '⛅';if(c===3)return '☁';if(c>=45&&c<=48)return '🌫';if(c>=51&&c<=67)return '🌦';if(c>=71&&c<=77)return '🌨';if(c>=80&&c<=82)return '🌧';if(c>=95)return '⛈';return '☁';}
 function angd(a,b){return Math.abs(((a-b+180)%360)-180);}
 function goodHr(s,w,g,dr){if(w==null||g==null||w<D.th.mean_min||w>D.th.mean_max||g>D.th.gust_max)return false;if(s.face==null||dr==null)return true;return angd((dr+180)%360,s.face)<=D.th.offshore_arc;}
@@ -231,11 +275,11 @@ function winBlock(s,day){
   var pk=day.pk||{},sum;
   var rt=rainTxt(day),rsuf=rt?' · <b'+(day.v==='wet'?' style="color:#9a6b12"':'')+'>'+rt+'</b>':'';
   if(!DET){sum='';}
-  else if(gh.length){var a=Math.min.apply(null,gh),b=Math.max.apply(null,gh);sum='<div class="wsum">Fly-window <b>'+hl(a)+'–'+hl(b+1)+'</b> · '+(pk.mph||'?')+' mph, gust '+(pk.gust||'?')+' · wind '+(pk.from||'?')+' — the green rows'+rsuf+'</div>';}
-  else{sum='<div class="wsum muted">No offshore in-band window this day — too light or wrong direction.</div>';}
+  else if(gh.length){var a=Math.min.apply(null,gh),b=Math.max.apply(null,gh);sum='<div class="wsum">Good from <b>'+hl(a)+'m to '+hl(b+1)+'m</b>, '+(pk.mph||'?')+' mph gusting '+(pk.gust||'?')+', wind from the '+(pk.from||'?')+'.'+(rt?' <b'+(day.v==='wet'?' style="color:#a36a00"':'')+'>'+rt.charAt(0).toUpperCase()+rt.slice(1)+'.</b>':'')+'</div>';}
+  else{sum='<div class="wsum muted">No good hours on this day: too light, too strong, or blowing the wrong way.</div>';}
   function mrow(lbl,rd,silent){var go=rd&&rd.go,h=rd?rd.hours:0;
     return '<div><span style="min-width:88px">'+lbl+(silent?' <span style="color:#a9a090">·watching</span>':'')+'</span>'
-      +'<b style="color:'+(go?'#2f7d3f':'#a9a090')+'">'+(go?'✓ full day':'✗ only '+h+'h')+'</b></div>';}
+      +'<b style="color:'+(go?'#0b7a3b':'#8592ad')+'">'+(go?'Full day, '+h+' h':'Only '+h+' h')+'</b></div>';}
   var msg=day.v==='go'?'Both your apps agree — the trustworthy call.'
          :day.v==='wet'?('Both your apps agree on the wind — but it rains: '+rainTxt(day)+'. Your call whether the group minds.')
          :day.v==='split'?('Your two apps disagree — a coin-flip, your judgement call.')
@@ -261,14 +305,14 @@ function panelHTML(i){
   var bars="";
   s.d.filter(function(d){return d.ld>=1;}).forEach(function(d){
     var hp=(d.v==='go'?40:d.v==='wet'?32:d.v==='split'?24:5)+2,firm=d.ld<=7;
-    var col=d.v==='go'?"#2f7d3f":(d.v==='wet'||d.v==='split')?"#c98f12":"#b9afa0";
+    var col=d.v==='go'?"#12a150":(d.v==='wet'||d.v==='split')?"#f5a300":"#c3cddd";
     var lab={go:'both agree',wet:'agreed but wet',split:'split',no:'no window'}[d.v];
     bars+='<div class="sb" title="'+d.wd+' '+d.dd+': '+lab+'"><div class="sbar" style="height:'+hp+'px;background:'+col+';opacity:'+(firm?.9:.4)+'"></div><div class="sl">'+d.wd[0]+'</div></div>';
   });
   var strip='<div class="blk"><div class="blkh" style="display:block">next two weeks — solid = firm, faded = rough outlook</div><div class="strip">'+bars+'</div></div>';
   return '<div class="verdict">'+verdict+'</div>'+chips+note+strip;
 }
-function showSide(i,ld){var s=D.sites[i],pn=siteNt(s.n).map(function(n){return '<div class="permbar" style="margin:6px 0 4px">✈ <b>Permission '+n.ref+'</b> · '+ntDate(n.from)+' → '+ntDate(n.to)+(ntFt(n.text)?' · max '+ntFt(n.text):'')+'<div class="pi" style="font-size:12px;color:#4a5a72">'+n.text+'</div></div>';}).join('');document.getElementById("side").innerHTML='<div class="sidehd">'+s.n+'<span>faces '+s.fc+' · offshore wind comes from the '+s.off_from+'</span></div>'+pn+panelHTML(i);document.querySelectorAll(".card").forEach(function(c,k){c.classList.toggle("sel",k===i);});if(ld!=null)pwDay(i,ld);}
+function showSide(i,ld){var s=D.sites[i],pn=siteNt(s.n).map(function(n){return '<div class="permbar" style="margin:8px 0 4px"><b>Permission '+n.ref+'</b>, '+ntDate(n.from)+' to '+ntDate(n.to)+(ntFt(n.text)?', up to '+ntFt(n.text):'')+'<div class="pi" style="font-size:12.5px;color:#4a5878">'+n.text+'</div></div>';}).join('');document.getElementById("side").innerHTML='<div class="sidehd">'+s.n+'<span>Faces '+s.fc+'. A wind from the '+s.off_from+' blows out to sea.</span></div>'+pn+panelHTML(i);document.querySelectorAll(".card").forEach(function(c,k){c.classList.toggle("sel",k===i);});if(ld!=null)pwDay(i,ld);}
 window.pwTog=function(i){if(WIDE){showSide(i,null);return;}var c=document.getElementById("card"+i),open=c.classList.contains("open");if(!open){if(!document.getElementById("panel"+i).innerHTML){document.getElementById("panel"+i).innerHTML=panelHTML(i);}c.classList.add("open");}else{c.classList.remove("open");}};
 window.pwOpen=function(e,i,ld){e.stopPropagation();if(WIDE){showSide(i,ld);return;}var c=document.getElementById("card"+i);if(!document.getElementById("panel"+i).innerHTML){document.getElementById("panel"+i).innerHTML=panelHTML(i);}c.classList.add("open");pwDay(i,ld);};
 window.pwDay=function(i,ld){CURI=i;CURLD=ld;var s=D.sites[i],day=s.d.filter(function(d){return d.ld===ld;})[0],w=document.getElementById("win"+i);if(w)w.innerHTML=winBlock(s,day);var ch=document.getElementById("chips"+i);if(ch){ch.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});var idx=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}).findIndex(function(d){return d.ld===ld;});if(idx>=0)ch.children[idx].classList.add("on");}};
@@ -298,13 +342,15 @@ document.querySelectorAll('.nb').forEach(function(b){b.addEventListener('click',
 head = ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
         '<title>Patang Wind — beach planner</title>'
-        '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>'
-        '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>'
+        '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">'
+        ''
         '<style>' + CSS + '</style></head><body><div class="wrap">'
-        '<div class="top"><h1>Patang Wind</h1></div>'
-        '<p class="sub">UK beach game planner · updated ' + data["g"] + '</p>'
-        + ('<p class="sub" style="opacity:.7;font-size:11px">' + data["src"] + '</p>' if data.get("src") else '') +
+        '<header class="bar"><div class="brand"><svg viewBox="0 0 26 32" aria-hidden="true"><path d="M13 1 L13 14 L3 14 Z" fill="#e0245e"/><path d="M13 1 L23 14 L13 14 Z" fill="#f5a300"/><path d="M3 14 L13 14 L13 28 Z" fill="#f5a300"/><path d="M23 14 L13 14 L13 28 Z" fill="#e0245e"/><path d="M13 28 L10.5 32 L15.5 32 Z" fill="#12a150"/></svg><h1>Patang Wind</h1></div>'
         '<div class="nav"><button class="nb on" data-s="forecast">Forecast</button><button class="nb" data-s="live">Wind map</button></div>'
+        '<div class="upd">Updated ' + data["g"] + ('<span>' + data["src"].replace(" | ", ". ") + '</span>' if data.get("src") else '') + '</div></header>'
+        ''
+        
         '<div id="sec-forecast" class="sec on"><div id="pwroot"></div></div>'
         '<div id="sec-live" class="sec"><div class="chips" id="livebeaches" style="margin-bottom:10px"></div><div id="livewrap"></div>'
         '<p class="maplegend" style="margin-top:8px">Windy&#39;s own map and forecast. Pick a beach above: the strip at the bottom shows its dates and every hour&#39;s wind, gusts and direction (arrows). Drag the time bar to move the map through the days.</p></div>'
