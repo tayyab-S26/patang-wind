@@ -158,7 +158,9 @@ details p{margin:8px 0;color:var(--ink2);line-height:1.6;max-width:72ch}
   .card.sel .chead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rani)}
   .chev,.dhchev{display:none}
   .widehint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink3);font-weight:400;line-height:1.25}
-  .widehint i{display:inline-block;width:6px;border-radius:2px 2px 0 0;background:var(--ink2);vertical-align:bottom}
+  .widehint{font-size:11.5px;color:var(--ink2)}
+  .widehint .lg{display:flex;align-items:flex-end;gap:2px;height:14px}
+  .widehint i{display:block;width:6px;border-radius:2px 2px 0 0;background:var(--ink2)}
   #livewrap{height:calc(100vh - 170px);min-height:560px}
 }
 @media (min-width:1600px){#side .chips{flex-wrap:nowrap}#side .chip{flex:1;text-align:center;white-space:nowrap;padding:4px 3px}}
@@ -224,7 +226,7 @@ html+='<details><summary>How to read this</summary>'
 +'<p><b>A good day</b> = wind 11–18 mph, gusts up to 26, blowing <b>offshore</b> (out to sea so kites fly over water), for <b>at least 9 hours</b> between 8am and 8pm — a full day, because it&#39;s only worth leaving work for a full day, not a lucky couple of hours.</p>'
 +'<p><b>Plan early, commit late.</b> A third model (ECMWF) rides along silently — tap any day to see all three. Summer winds are light; this fills with green from October to spring.</p></details></div>';
 var dhCols=D.sites[0].d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;});
-html+='<div class="cols"><div class="colL"><div class="board"><div class="dayhead"><div class="cname"><span class="widehint"><span><i style="height:14px"></i> <i style="height:9px"></i></span><span>good hours:<br>XCWeather, Met Office</span></span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh'+((d.wd==='Sat'||d.wd==='Sun')?' we':'')+(d.ld===0?' td':'')+'"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')+'</div><div class="dhchev"></div></div>';
+html+='<div class="cols"><div class="colL"><div class="board"><div class="dayhead"><div class="cname"><span class="widehint"><span class="lg"><i style="height:14px"></i><i style="height:9px"></i></span><span>Bars: good hours from<br>XCWeather and Met Office</span></span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh'+((d.wd==='Sat'||d.wd==='Sun')?' we':'')+(d.ld===0?' td':'')+'"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')+'</div><div class="dhchev"></div></div>';
 D.sites.forEach(function(s,i){
   var firm=s.d.filter(function(d){return d.ld>=0&&d.ld<=MAXLD;}),cells="",pd={};
   siteNt(s.n).forEach(function(n){var x=ntDays(n);for(var k in x)pd[k]=1;});
@@ -233,7 +235,7 @@ D.sites.forEach(function(s,i){
 });
 html+='</div></div><div class="colR" id="side"></div></div>';
 root.innerHTML=html;
-if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);cl.appendChild(root.querySelector('details'));}
+if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);cl.insertBefore(root.querySelector('.permbar'),cl.children[1]);cl.appendChild(root.querySelector('details'));}
 function bestFirm(s){var f=s.d.filter(function(d){return d.ld>=0&&d.ld<=7;});return f.reduce(function(a,d){return dscore(d)>dscore(a)?d:a;},f[0]);}
 function windColor(v){if(v==null)return '#eee';return v<9?'#bfeaf5':v<13?'#d6f2f8':v<19?'#b2ecb0':v<25?'#f6f29a':v<32?'#f8cfa6':v<39?'#f4a994':'#ee8585';}
 function tempColor(t){if(t==null)return '#f3efe6';return t<5?'#d6e9f5':t<10?'#e3ecb8':t<16?'#e6dd82':t<19?'#ebc97c':t<22?'#e8b56c':t<26?'#e5a062':'#e08656';}

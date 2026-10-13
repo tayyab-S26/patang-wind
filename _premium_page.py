@@ -176,7 +176,9 @@ details p{margin:8px 0;color:var(--ink2);line-height:1.6;max-width:72ch}
   .card.sel .chead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rani)}
   .chev,.dhchev{display:none}
   .widehint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink3);font-weight:400;line-height:1.25}
-  .widehint i{display:inline-block;width:6px;border-radius:2px 2px 0 0;background:var(--ink2);vertical-align:bottom}
+  .widehint{font-size:11.5px;color:var(--ink2)}
+  .widehint .lg{display:flex;align-items:flex-end;gap:2px;height:14px}
+  .widehint i{display:block;width:6px;border-radius:2px 2px 0 0;background:var(--ink2)}
   #livewrap{height:calc(100vh - 170px);min-height:560px}
 }
 @media (min-width:1600px){#side .chips{flex-wrap:nowrap}#side .chip{flex:1;text-align:center;white-space:nowrap;padding:4px 3px}}
@@ -249,7 +251,7 @@ swap("<summary>How to read this — tap to open</summary>", "<summary>How to rea
 
 # the board: one sheet; weekend and today marked in the header; bars for each app's good hours
 swap("""html+='<div class="cols"><div class="colL"><div class="dayhead"><div class="cname"><span class="widehint">small numbers = good hours<br>XC · Met Office (9+ = full day)</span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')""",
-     """html+='<div class="cols"><div class="colL"><div class="board"><div class="dayhead"><div class="cname"><span class="widehint"><span><i style="height:14px"></i> <i style="height:9px"></i></span><span>good hours:<br>XCWeather, Met Office</span></span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh'+((d.wd==='Sat'||d.wd==='Sun')?' we':'')+(d.ld===0?' td':'')+'"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')""")
+     """html+='<div class="cols"><div class="colL"><div class="board"><div class="dayhead"><div class="cname"><span class="widehint"><span class="lg"><i style="height:14px"></i><i style="height:9px"></i></span><span>Bars: good hours from<br>XCWeather and Met Office</span></span></div><div class="strip7">'+dhCols.map(function(d){return '<div class="dh'+((d.wd==='Sat'||d.wd==='Sun')?' we':'')+(d.ld===0?' td':'')+'"><b>'+(d.ld===0?'Today':d.wd)+'</b><span>'+d.dd.split(' ')[0]+'</span></div>';}).join('')""")
 swap("""cells+='<div class="dc'+(d.ld>7?' out':'')+(pd[dIso(d)]?' perm':'')+'" style="'+STY[k]+';font-size:12px;font-weight:700" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+'">'+cellTxt(d)+'<small>'+(d.xc?d.xc.hours:0)+'·'+(d.met?d.met.hours:0)+'</small></div>';""",
      """var xh=d.xc?d.xc.hours:0,mh=d.met?d.met.hours:0,lab=d.v==='no'?'':cellTxt(d).replace('?','');cells+='<div class="dc v-'+k+(d.ld>7?' out':'')+(pd[dIso(d)]?' perm':'')+'" onclick="pwOpen(event,'+i+','+d.ld+')" title="'+d.wd+' '+d.dd+': XCWeather '+xh+' good hours, Met Office '+mh+'">'+'<span class="lab">'+lab+'</span><span class="bars"><i class="'+(xh>=9?'f':'')+'" style="height:'+Math.round(xh/13*100)+'%"></i><i class="'+(mh>=9?'f':'')+'" style="height:'+Math.round(mh/13*100)+'%"></i></span></div>';""")
 swap("""html+='</div><div class="colR" id="side"></div></div>';""", """html+='</div></div><div class="colR" id="side"></div></div>';""")
@@ -284,6 +286,8 @@ swap("""'<p class="sub">UK beach game planner · updated ' + data["g"] + '</p>'"
 swap("""+ ('<p class="sub" style="opacity:.7;font-size:11px">' + data["src"] + '</p>' if data.get("src") else '') +""", "")
 swap("""'<div class="nav"><button class="nb on" data-s="forecast">Forecast</button><button class="nb" data-s="live">Wind map</button></div>'
         '<div id="sec-forecast\"""", """'<div id="sec-forecast\"""")
+swap("if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);",
+     "if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);cl.insertBefore(root.querySelector('.permbar'),cl.children[1]);")
 swap('"docs", "prototype.html"', '"docs", "preview.html"', count=2)
 swap('print("wrote docs/prototype.html |"', 'print("wrote docs/preview.html |"')
 
