@@ -1,5 +1,5 @@
 {
-"generated": "Tue 13 Oct 2026, 20:56",
+"generated": "Tue 13 Oct 2026, 21:32",
 "criteria": {
 "mean_min": 11,
 "mean_max": 18,
@@ -2289,9 +2289,9 @@
 "lead": 3,
 "verdict": "no",
 "peak": {
-"hour": 13,
-"mph": 11,
-"gust": 24,
+"hour": 15,
+"mph": 15,
+"gust": 22,
 "from": "NNW"
 },
 "wet": {
@@ -2312,7 +2312,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 2,
+"hours": 0,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -2329,9 +2329,9 @@
 "lead": 4,
 "verdict": "no",
 "peak": {
-"hour": 11,
-"mph": 13,
-"gust": 26,
+"hour": 10,
+"mph": 11,
+"gust": 24,
 "from": "N"
 },
 "wet": {
@@ -2349,7 +2349,7 @@
 "go": false
 },
 "ukmo_seamless": {
-"hours": 2,
+"hours": 1,
 "go": false
 },
 "ecmwf_ifs025": {
@@ -2872,7 +2872,7 @@
 "peak": {
 "hour": 10,
 "mph": 13,
-"gust": 23,
+"gust": 24,
 "from": "N"
 },
 "wet": {
@@ -4469,12 +4469,12 @@
 "wd": "Fri",
 "dd": "16 Oct",
 "lead": 3,
-"verdict": "wet",
+"verdict": "split",
 "peak": {
-"hour": 12,
-"mph": 13,
-"gust": 25,
-"from": "NW"
+"hour": 15,
+"mph": 16,
+"gust": 22,
+"from": "NNW"
 },
 "wet": {
 "wet": true,
@@ -4494,15 +4494,15 @@
 "go": true
 },
 "ukmo_seamless": {
-"hours": 9,
-"go": true
+"hours": 7,
+"go": false
 },
 "ecmwf_ifs025": {
 "hours": 1,
 "go": false
 }
 },
-"agree": true
+"agree": false
 },
 {
 "date": "2026-10-17",
