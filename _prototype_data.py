@@ -172,6 +172,31 @@ def main():
     items, meta = src_notam.pull(B.SITES)
     out["notam"] = {"items": items, "meta": meta,
                     "checked": datetime.datetime.now().strftime("%a %-d %b, %H:%M")}
+    # The weekend: odds per beach from the ensembles, because permission is applied
+    # for two days ahead and one forecast cannot say how likely Saturday is.
+    odds = {}
+    try:
+        import src_odds
+        wdates = src_odds.weekend_dates()
+        odds = src_odds.pull(B.SITES, wdates)
+        wk = {"asof": odds.get("asof"), "error": odds.get("error"), "days": []}
+        for wd_ in odds.get("dates", wdates):
+            dt_ = datetime.date.fromisoformat(wd_)
+            ap = dt_ - datetime.timedelta(days=2)
+            rows = []
+            for s in out["sites"]:
+                o = odds.get("b", {}).get(s["n"], {}).get(wd_)
+                if not o:
+                    continue
+                day = next((d for d in s["d"] if d["dd"] == dt_.strftime("%-d %b")), None)
+                rows.append({"b": s["n"], "p": o["p"], "p6": o["p6"], "lo": o["lo"], "hi": o["hi"], "by": o["by"],
+                             "xc": day["xc"]["hours"] if day else None, "met": day["met"]["hours"] if day else None})
+            rows.sort(key=lambda r: (-r["p"], -r["p6"], r["b"]))
+            wk["days"].append({"date": wd_, "name": dt_.strftime("%A %-d %B"), "apply": ap.strftime("%A"),
+                               "apply_in": (ap - today).days, "rows": rows})
+        out["weekend"] = wk
+    except Exception as e:
+        out["weekend"] = {"error": "%s: %s" % (type(e).__name__, e), "days": []}
     # The trail: every build appends what each app said for each beach-day, so we can
     # watch a call firm up or fall apart run by run (his method, 13 Oct 2026) and later
     # score it against what happened. One line per build, docs/trail/YYYY-MM.jsonl.
@@ -180,7 +205,9 @@ def main():
         line = {"run": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
                 "gfs": meta.get("gfs", {}).get("run"), "mo": meta.get("met", {}).get("blend_newest"),
                 "b": {s["n"]: {d["dd"]: [d["xc"]["hours"], d["met"]["hours"], d["ec"]["hours"], d["v"], d["ld"]]
-                               for d in s["d"]} for s in out["sites"]}}
+                               for d in s["d"]} for s in out["sites"]},
+                "odds": {b: {d: [o["p"], o["p6"], o["lo"], o["hi"]] for d, o in v.items()}
+                         for b, v in odds.get("b", {}).items()}}
         tdir = os.path.join(ROOT, "docs", "trail")
         os.makedirs(tdir, exist_ok=True)
         with open(os.path.join(tdir, datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m") + ".jsonl"), "a") as f:

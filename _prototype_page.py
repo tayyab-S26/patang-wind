@@ -59,6 +59,25 @@ h1{font:700 24px/1 var(--disp);letter-spacing:-.02em;margin:0}
 .permbar .none{color:var(--ink2)}
 .nbadge{display:inline-block;margin-left:7px;font-size:10.5px;font-weight:700;color:#fff;background:var(--indigo);border-radius:4px;padding:1px 6px;vertical-align:2px}
 
+/* the weekend: odds, because permission is asked two days ahead */
+.wk{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 16px 8px;margin:0 0 12px;display:grid;grid-template-columns:1fr;gap:6px 28px}
+.wkh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.wkh b{font:700 17px/1.2 var(--disp);letter-spacing:-.01em}
+.wkap{font-size:12.5px;font-weight:600;color:var(--indigo);background:#e9edfb;border-radius:999px;padding:2px 10px}
+.wkap.late{color:var(--ink2);background:var(--mist)}
+.wkv{font-size:13.5px;font-weight:600;margin:2px 0 4px;color:var(--ink2)}
+.wkv.hi{color:var(--parrot-d)}.wkv.mid{color:#a36a00}
+.wkr{display:grid;grid-template-columns:104px minmax(60px,1fr) 40px auto;align-items:center;gap:2px 10px;margin:4px 0}
+.wkn{font-weight:600;font-size:14px}
+.wkt{height:9px;border-radius:5px;background:var(--mist);overflow:hidden}
+.wkt i{display:block;height:100%;border-radius:5px;background:var(--ink3)}
+.wkt i.hi{background:var(--parrot)}.wkt i.mid{background:var(--saffron)}
+.wkr b{text-align:right;font-size:15px}
+.wks{font-size:12px;color:var(--ink3);white-space:nowrap}
+.wkf{grid-column:1/-1;font-size:11.5px;color:var(--ink3);border-top:1px solid var(--line);padding-top:7px}
+@media (min-width:700px){.wk{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.wkr{grid-template-columns:96px 1fr 40px}.wks{grid-column:1/-1}}
+
 /* the board: one sheet, ten rows */
 .board{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .dayhead{display:flex;align-items:flex-end;gap:10px;padding:12px 14px 8px;border-bottom:1px solid var(--line);background:var(--mist)}
@@ -231,6 +250,17 @@ function ntDays(n){var out={};if(!n.from||!n.to)return out;var a=new Date(n.from
 function siteNt(name){return NT.filter(function(n){return n.beach===name;});}
 html+='<div class="permbar"><b>Kite permission</b> '+(NM.error?'<span class="none">could not be checked this time ('+NM.error+').</span>':NT.length?(NT.length===1?'is published for one of our beaches.':'is published for '+NT.length+' of our beaches.'):'<span class="none">none published for our beaches yet.</span>')+' <a href="https://notaminfo.com/nationalmap" target="_blank" rel="noopener">Open the NOTAM map</a>' 
   +NT.map(function(n){return '<div class="pi"><b>'+n.beach+'</b>, '+n.ref+', '+ntDate(n.from)+' to '+ntDate(n.to)+(ntFt(n.text)?', up to '+ntFt(n.text):'')+'</div>';}).join('')+'</div>';
+var WK=D.weekend||{days:[]};
+function wkWord(p){return p>=50?'Worth applying':p>=30?'A coin flip':p>=10?'A long shot':'No real chance';}
+function wkCls(p){return p>=50?'hi':p>=30?'mid':'lo';}
+html+='<div class="wk">'+(WK.days.length?WK.days.map(function(d){
+  var top=d.rows.filter(function(r){return r.p>=3||r.p6>=10;}).slice(0,2),best=d.rows[0]||{p:0};
+  var ap=d.apply_in>0?'Apply by '+d.apply:d.apply_in===0?'Apply today':'Past the two-day deadline';
+  return '<div class="wkd"><div class="wkh"><b>'+d.name+'</b><span class="wkap'+(d.apply_in<0?' late':'')+'">'+ap+'</span></div>'
+    +'<div class="wkv '+wkCls(best.p)+'">'+(top.length?wkWord(best.p)+' at '+best.b:'No beach has a real chance')+'</div>'
+    +top.map(function(r){return '<div class="wkr" title="'+Object.keys(r.by).map(function(k){return k+' '+r.by[k]+'%';}).join(', ')+'"><span class="wkn">'+r.b+'</span><span class="wkt"><i class="'+wkCls(r.p)+'" style="width:'+Math.max(2,r.p)+'%"></i></span><b>'+r.p+'%</b><span class="wks">centres '+r.lo+' to '+r.hi+'%, 6 hours+ '+r.p6+'%</span></div>';}).join('')
+    +'</div>';}).join('')+'<div class="wkf">Odds of a full offshore day (9+ good hours) from 140 runs of four weather centres. "Centres" is how far they disagree; "6 hours+" is the odds of a shorter session'+(WK.asof?', worked out '+new Date(WK.asof).toLocaleString('en-GB',{weekday:'short',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}):'')+'.'+(WK.error?' The latest update failed, so these are the previous figures.':'')+'</div>'
+  :'<div class="wkf">Weekend odds could not be worked out this time'+(WK.error?' ('+WK.error+')':'')+'.</div>')+'</div>';
 html+='<details><summary>How to read this</summary>'
 +'<p><b>GO (green)</b> means the two apps you check on the day — <b>XCWeather</b> and the <b>Met Office</b> — <b>both</b> forecast a full offshore day. <b>maybe (amber)</b> means they split: one says go, one says no — the cell shows which one. Grey means neither.</p>'
 +'<p><b>☔ wet (amber)</b> means the wind call stands — both apps agree — but one of them forecasts '+D.th.wet_mm+'mm+ of rain for '+D.th.wet_hours+'+ of the flying hours, so it&#39;s not a day to drive to. Rain past about day 8 comes from XC (GFS) alone; the Met Office model doesn&#39;t reach that far.</p>'
@@ -246,7 +276,7 @@ D.sites.forEach(function(s,i){
 });
 html+='</div></div><div class="colR" id="side"></div></div>';
 root.innerHTML=html;
-if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);cl.insertBefore(root.querySelector('.permbar'),cl.children[1]);cl.appendChild(root.querySelector('details'));}
+if(WIDE){var cl=root.querySelector('.colL');cl.insertBefore(root.querySelector('.hero'),cl.firstChild);cl.insertBefore(root.querySelector('.permbar'),cl.children[1]);cl.insertBefore(root.querySelector('.wk'),cl.children[2]);cl.appendChild(root.querySelector('details'));}
 function bestFirm(s){var f=s.d.filter(function(d){return d.ld>=0&&d.ld<=7;});return f.reduce(function(a,d){return dscore(d)>dscore(a)?d:a;},f[0]);}
 function windColor(v){if(v==null)return '#eee';return v<9?'#bfeaf5':v<13?'#d6f2f8':v<19?'#b2ecb0':v<25?'#f6f29a':v<32?'#f8cfa6':v<39?'#f4a994':'#ee8585';}
 function tempColor(t){if(t==null)return '#f3efe6';return t<5?'#d6e9f5':t<10?'#e3ecb8':t<16?'#e6dd82':t<19?'#ebc97c':t<22?'#e8b56c':t<26?'#e5a062':'#e08656';}

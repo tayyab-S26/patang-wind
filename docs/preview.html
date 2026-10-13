@@ -49,22 +49,23 @@ h1{font:700 24px/1 var(--disp);letter-spacing:-.02em;margin:0}
 .nbadge{display:inline-block;margin-left:7px;font-size:10.5px;font-weight:700;color:#fff;background:var(--indigo);border-radius:4px;padding:1px 6px;vertical-align:2px}
 
 /* the weekend: odds, because permission is asked two days ahead */
-.wk{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 16px 10px;margin:0 0 12px;display:grid;grid-template-columns:1fr;gap:10px 28px}
+.wk{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 16px 8px;margin:0 0 12px;display:grid;grid-template-columns:1fr;gap:6px 28px}
 .wkh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .wkh b{font:700 17px/1.2 var(--disp);letter-spacing:-.01em}
 .wkap{font-size:12.5px;font-weight:600;color:var(--indigo);background:#e9edfb;border-radius:999px;padding:2px 10px}
 .wkap.late{color:var(--ink2);background:var(--mist)}
-.wkv{font-size:14px;font-weight:600;margin:3px 0 7px;color:var(--ink2)}
+.wkv{font-size:13.5px;font-weight:600;margin:2px 0 4px;color:var(--ink2)}
 .wkv.hi{color:var(--parrot-d)}.wkv.mid{color:#a36a00}
-.wkr{display:grid;grid-template-columns:104px 1fr 44px;align-items:center;gap:2px 10px;margin:5px 0}
+.wkr{display:grid;grid-template-columns:104px minmax(60px,1fr) 40px auto;align-items:center;gap:2px 10px;margin:4px 0}
 .wkn{font-weight:600;font-size:14px}
 .wkt{height:9px;border-radius:5px;background:var(--mist);overflow:hidden}
 .wkt i{display:block;height:100%;border-radius:5px;background:var(--ink3)}
 .wkt i.hi{background:var(--parrot)}.wkt i.mid{background:var(--saffron)}
 .wkr b{text-align:right;font-size:15px}
-.wks{grid-column:1/-1;font-size:12px;color:var(--ink3);line-height:1.4}
+.wks{font-size:12px;color:var(--ink3);white-space:nowrap}
 .wkf{grid-column:1/-1;font-size:11.5px;color:var(--ink3);border-top:1px solid var(--line);padding-top:7px}
 @media (min-width:700px){.wk{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.wkr{grid-template-columns:96px 1fr 40px}.wks{grid-column:1/-1}}
 
 /* the board: one sheet, ten rows */
 .board{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -242,12 +243,12 @@ var WK=D.weekend||{days:[]};
 function wkWord(p){return p>=50?'Worth applying':p>=30?'A coin flip':p>=10?'A long shot':'No real chance';}
 function wkCls(p){return p>=50?'hi':p>=30?'mid':'lo';}
 html+='<div class="wk">'+(WK.days.length?WK.days.map(function(d){
-  var top=d.rows.filter(function(r){return r.p>=3||r.p6>=10;}).slice(0,3),best=d.rows[0]||{p:0};
+  var top=d.rows.filter(function(r){return r.p>=3||r.p6>=10;}).slice(0,2),best=d.rows[0]||{p:0};
   var ap=d.apply_in>0?'Apply by '+d.apply:d.apply_in===0?'Apply today':'Past the two-day deadline';
   return '<div class="wkd"><div class="wkh"><b>'+d.name+'</b><span class="wkap'+(d.apply_in<0?' late':'')+'">'+ap+'</span></div>'
     +'<div class="wkv '+wkCls(best.p)+'">'+(top.length?wkWord(best.p)+' at '+best.b:'No beach has a real chance')+'</div>'
-    +top.map(function(r){return '<div class="wkr" title="'+Object.keys(r.by).map(function(k){return k+' '+r.by[k]+'%';}).join(', ')+'"><span class="wkn">'+r.b+'</span><span class="wkt"><i class="'+wkCls(r.p)+'" style="width:'+Math.max(2,r.p)+'%"></i></span><b>'+r.p+'%</b><span class="wks">Centres say '+r.lo+' to '+r.hi+'%. A shorter 6-hour session: '+r.p6+'%.'+(r.xc!=null?' Main runs: XCWeather '+r.xc+' h, Met Office '+r.met+' h.':'')+'</span></div>';}).join('')
-    +'</div>';}).join('')+'<div class="wkf">Odds of a full offshore day (9+ good hours), from 140 runs of four weather centres'+(WK.asof?', worked out '+new Date(WK.asof).toLocaleString('en-GB',{weekday:'short',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}):'')+'.'+(WK.error?' The latest update failed, so these are the previous figures.':'')+'</div>'
+    +top.map(function(r){return '<div class="wkr" title="'+Object.keys(r.by).map(function(k){return k+' '+r.by[k]+'%';}).join(', ')+'"><span class="wkn">'+r.b+'</span><span class="wkt"><i class="'+wkCls(r.p)+'" style="width:'+Math.max(2,r.p)+'%"></i></span><b>'+r.p+'%</b><span class="wks">centres '+r.lo+' to '+r.hi+'%, 6 hours+ '+r.p6+'%</span></div>';}).join('')
+    +'</div>';}).join('')+'<div class="wkf">Odds of a full offshore day (9+ good hours) from 140 runs of four weather centres. "Centres" is how far they disagree; "6 hours+" is the odds of a shorter session'+(WK.asof?', worked out '+new Date(WK.asof).toLocaleString('en-GB',{weekday:'short',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}):'')+'.'+(WK.error?' The latest update failed, so these are the previous figures.':'')+'</div>'
   :'<div class="wkf">Weekend odds could not be worked out this time'+(WK.error?' ('+WK.error+')':'')+'.</div>')+'</div>';
 html+='<details><summary>How to read this</summary>'
 +'<p><b>GO (green)</b> means the two apps you check on the day — <b>XCWeather</b> and the <b>Met Office</b> — <b>both</b> forecast a full offshore day. <b>maybe (amber)</b> means they split: one says go, one says no — the cell shows which one. Grey means neither.</p>'
