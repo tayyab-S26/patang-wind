@@ -70,7 +70,7 @@ def overlay(per, site_name):
             for r in true.get(date, []):
                 if not (CFG["thresholds"]["hour_start"] <= r[0] <= CFG["thresholds"]["hour_end"]):
                     continue                      # shown, not judged
-                if r[1] is not None and r[2] is not None:
+                if r[1] is not None and r[2] is not None and r[3] is not None:   # no direction -> keep the stand-in hour
                     hours[r[0]] = (r[0], r[1], r[2], r[3])
             merged[date] = [hours[h] for h in sorted(hours)]
         per[model] = merged

@@ -32,8 +32,9 @@ def hourly(pooled, date, sc):
         frac = round(100 * len(inb) / tot) if tot else 0
         if inb:
             ms = sorted(x[0] for x in inb); gs = sorted(x[1] for x in inb)
-            xs = sum(math.cos(math.radians(x[2])) for x in inb)
-            ys = sum(math.sin(math.radians(x[2])) for x in inb)
+            dirs = [x[2] for x in inb if x[2] is not None]
+            xs = sum(math.cos(math.radians(d)) for d in dirs) or 1e-9
+            ys = sum(math.sin(math.radians(d)) for d in dirs)
             rows.append([h, frac, round(ms[len(ms) // 2]), round(gs[len(gs) // 2]),
                          B.comp(math.degrees(math.atan2(ys, xs)) % 360)])
         else:
@@ -100,7 +101,7 @@ def main():
                     rain = r[4] or 0
                     cc = ex.get("cc")
                     code = 80 if rain >= 1 else 61 if rain >= 0.2 else 3 if cc is None or cc >= 85 else 2 if cc >= 25 else 0
-                    new[r[0]] = [r[0], round(r[1]), round(r[2]), int(r[3]),
+                    new[r[0]] = [r[0], round(r[1]), round(r[2]), None if r[3] is None else int(r[3]),
                                  None if ex.get("t") is None else round(ex["t"]), round(rain, 1), code]
                 for h, r in old.items():
                     new.setdefault(h, r)

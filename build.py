@@ -262,8 +262,9 @@ def day_read(byday, date, face):
     if rows:
         ms = sorted(r[0] for r in rows)
         gs = sorted(r[1] for r in rows)
-        xs = sum(math.cos(math.radians(r[2])) for r in rows)
-        ys = sum(math.sin(math.radians(r[2])) for r in rows)
+        dirs = [r[2] for r in rows if r[2] is not None]
+        xs = sum(math.cos(math.radians(d)) for d in dirs) or 1e-9
+        ys = sum(math.sin(math.radians(d)) for d in dirs)
         peak = {"hour": good_hours[len(good_hours) // 2], "mph": round(ms[len(ms) // 2]),
                 "gust": round(gs[len(gs) // 2]), "from": comp(math.degrees(math.atan2(ys, xs)) % 360)}
     return {"hours": n, "go": n >= TH["full_day_hours"],
